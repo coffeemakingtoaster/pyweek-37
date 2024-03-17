@@ -1,3 +1,4 @@
+from helpers.constants import EVENT_NAMES
 from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3
 from entities.player import Player
 from helpers.logging import debug_log
@@ -6,7 +7,7 @@ from ui.pause_menu import pause_menu
 from ui.settings_menu import settings_menu
 from ui.victory_screen import victory_screen
 from ui.hud import game_hud
-from config import GAME_STATUS
+from config import GAME_STATUS, KEYBIND_IDENTIFIERS
 from helpers.utilities import load_config, lock_mouse_in_window, release_mouse_from_window
 
 from direct.showbase.ShowBase import ShowBase
@@ -25,7 +26,7 @@ class main_game(ShowBase):
         ShowBase.__init__(self)
 
         # Set camera position
-        base.cam.setPos(0, -60, 0)
+        base.cam.setPos(0, -60, 10)
 
         load_config(join("user_config.json"))
 
@@ -42,15 +43,15 @@ class main_game(ShowBase):
         self.goto_to_main_menu()
 
         # Create event handlers for events fired by UI
-        self.accept("start_game", self.set_game_status, [GAME_STATUS.STARTING])
+        self.accept(EVENT_NAMES.START_GAME_EVENT, self.set_game_status, [GAME_STATUS.STARTING])
 
         # Create event handlers for events fired by keyboard
-        self.accept("escape", self.toggle_pause)
+        self.accept(KEYBIND_IDENTIFIERS.ESCAPE_KEY_DOWN, self.toggle_pause)
 
-        self.accept("pause_game", self.toggle_pause)
+        self.accept(EVENT_NAMES.PAUSE_GAME_EVENT , self.toggle_pause)
 
-        self.accept("goto_main_menu", self.goto_to_main_menu)
-        self.accept("toggle_settings", self.toggle_settings)
+        self.accept(EVENT_NAMES.GOTO_MAIN_MENU_EVENT, self.goto_to_main_menu)
+        self.accept(EVENT_NAMES.TOGGLE_SETTINGS_EVENT, self.toggle_settings)
 
         self.gameTask = base.taskMgr.add(self.game_loop, "gameLoop")
 

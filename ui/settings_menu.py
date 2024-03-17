@@ -1,3 +1,4 @@
+from helpers.constants import EVENT_NAMES
 from ui.ui_base import ui_base
 from helpers.utilities import set_music_volume, set_sfx_volume, set_fullscreen_value, get_music_volume, get_sfx_volume, get_fullscreen_value
 
@@ -34,7 +35,7 @@ class settings_menu(ui_base):
         self.ui_elements.append(main_menu_button)
 
     def return_to_main_menu(self):
-        messenger.send('goto_main_menu')
+        messenger.send(EVENT_NAMES.GOTO_MAIN_MENU_EVENT)
 
     def toggle_fullscreen(self, status):
         set_fullscreen_value(status == 1)

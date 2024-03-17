@@ -1,3 +1,4 @@
+from helpers.constants import EVENT_NAMES
 from ui.ui_base import ui_base 
 
 from direct.gui.DirectGui import DirectButton, OnscreenImage, DirectLabel
@@ -34,7 +35,7 @@ class victory_screen(ui_base):
         self.ui_elements.append(main_menu_button)
     
     def goto_main_menu(self):
-        messenger.send('goto_main_menu') 
+        messenger.send(EVENT_NAMES.GOTO_MAIN_MENU_EVENT) 
 
     def resume(self):
         pass

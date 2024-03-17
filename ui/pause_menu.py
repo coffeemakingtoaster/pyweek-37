@@ -1,3 +1,4 @@
+from helpers.constants import EVENT_NAMES
 from ui.ui_base import ui_base
 
 from direct.gui.DirectGui import DirectButton, OnscreenImage
@@ -21,7 +22,8 @@ class pause_menu(ui_base):
         self.ui_elements.append(main_menu_button)
 
     def unpause_game(self):
-        messenger.send('pause_game')
+        messenger.send(EVENT_NAMES.PAUSE_GAME_EVENT)
 
     def goto_main_menu(self):
-        messenger.send('goto_main_menu')
+        messenger.send(EVENT_NAMES.GOTO_MAIN_MENU_EVENT)
+

@@ -1,6 +1,7 @@
 from ui.ui_base import ui_base 
 from config import GAME_STATUS
 from helpers.utilities import save_config
+from helpers.constants import EVENT_NAMES
 
 from direct.gui.DirectGui import DirectButton, OnscreenImage
 
@@ -27,10 +28,10 @@ class main_menu(ui_base):
     def start_game(self):
         print("Start button pressed")
         # Use global event messenger to start the game
-        messenger.send('start_game') 
+        messenger.send(EVENT_NAMES.START_GAME_EVENT) 
         
     def open_settings(self):
-       messenger.send('toggle_settings') 
+       messenger.send(EVENT_NAMES.TOGGLE_SETTINGS_EVENT)
        
     def quit_game(self):
         save_config(join("user_config.json"))
