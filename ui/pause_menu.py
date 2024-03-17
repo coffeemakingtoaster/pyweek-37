@@ -1,9 +1,6 @@
 from ui.ui_base import ui_base
-from config import GAME_STATUS
 
 from direct.gui.DirectGui import DirectButton, OnscreenImage
-
-import sys
 
 from os.path import join
 

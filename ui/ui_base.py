@@ -26,7 +26,6 @@ class ui_base(DirectObject.DirectObject):
             print("hiding ui element")
             ui_element.hide()
 
-
     def load_background_image(self):
         r = random.randint(0,21)
         if r == 5:

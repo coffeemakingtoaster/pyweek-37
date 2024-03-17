@@ -1,11 +1,7 @@
 from ui.ui_base import ui_base
-from config import GAME_STATUS, GAME_CONFIG
 from helpers.utilities import set_music_volume, set_sfx_volume, set_fullscreen_value, get_music_volume, get_sfx_volume, get_fullscreen_value
 
-from panda3d.core import WindowProperties
-
 from direct.gui.DirectGui import DirectButton, DirectCheckButton, DirectSlider, DirectLabel
-from panda3d.core import DisplayInformation
 
 import sys
 from os.path import join

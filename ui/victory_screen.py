@@ -1,11 +1,8 @@
 from ui.ui_base import ui_base 
-from config import GAME_STATUS
 
 from direct.gui.DirectGui import DirectButton, OnscreenImage, DirectLabel
 
 from helpers.utilities import format_seconds
-
-import sys
 
 from os.path import join
 
@@ -38,3 +35,9 @@ class victory_screen(ui_base):
     
     def goto_main_menu(self):
         messenger.send('goto_main_menu') 
+
+    def resume(self):
+        pass
+
+    def pause(self):
+        pass

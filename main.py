@@ -1,24 +1,17 @@
-from panda3d.core import loadPrcFile, CollisionHandlerEvent, CollisionTraverser, CollisionHandlerPusher
-from panda3d.core import CollisionSphere, CollisionNode, CollisionTube
+from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3
+from entities.player import Player
+from helpers.logging import debug_log
 from ui.main_menu import main_menu
 from ui.pause_menu import pause_menu
 from ui.settings_menu import settings_menu
 from ui.victory_screen import victory_screen
 from ui.hud import game_hud
-from config import GAME_STATUS,  GAME_CONFIG
-from helpers.utilities import load_config, save_config, lock_mouse_in_window, release_mouse_from_window
-
-from panda3d.core import WindowProperties
-from panda3d.core import AmbientLight, DirectionalLight, LightAttrib, PointLight
-from panda3d.core import LPoint3, LVector3, BitMask32
-
-from direct.gui.DirectGui import OnscreenImage
+from config import GAME_STATUS
+from helpers.utilities import load_config, lock_mouse_in_window, release_mouse_from_window
 
 from direct.showbase.ShowBase import ShowBase
 from direct.task.Task import Task
 from direct.gui.OnscreenText import OnscreenText
-
-from direct.actor.Actor import Actor
 
 from os.path import join
 
@@ -26,13 +19,13 @@ from os.path import join
 loadPrcFile("./settings.prc")
 
 class main_game(ShowBase):
+    player = None
     def __init__(self):
 
         ShowBase.__init__(self)
 
         # Set camera position
-        base.cam.setPos(0, 50, 0)
-        base.cam.setHpr(0, 180+40, 0)
+        base.cam.setPos(0, -60, 0)
 
         load_config(join("user_config.json"))
 
@@ -65,12 +58,21 @@ class main_game(ShowBase):
         background_music = base.loader.loadMusic(join("assets", "music", "music.mp3"))
         background_music.setLoop(True)
         background_music.play()
+    
+        render.setShaderAuto()
 
         base.disableMouse()
 
-    def game_loop(self, task):
+    def setupLights(self):  
+        ambientLight = AmbientLight("ambientLight")
+        ambientLight.setColor((.1, .1, .1, 1))
+        directionalLight = DirectionalLight("directionalLight")
+        directionalLight.setDirection(LVector3(0, -45, -45))
+        directionalLight.setColor((0.3, 0.3, 0.3, 1))
+        render.setLight(render.attachNewNode(directionalLight))
+        render.setLight(render.attachNewNode(ambientLight))
 
-        dt = self.clock.dt
+    def game_loop(self, task):
 
         if self.game_status == GAME_STATUS.STARTING:
             print("Starting")
@@ -82,17 +84,26 @@ class main_game(ShowBase):
         if self.game_status != GAME_STATUS.RUNNING:
            return Task.cont
 
+        dt = self.clock.dt
+
+        self.player.update(dt)
+
         return Task.cont
 
     def load_game(self):
         print("Loading game")
         self.active_ui.destroy()
-        self.setBackgroundColor((0, 0, 0, 1))
+        self.setBackgroundColor((255, 255, 255, 1))
 
         self.active_ui = game_hud()
 
         lock_mouse_in_window()
         self.set_game_status(GAME_STATUS.RUNNING)
+
+        # Setup entities
+        self.player = Player(0,0)
+
+        self.setupLights()
 
     def set_game_status(self, status):
         self.status_display["text"] = status
@@ -115,7 +126,6 @@ class main_game(ShowBase):
 
     def goto_to_main_menu(self):
         print("Return to main menu")
-        self.enemies = 0
         # no hud yet
         if self.active_ui is not None:
             self.active_ui.destroy()
@@ -125,7 +135,9 @@ class main_game(ShowBase):
         self.active_ui = main_menu()
         self.setBackgroundColor((0, 0, 0, 1))
         self.set_game_status(GAME_STATUS.MAIN_MENU)
-
+        # Destroy player object
+        if self.player is not None:
+            self.player.destroy()
 
     def toggle_settings(self):
         if self.game_status == GAME_STATUS.MAIN_MENU:
@@ -145,6 +157,7 @@ class main_game(ShowBase):
 
 def start_game():
     print("Starting game..")
+    debug_log("Debug log enabled")
     game = main_game()
     game.run()
 
