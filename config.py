@@ -27,6 +27,9 @@ class KEYBIND_IDENTIFIERS:
 
 class WORLD_CONSTANTS:
    GRAVITY_VELOCITY = math.pi * 2 
+   MAP_X_LIMIT = 100
+   # Make camera more dynamic
+   CAMERA_X_LIMIT = MAP_X_LIMIT - 10
 
 class ENTITY_CONSTANTS:
    PLAYER_MOVEMENT_SPEED = 5

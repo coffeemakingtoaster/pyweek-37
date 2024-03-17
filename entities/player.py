@@ -57,10 +57,10 @@ class Player(Base_Entity):
          debug_log(self.z_vel)
          new_z = self.model.getZ() + (self.z_vel * dt)
 
-      self.model.setFluidPos(new_x, 0, new_z)
+      self.model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), 0, new_z)
  
       # Make camera follow player
-      base.cam.setX(self.model.getX())
+      base.cam.setX(min(max(self.model.getX(), -WORLD_CONSTANTS.CAMERA_X_LIMIT),WORLD_CONSTANTS.CAMERA_X_LIMIT))
 
       self.last_position = self.model.getPos()
 
