@@ -139,6 +139,7 @@ class main_game(ShowBase):
         # Destroy player object
         if self.player is not None:
             self.player.destroy()
+            self.player = None
 
     def toggle_settings(self):
         if self.game_status == GAME_STATUS.MAIN_MENU:

@@ -2,6 +2,7 @@ from config import ENTITY_CONSTANTS, TEAM_BITMASKS, KEYBIND_IDENTIFIERS, WORLD_C
 from entities.base import Base_Entity
 from direct.actor.Actor import Actor
 
+from helpers.constants import EVENT_NAMES
 from helpers.logging import debug_log
 
 class Player(Base_Entity):
@@ -23,6 +24,8 @@ class Player(Base_Entity):
 
       self.last_position = self.model.getPos()
 
+      self.hp = ENTITY_CONSTANTS.PLAYER_MAX_HP
+
       self._setup_keybinds()
    
    def _setup_keybinds(self) -> None:
@@ -31,6 +34,9 @@ class Player(Base_Entity):
       self.accept(KEYBIND_IDENTIFIERS.D_KEY_DOWN, self._update_movement_status, ["right", True])
       self.accept(KEYBIND_IDENTIFIERS.D_KEY_UP, self._update_movement_status, ["right", False])
       self.accept(KEYBIND_IDENTIFIERS.SPACE_KEY_DOWN, self._jump)
+      self.accept(KEYBIND_IDENTIFIERS.O_KEY_DOWN, self._change_hp, [-1])
+      self.accept(KEYBIND_IDENTIFIERS.P_KEY_DOWN, self._change_hp, [1])
+
 
    def _update_movement_status(self, direction: str, pressed: bool) -> None:
       if pressed:
@@ -54,7 +60,6 @@ class Player(Base_Entity):
       # Is player in midair? -> Gravity OR did player just start jumping -> Also gravity
       if self.model.getZ() > 0.1 or self.z_vel > 0:
          self.z_vel = max(self.z_vel - WORLD_CONSTANTS.GRAVITY_VELOCITY, -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
-         debug_log(self.z_vel)
          new_z = self.model.getZ() + (self.z_vel * dt)
 
       self.model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), 0, new_z)
@@ -65,6 +70,10 @@ class Player(Base_Entity):
       self.last_position = self.model.getPos()
 
       #debug_log(f'{self.model.getX(), self.model.getZ()}')
+
+   def _change_hp(self, value):
+      self.hp += value
+      messenger.send(EVENT_NAMES.DISPLAY_PLAYER_HP_EVENT, [self.hp])
 
    def destroy(self):
       self.ignore_all()

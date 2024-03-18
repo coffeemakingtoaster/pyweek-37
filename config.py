@@ -25,6 +25,10 @@ class KEYBIND_IDENTIFIERS:
    SPACE_KEY_DOWN = "space"
    SPACE_KEY_UP = SPACE_KEY_DOWN + "-up" 
    ESCAPE_KEY_DOWN = "escape"
+   O_KEY_DOWN = "o"
+   O_KEY_UP = O_KEY_DOWN + "-up"
+   P_KEY_DOWN = "p"
+   P_KEY_UP = P_KEY_DOWN + "-up"
 
 class WORLD_CONSTANTS:
    GRAVITY_VELOCITY = math.pi * 2 
