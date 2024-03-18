@@ -55,15 +55,23 @@ class Player(Base_Entity):
       # Player cannot jump again if midair
       if self.model.getZ() < 0.1:
          self.z_vel = ENTITY_CONSTANTS.PLAYER_JUMP_VELOCITY
-         debug_log("Jump")
 
    def update(self, dt):
       # Clear current status
       self.model.node().resetAllPrevTransform()
-
-      new_x = self.model.getX() +((self.movement_status["left"] * -1 ) + self.movement_status["right"]) * ENTITY_CONSTANTS.PLAYER_MOVEMENT_SPEED * dt
+      
+      x_movement = ((self.movement_status["left"] * -1 ) + self.movement_status["right"]) * ENTITY_CONSTANTS.PLAYER_MOVEMENT_SPEED 
+      new_x = self.model.getX() + x_movement* dt
       new_z = 0
-   
+
+      # Rotate right
+      if x_movement > 0:
+         self.model.setH(90) 
+      # Rotate left
+      elif x_movement < 0:
+         self.model.setH(-90)
+
+
       # Is player in midair? -> Gravity OR did player just start jumping -> Also gravity
       if self.model.getZ() > 0.1  or self.z_vel > 0:
          if self.is_in_light_attack:
@@ -89,7 +97,7 @@ class Player(Base_Entity):
       if self.model:
          self.attack_hitbox = self.model.attachNewNode(CollisionNode("attack"))
          self.attack_hitbox.show()
-         self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,0,2),2,3,1.5))
+         self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-1,2),1,1,1))
          self.attack_hitbox.setTag("team", "player")
          self.attack_hitbox.setPos(0,0,-1)
          self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
@@ -97,25 +105,22 @@ class Player(Base_Entity):
          base.taskMgr.doMethodLater(0.3, self._destroy_attack_hitbox,"destroy_light_attack_hitbox",[self.attack_hitbox, True])
       self.is_in_light_attack = True
         
-      print("light attack")
-
    def _heavy_attack(self):
       if self.model:
          self.attack_hitbox = self.model.attachNewNode(CollisionNode("attack"))
          self.attack_hitbox.show()
-         self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,0,2),5,1,1))
+         self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-2,2),1,2,1))
          self.attack_hitbox.setTag("team", "player")
          self.attack_hitbox.setPos(0,0,-1)
          self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
          base.cTrav.addCollider(self.attack_hitbox, self.notifier)
          base.taskMgr.doMethodLater(0.5, self._destroy_attack_hitbox,"destroy_light_attack_hitbox",[self.attack_hitbox])
 
-      print("heavy attack")
-
    def _destroy_attack_hitbox(self, hitbox, is_light_attack=False):
       if hitbox:
          hitbox.removeNode()
-      self.is_in_light_attack = False
+      if is_light_attack:
+         self.is_in_light_attack = False
       
 
    def destroy(self):
