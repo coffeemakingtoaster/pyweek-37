@@ -6,7 +6,7 @@ from helpers.constants import EVENT_NAMES
 from helpers.logging import debug_log
 
 class Player(Base_Entity):
-   def __init__(self, player_x, player_y) -> None:
+   def __init__(self, player_x, player_z) -> None:
       super().__init__()
    
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
@@ -14,7 +14,7 @@ class Player(Base_Entity):
         
       self.model.reparentTo(render)
 
-      self.model.setPos(player_x, player_y, 0)
+      self.model.setPos(player_x, 0, player_z)
 
       self.z_vel = 0
 

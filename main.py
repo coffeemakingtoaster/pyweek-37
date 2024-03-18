@@ -1,3 +1,4 @@
+from entities.sample_enemy import Sample_Enemy
 from helpers.constants import EVENT_NAMES
 from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3
 from entities.player import Player
@@ -21,6 +22,7 @@ loadPrcFile("./settings.prc")
 
 class main_game(ShowBase):
     player = None
+    enemies = []
     def __init__(self):
 
         ShowBase.__init__(self)
@@ -89,6 +91,9 @@ class main_game(ShowBase):
 
         self.player.update(dt)
 
+        for enemy in self.enemies:
+            enemy.update(dt)
+
         return Task.cont
 
     def load_game(self):
@@ -103,6 +108,8 @@ class main_game(ShowBase):
 
         # Setup entities
         self.player = Player(0,0)
+
+        self.enemies = [Sample_Enemy(10,0)]
 
         self.setupLights()
 
@@ -140,6 +147,9 @@ class main_game(ShowBase):
         if self.player is not None:
             self.player.destroy()
             self.player = None
+        for enemy in self.enemies:
+            enemy.destroy()
+        self.enemies = []
 
     def toggle_settings(self):
         if self.game_status == GAME_STATUS.MAIN_MENU:
