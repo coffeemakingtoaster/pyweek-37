@@ -1,6 +1,6 @@
 from entities.sample_enemy import Sample_Enemy
 from helpers.constants import EVENT_NAMES
-from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3
+from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3, CollisionTraverser
 from entities.player import Player
 from helpers.logging import debug_log
 from ui.main_menu import main_menu
@@ -65,6 +65,9 @@ class main_game(ShowBase):
         render.setShaderAuto()
 
         base.disableMouse()
+        
+        self.cTrav = CollisionTraverser()
+        base.cTrav.setRespectPrevTransform(True)
 
     def setupLights(self):  
         ambientLight = AmbientLight("ambientLight")

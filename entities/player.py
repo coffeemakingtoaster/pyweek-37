@@ -2,6 +2,8 @@ from config import ENTITY_CONSTANTS, TEAM_BITMASKS, KEYBIND_IDENTIFIERS, WORLD_C
 from entities.base import Base_Entity
 from direct.actor.Actor import Actor
 
+from panda3d.core import CollisionNode, Point3, CollisionBox, CollisionHandlerEvent
+
 from helpers.constants import EVENT_NAMES
 from helpers.logging import debug_log
 
@@ -27,6 +29,10 @@ class Player(Base_Entity):
       self.hp = ENTITY_CONSTANTS.PLAYER_MAX_HP
 
       self._setup_keybinds()
+
+      self.notifier = CollisionHandlerEvent()
+
+      self.is_in_light_attack = False
    
    def _setup_keybinds(self) -> None:
       self.accept(KEYBIND_IDENTIFIERS.A_KEY_DOWN, self._update_movement_status, ["left", True])
@@ -36,7 +42,8 @@ class Player(Base_Entity):
       self.accept(KEYBIND_IDENTIFIERS.SPACE_KEY_DOWN, self._jump)
       self.accept(KEYBIND_IDENTIFIERS.O_KEY_DOWN, self._change_hp, [-1])
       self.accept(KEYBIND_IDENTIFIERS.P_KEY_DOWN, self._change_hp, [1])
-
+      self.accept(KEYBIND_IDENTIFIERS.COMMA_KEY_DOWN, self._light_attack)
+      self.accept(KEYBIND_IDENTIFIERS.DOT_KEY_DOWN, self._heavy_attack)
 
    def _update_movement_status(self, direction: str, pressed: bool) -> None:
       if pressed:
@@ -58,9 +65,12 @@ class Player(Base_Entity):
       new_z = 0
    
       # Is player in midair? -> Gravity OR did player just start jumping -> Also gravity
-      if self.model.getZ() > 0.1 or self.z_vel > 0:
-         self.z_vel = max(self.z_vel - WORLD_CONSTANTS.GRAVITY_VELOCITY, -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
-         new_z = self.model.getZ() + (self.z_vel * dt)
+      if self.model.getZ() > 0.1  or self.z_vel > 0:
+         if self.is_in_light_attack:
+            new_z = self.model.getZ()
+         else:
+            self.z_vel = max(self.z_vel - WORLD_CONSTANTS.GRAVITY_VELOCITY, -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
+            new_z = self.model.getZ() + (self.z_vel * dt)
 
       self.model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), 0, new_z)
  
@@ -74,6 +84,39 @@ class Player(Base_Entity):
    def _change_hp(self, value):
       self.hp += value
       messenger.send(EVENT_NAMES.DISPLAY_PLAYER_HP_EVENT, [self.hp])
+
+   def _light_attack(self):
+      if self.model:
+         self.attack_hitbox = self.model.attachNewNode(CollisionNode("attack"))
+         self.attack_hitbox.show()
+         self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,0,2),2,3,1.5))
+         self.attack_hitbox.setTag("team", "player")
+         self.attack_hitbox.setPos(0,0,-1)
+         self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
+         base.cTrav.addCollider(self.attack_hitbox, self.notifier)
+         base.taskMgr.doMethodLater(0.3, self._destroy_attack_hitbox,"destroy_light_attack_hitbox",[self.attack_hitbox, True])
+      self.is_in_light_attack = True
+        
+      print("light attack")
+
+   def _heavy_attack(self):
+      if self.model:
+         self.attack_hitbox = self.model.attachNewNode(CollisionNode("attack"))
+         self.attack_hitbox.show()
+         self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,0,2),5,1,1))
+         self.attack_hitbox.setTag("team", "player")
+         self.attack_hitbox.setPos(0,0,-1)
+         self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
+         base.cTrav.addCollider(self.attack_hitbox, self.notifier)
+         base.taskMgr.doMethodLater(0.5, self._destroy_attack_hitbox,"destroy_light_attack_hitbox",[self.attack_hitbox])
+
+      print("heavy attack")
+
+   def _destroy_attack_hitbox(self, hitbox, is_light_attack=False):
+      if hitbox:
+         hitbox.removeNode()
+      self.is_in_light_attack = False
+      
 
    def destroy(self):
       self.ignore_all()

@@ -16,6 +16,7 @@ class GAME_STATUS:
 
 class TEAM_BITMASKS:
    PLAYER =  BitMask32(1 << 0) #0001
+   ENEMY = BitMask32(1 << 1) #0010
 
 class KEYBIND_IDENTIFIERS:
    A_KEY_DOWN = "a"
@@ -29,6 +30,11 @@ class KEYBIND_IDENTIFIERS:
    O_KEY_UP = O_KEY_DOWN + "-up"
    P_KEY_DOWN = "p"
    P_KEY_UP = P_KEY_DOWN + "-up"
+   COMMA_KEY_DOWN = ","
+   COMMA_KEY_UP = COMMA_KEY_DOWN + "-up"
+   DOT_KEY_DOWN = "."
+   DOT_KEY_UP = DOT_KEY_DOWN + "-up"
+
 
 class WORLD_CONSTANTS:
    GRAVITY_VELOCITY = math.pi * 2 
