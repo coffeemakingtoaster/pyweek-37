@@ -12,7 +12,9 @@ class Player(Base_Entity):
       super().__init__()
    
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
-      self.model = Actor("assets/eggs/Player.egg",)
+      self.model = Actor("assets/anims/Secretary.egg",{
+         'idle': 'assets/anims/Secretary-Idle.egg'
+      })
         
       self.model.reparentTo(render)
 
