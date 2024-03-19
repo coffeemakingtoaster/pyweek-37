@@ -49,7 +49,7 @@ class Sample_Enemy(Base_Enemy):
       base.cTrav.addCollider(self.collision, self.notifier)
 
    def update(self, dt, player_pos):
-      
+     pass 
 
 
    def _player_hit(self, entry: CollisionEntry):
