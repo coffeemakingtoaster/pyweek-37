@@ -120,8 +120,10 @@ class Player(Base_Entity):
          if self.is_in_light_attack:
             new_z = self.main_model.getZ()
          else:
-            self.z_vel = max(self.z_vel - WORLD_CONSTANTS.GRAVITY_VELOCITY, -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
-            new_z = self.main_model.getZ() + (self.z_vel * dt)
+            self.z_vel = max(self.z_vel - (WORLD_CONSTANTS.GRAVITY_VELOCITY * dt), -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
+            new_z = min(self.main_model.getZ() + (self.z_vel * dt), WORLD_CONSTANTS.MAP_HEIGHT)
+            if new_z == WORLD_CONSTANTS.MAP_HEIGHT and self.z_vel > 0:
+               self.z_vel /= 2 
 
       if self.is_dashing:
          print("Dashing")
