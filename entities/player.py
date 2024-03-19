@@ -12,10 +12,6 @@ class Player(Base_Entity):
       super().__init__()
    
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
-      
-        
-      
-
       self._load_models()
       self._set_model_pos(player_x, player_z)
       self._set_model_h(90)
@@ -145,7 +141,7 @@ class Player(Base_Entity):
 
    def _light_attack(self):
       if self.main_model:
-         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode("attack"))
+         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode("player_light_attack"))
          self.attack_hitbox.show()
          self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-1,2),1,1,1))
          self.attack_hitbox.setTag("team", "player")
@@ -157,7 +153,7 @@ class Player(Base_Entity):
         
    def _heavy_attack(self):
       if self.main_model:
-         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode("attack"))
+         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode("player_heavy_attack"))
          self.attack_hitbox.show()
          self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-2,2),1,2,1))
          self.attack_hitbox.setTag("team", "player")
