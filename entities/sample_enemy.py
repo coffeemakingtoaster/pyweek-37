@@ -44,16 +44,16 @@ class Sample_Enemy(Base_Enemy):
 
       self.notifier.addInPattern("%fn-into-%in")
 
-      self.accept("player_light_attack-into", self._player_hit)
+      self.accept("enemy-into-player_light_attack", self._player_hit)
 
       base.cTrav.addCollider(self.collision, self.notifier)
 
+   def update(self, dt, player_pos):
+      
+
 
    def _player_hit(self, entry: CollisionEntry):
-      if entry.into_node.getTag("id") != self.id:
+      if entry.from_node.getTag("id") != self.id:
          return
       self._update_hp(-1)
 
-   def _update_hp(self, value):
-      self.hp += value
-      self._update_hp_display()

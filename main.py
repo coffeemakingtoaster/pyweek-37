@@ -26,6 +26,9 @@ class main_game(ShowBase):
     def __init__(self):
 
         ShowBase.__init__(self)
+        
+        # Print all occuring events
+        #messenger.toggleVerbose()
 
         # Set camera position
         base.cam.setPos(0, -60, 10)
@@ -93,9 +96,17 @@ class main_game(ShowBase):
         dt = self.clock.dt
 
         self.player.update(dt)
+        
+        remaining_enemies = []
 
         for enemy in self.enemies:
-            enemy.update(dt)
+            enemy.update(dt, self.player.getPos())
+            if enemy.is_dead:
+                enemy.destroy()
+                continue
+            # Is this inefficient? Probably yes...
+            remaining_enemies.append(enemy)
+            self.enemies = remaining_enemies
 
         return Task.cont
 
@@ -113,6 +124,7 @@ class main_game(ShowBase):
         self.player = Player(0,0)
         
         self.player.main_model.loop('idle')
+        self.player.shadow_model.loop('idle')
 
         self.enemies = [Sample_Enemy(10,0)]
 

@@ -195,6 +195,9 @@ class Player(Base_Entity):
       if not self.shadow_is_detached:
          self.shadow_model.setH(h)
 
+   def getPos(self):
+      return self.main_model.getPos()
+
    def destroy(self):
       self.ignore_all()
       self.main_model.removeNode()
