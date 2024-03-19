@@ -101,11 +101,8 @@ class Football_Fan(Base_Enemy):
       #print(f"{self.parentNode.getX()}")
 
    def _attack(self):
-      print(time() - self.last_attack_time)
       if time() - self.last_attack_time < ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_CD:
-         print("Nonono")
          return
-      print("attack")
       self.is_in_attack = True
       self.attack_hitbox = self.model.attachNewNode(CollisionNode(ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK))
       self.attack_hitbox.show()

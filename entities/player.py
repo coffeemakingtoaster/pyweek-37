@@ -224,3 +224,4 @@ class Player(Base_Entity):
    def destroy(self):
       self.ignore_all()
       self.main_model.removeNode()
+      self.shadow_model.removeNode()
