@@ -2,6 +2,8 @@ from entities.sample_enemy import Sample_Enemy
 from helpers.constants import EVENT_NAMES
 from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3, CollisionTraverser
 from entities.player import Player
+from entities.tunnel import Tunnel
+from entities.carriage import Carriage
 from helpers.logging import debug_log
 from ui.main_menu import main_menu
 from ui.pause_menu import pause_menu
@@ -24,11 +26,13 @@ class main_game(ShowBase):
     player = None
     enemies = []
     def __init__(self):
+        
+        self.map_status = "DRIVING"
 
         ShowBase.__init__(self)
 
         # Set camera position
-        base.cam.setPos(0, -60, 10)
+        base.cam.setPos(0, -7, 1)
 
         load_config(join("user_config.json"))
 
@@ -93,11 +97,18 @@ class main_game(ShowBase):
         dt = self.clock.dt
 
         self.player.update(dt)
+        self.tunnel.update(dt)
 
         for enemy in self.enemies:
             enemy.update(dt)
+            
+            
+        #if self.map_status == "Running":
+            
+        
 
         return Task.cont
+    
 
     def load_game(self):
         print("Loading game")
@@ -111,8 +122,11 @@ class main_game(ShowBase):
 
         # Setup entities
         self.player = Player(0,0)
+        self.tunnel = Tunnel()
+        self.carriage = Carriage()
         
         self.player.main_model.loop('idle')
+        self.player.shadow_model.loop('idle')
 
         self.enemies = [Sample_Enemy(10,0)]
 
