@@ -30,6 +30,9 @@ class main_game(ShowBase):
         self.map_status = "DRIVING"
 
         ShowBase.__init__(self)
+        
+        # Print all occuring events
+        #messenger.toggleVerbose()
 
         # Set camera position
         base.cam.setPos(0, -7, 1)
@@ -98,14 +101,17 @@ class main_game(ShowBase):
 
         self.player.update(dt)
         self.tunnel.update(dt)
+        
+        remaining_enemies = []
 
         for enemy in self.enemies:
-            enemy.update(dt)
-            
-            
-        #if self.map_status == "Running":
-            
-        
+            enemy.update(dt, self.player.getPos())
+            if enemy.is_dead:
+                enemy.destroy()
+                continue
+            # Is this inefficient? Probably yes...
+            remaining_enemies.append(enemy)
+            self.enemies = remaining_enemies
 
         return Task.cont
     

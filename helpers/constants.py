@@ -5,3 +5,8 @@ class EVENT_NAMES:
    TOGGLE_SETTINGS_EVENT = "toggle_settings"
    PAUSE_GAME_EVENT = "pause_game"
    GOTO_MAIN_MENU_EVENT = "goto_main_menu"
+
+class PLAYER_ATTACK_NAMES:
+   LIGHT_ATTACK = "player_light_attack"
+   HEAVY_ATTACK = "player_heavy_attack" 
+   DASH_ATTACK = "player_dash_attack" 

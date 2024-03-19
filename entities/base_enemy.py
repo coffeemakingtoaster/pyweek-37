@@ -6,16 +6,19 @@ from entities.base import Base_Entity
 class Base_Enemy(Base_Entity):
    def __init__(self) -> None:
       super().__init__()
+      
+      # Create empty parent node to allow rotating model without rotating hp bar
+      self.parentNode = render.attachNewNode("enemy")
+
       self.hp = 5
       self.max_hp = 5
       self.model = None
+      self.is_dead = False
 
    def attach_hp_bar_to_model(self, x_offset=-0.5, z_offset=3):
-      if self.model is None:
-         return
       cmfg = CardMaker('fg')
       cmfg.setFrame(0, 1, -0.1, 0.1)
-      self.fg = self.model.attachNewNode(cmfg.generate())
+      self.fg = self.parentNode.attachNewNode(cmfg.generate())
       self.fg.setPos(x_offset,0,z_offset)
 
       #cmbg = CardMaker('bg')
@@ -31,3 +34,11 @@ class Base_Enemy(Base_Entity):
       self.fg.setScale(hp_fraction, 1, 1)
       #self.bg.setScale(1.0 - hp_fraction, 1, 1)
 
+   def _update_hp(self, value):
+      self.hp += value
+      self._update_hp_display()
+      if self.hp <= 0:
+         self.is_dead = True
+
+   def destroy(self):
+      self.parentNode.removeNode()

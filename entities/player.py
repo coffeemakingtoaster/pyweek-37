@@ -4,18 +4,16 @@ from direct.actor.Actor import Actor
 
 from panda3d.core import CollisionNode, Point3, CollisionBox, CollisionHandlerEvent, Vec3
 
-from helpers.constants import EVENT_NAMES
+from helpers.constants import EVENT_NAMES, PLAYER_ATTACK_NAMES
 from helpers.logging import debug_log
+from collections import defaultdict
+from time import time
 
 class Player(Base_Entity):
    def __init__(self, player_x, player_z) -> None:
       super().__init__()
    
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
-      
-        
-      
-
       self._load_models()
       self._set_model_pos(player_x, player_z)
       self._set_model_h(90)
@@ -36,10 +34,13 @@ class Player(Base_Entity):
 
       self.is_in_light_attack = False
 
+      self.is_in_animation = False
+
       self.curr_dash_duration = 0
 
       self.is_dashing = False
 
+      self.cooldowns = defaultdict(lambda: 0.0)
 
    def _load_models(self):
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
@@ -57,7 +58,6 @@ class Player(Base_Entity):
 
       self.shadow_is_detached = False
       self.shadow_is_catching_up = False
-
    
    def _setup_keybinds(self) -> None:
       self.accept(KEYBIND_IDENTIFIERS.A_KEY_DOWN, self._update_movement_status, ["left", True])
@@ -69,6 +69,7 @@ class Player(Base_Entity):
       self.accept(KEYBIND_IDENTIFIERS.P_KEY_DOWN, self._change_hp, [1])
       self.accept(KEYBIND_IDENTIFIERS.COMMA_KEY_DOWN, self._light_attack)
       self.accept(KEYBIND_IDENTIFIERS.DOT_KEY_DOWN, self._heavy_attack)
+      self.accept(KEYBIND_IDENTIFIERS.M_KEY_DOWN, self._dash_attack)
 
    def _update_movement_status(self, direction: str, pressed: bool) -> None:
       if pressed:
@@ -144,29 +145,35 @@ class Player(Base_Entity):
       messenger.send(EVENT_NAMES.DISPLAY_PLAYER_HP_EVENT, [self.hp])
 
    def _light_attack(self):
+      # Prevent animation cancel
+      if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.LIGHT_ATTACK] < ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_CD:
+         return
       if self.main_model:
-         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode("attack"))
-         self.attack_hitbox.show()
-         self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-1,2),1,1,1))
-         self.attack_hitbox.setTag("team", "player")
-         self.attack_hitbox.setPos(0,0,-1)
-         self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
-         base.cTrav.addCollider(self.attack_hitbox, self.notifier)
-         base.taskMgr.doMethodLater(0.3, self._destroy_attack_hitbox,"destroy_light_attack_hitbox",[self.attack_hitbox, True])
+         self._add_attack_hitbox(PLAYER_ATTACK_NAMES.LIGHT_ATTACK, CollisionBox(Point3(0,-1,2),1,1,1), ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_DURATION, True)
       self.is_in_light_attack = True
-        
+      self.is_in_animation = True
+      self.cooldowns[PLAYER_ATTACK_NAMES.LIGHT_ATTACK] = time()
+
    def _heavy_attack(self):
+      # Prevent animation cancel
+      if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.HEAVY_ATTACK] < ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_CD:
+         return
       if self.main_model:
-         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode("attack"))
-         self.attack_hitbox.show()
-         self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-2,2),1,2,1))
-         self.attack_hitbox.setTag("team", "player")
-         self.attack_hitbox.setPos(0,0,-1)
-         self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
-         base.cTrav.addCollider(self.attack_hitbox, self.notifier)
-         base.taskMgr.doMethodLater(0.5, self._destroy_attack_hitbox,"destroy_light_attack_hitbox",[self.attack_hitbox])
+         self._add_attack_hitbox(PLAYER_ATTACK_NAMES.HEAVY_ATTACK,CollisionBox(Point3(0,-2,2),1,2,1), ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_DURATION)
+      self.is_in_animation = True
+      self.cooldowns[PLAYER_ATTACK_NAMES.HEAVY_ATTACK] = time()
+        
+   def _dash_attack(self):
+      # Prevent animation cancel
+      if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.DASH_ATTACK] < ENTITY_CONSTANTS.PLAYER_DASH_ATTACK_CD:
+         return
+      if self.main_model:
+         box = CollisionBox(Point3(0,-(ENTITY_CONSTANTS.PLAYER_DASH_DISTANCE / 2),2),1,ENTITY_CONSTANTS.PLAYER_DASH_DISTANCE/2,1)
+         self._add_attack_hitbox(PLAYER_ATTACK_NAMES.DASH_ATTACK, box,0.05)
 
          self.is_dashing = True
+
+         self.cooldowns[PLAYER_ATTACK_NAMES.DASH_ATTACK] = time()
 
          # right
          self.dash_direction_x = ENTITY_CONSTANTS.PLAYER_DASH_DISTANCE
@@ -179,12 +186,26 @@ class Player(Base_Entity):
          base.taskMgr.doMethodLater(ENTITY_CONSTANTS.PLAYER_DASH_DURATION + ENTITY_CONSTANTS.PLAYER_SHADOW_CATCH_UP_INITIAL_DELAY, self._shadow_ketchup, "shadow_catch_up", [0])
          # detach second model for dash effect
          self.shadow_is_detached = True
+         self.is_in_animation = True
+
+   def _add_attack_hitbox(self, attack_name, box, attack_duration, is_light_attack = False):
+         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode(attack_name))
+         self.attack_hitbox.show()
+         self.attack_hitbox.node().addSolid(box)
+         self.attack_hitbox.setTag("team", "player")
+         self.attack_hitbox.setPos(0,0,-1)
+         self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
+         base.cTrav.addCollider(self.attack_hitbox, self.notifier)
+         base.taskMgr.doMethodLater(attack_duration, self._destroy_attack_hitbox,f"destroy_{attack_name}_hitbox",[self.attack_hitbox, is_light_attack])
+
+
 
    def _destroy_attack_hitbox(self, hitbox, is_light_attack=False):
       if hitbox:
          hitbox.removeNode()
       if is_light_attack:
          self.is_in_light_attack = False
+      self.is_in_animation = False
 
    def _shadow_ketchup(self,_):
       self.shadow_is_catching_up = True
@@ -198,6 +219,9 @@ class Player(Base_Entity):
       self.main_model.setH(h)
       if not self.shadow_is_detached:
          self.shadow_model.setH(h)
+
+   def getPos(self):
+      return self.main_model.getPos()
 
    def destroy(self):
       self.ignore_all()
