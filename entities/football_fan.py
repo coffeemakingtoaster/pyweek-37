@@ -7,10 +7,11 @@ import uuid
 from panda3d.core import CollisionEntry, CollisionNode,  CollisionBox, Point3, CollisionHandlerEvent
 
 from entities.player import Player
-from helpers.constants import PLAYER_ATTACK_NAMES
+from helpers.constants import ENEMY_ATTACK_NAMES, PLAYER_ATTACK_NAMES
 
-# This is used for testing, not for the actual game
-class Sample_Enemy(Base_Enemy):
+from time import time
+
+class Football_Fan(Base_Enemy):
    def __init__(self, enemy_x, enemy_z) -> None:
       super().__init__()
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
@@ -54,14 +55,36 @@ class Sample_Enemy(Base_Enemy):
 
       base.cTrav.addCollider(self.collision, self.notifier)
 
+      self.is_in_attack = False
+
+      self.last_attack_time = 0
+
    def update(self, dt, player_pos):
       if self.is_dead:
          return
-      x_diff_to_player = self.parentNode.getX() - player_pos.getX()
-      if x_diff_to_player < 0: 
-         self.model.setH(90)
-      elif x_diff_to_player > 0:
-         self.model.setH(-90)
+      
+      x_movement = 0
+      if not self.is_in_attack:
+         x_diff_to_player = self.parentNode.getX() - player_pos.getX()
+
+         if abs(x_diff_to_player) < ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_RANGE:
+            self._attack()
+
+         x_movement = ENTITY_CONSTANTS.FOOTBALL_FAN_MOVEMENT_SPEED * dt 
+
+         if  x_diff_to_player < x_movement:
+            # prevent -inf exception
+            x_movement = max(x_diff_to_player, 0.3)
+         
+         # Stop moving once close to avoid glitching in player
+         if abs(x_diff_to_player) < (ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_RANGE / 2):
+            x_movement = 0
+
+         if x_diff_to_player < 0: 
+            self.model.setH(90)
+         elif x_diff_to_player > 0:
+            self.model.setH(-90)
+            x_movement *= -1
 
       new_z = 0
 
@@ -69,8 +92,35 @@ class Sample_Enemy(Base_Enemy):
       if self.parentNode.getZ() > 0.1  or self.z_velocity > 0:
          self.z_velocity = max(self.z_velocity - WORLD_CONSTANTS.GRAVITY_VELOCITY, -ENTITY_CONSTANTS.ENEMY_MAX_FALL_SPEED) 
          new_z = self.parentNode.getZ() + (self.z_velocity * dt)
+         x_movement = 0
       
-      self.parentNode.setFluidPos(self.parentNode.getX(), 0, new_z)
+      new_x = self.parentNode.getX() + x_movement
+      
+      self.parentNode.setFluidPos(new_x, 0, new_z)
+
+      #print(f"{self.parentNode.getX()}")
+
+   def _attack(self):
+      print(time() - self.last_attack_time)
+      if time() - self.last_attack_time < ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_CD:
+         print("Nonono")
+         return
+      print("attack")
+      self.is_in_attack = True
+      self.attack_hitbox = self.model.attachNewNode(CollisionNode(ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK))
+      self.attack_hitbox.show()
+      self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-1,2),1,1,1))
+      self.attack_hitbox.setTag("team", "enemy")
+      self.attack_hitbox.setPos(0,0,-1)
+      self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.PLAYER)
+      base.cTrav.addCollider(self.attack_hitbox, self.notifier)
+      base.taskMgr.doMethodLater(ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_DURATION, self._destroy_attack_hitbox,f"destroy_{ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK}_hitbox",[self.attack_hitbox])
+      self.last_attack_time = time()
+
+   def _destroy_attack_hitbox(self, hitbox):
+      if hitbox:
+         hitbox.removeNode()
+      self.is_in_attack = False
 
    def _player_hit(self, entry: CollisionEntry):
       if entry.from_node.getTag("id") != self.id:

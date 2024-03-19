@@ -198,8 +198,6 @@ class Player(Base_Entity):
          base.cTrav.addCollider(self.attack_hitbox, self.notifier)
          base.taskMgr.doMethodLater(attack_duration, self._destroy_attack_hitbox,f"destroy_{attack_name}_hitbox",[self.attack_hitbox, is_light_attack])
 
-
-
    def _destroy_attack_hitbox(self, hitbox, is_light_attack=False):
       if hitbox:
          hitbox.removeNode()
