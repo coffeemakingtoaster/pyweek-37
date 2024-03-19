@@ -4,7 +4,7 @@ from direct.actor.Actor import Actor
 
 from panda3d.core import CollisionNode, Point3, CollisionBox, CollisionHandlerEvent, Vec3
 
-from helpers.constants import EVENT_NAMES
+from helpers.constants import EVENT_NAMES, PLAYER_ATTACK_NAMES
 from helpers.logging import debug_log
 
 class Player(Base_Entity):
@@ -53,7 +53,6 @@ class Player(Base_Entity):
 
       self.shadow_is_detached = False
       self.shadow_is_catching_up = False
-
    
    def _setup_keybinds(self) -> None:
       self.accept(KEYBIND_IDENTIFIERS.A_KEY_DOWN, self._update_movement_status, ["left", True])
@@ -65,6 +64,7 @@ class Player(Base_Entity):
       self.accept(KEYBIND_IDENTIFIERS.P_KEY_DOWN, self._change_hp, [1])
       self.accept(KEYBIND_IDENTIFIERS.COMMA_KEY_DOWN, self._light_attack)
       self.accept(KEYBIND_IDENTIFIERS.DOT_KEY_DOWN, self._heavy_attack)
+      self.accept(KEYBIND_IDENTIFIERS.M_KEY_DOWN, self._dash_attack)
 
    def _update_movement_status(self, direction: str, pressed: bool) -> None:
       if pressed:
@@ -141,26 +141,37 @@ class Player(Base_Entity):
 
    def _light_attack(self):
       if self.main_model:
-         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode("player_light_attack"))
+         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode(PLAYER_ATTACK_NAMES.LIGHT_ATTACK))
          self.attack_hitbox.show()
          self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-1,2),1,1,1))
          self.attack_hitbox.setTag("team", "player")
          self.attack_hitbox.setPos(0,0,-1)
          self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
          base.cTrav.addCollider(self.attack_hitbox, self.notifier)
-         base.taskMgr.doMethodLater(0.3, self._destroy_attack_hitbox,"destroy_light_attack_hitbox",[self.attack_hitbox, True])
+         base.taskMgr.doMethodLater(0.3, self._destroy_attack_hitbox,f"destroy_{PLAYER_ATTACK_NAMES.LIGHT_ATTACK}_hitbox",[self.attack_hitbox, True])
       self.is_in_light_attack = True
-        
+
    def _heavy_attack(self):
       if self.main_model:
-         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode("player_heavy_attack"))
+         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode(PLAYER_ATTACK_NAMES.HEAVY_ATTACK))
          self.attack_hitbox.show()
          self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-2,2),1,2,1))
          self.attack_hitbox.setTag("team", "player")
          self.attack_hitbox.setPos(0,0,-1)
          self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
          base.cTrav.addCollider(self.attack_hitbox, self.notifier)
-         base.taskMgr.doMethodLater(0.5, self._destroy_attack_hitbox,"destroy_light_attack_hitbox",[self.attack_hitbox])
+         base.taskMgr.doMethodLater(0.5, self._destroy_attack_hitbox,f"destroy_{PLAYER_ATTACK_NAMES.HEAVY_ATTACK}_hitbox",[self.attack_hitbox])
+        
+   def _dash_attack(self):
+      if self.main_model:
+         self.attack_hitbox = self.main_model.attachNewNode(CollisionNode(PLAYER_ATTACK_NAMES.DASH_ATTACK))
+         self.attack_hitbox.show()
+         self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-2,2),1,2,1))
+         self.attack_hitbox.setTag("team", "player")
+         self.attack_hitbox.setPos(0,0,-1)
+         self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.ENEMY)
+         base.cTrav.addCollider(self.attack_hitbox, self.notifier)
+         base.taskMgr.doMethodLater(0.5, self._destroy_attack_hitbox,f"destroy_{PLAYER_ATTACK_NAMES.DASH_ATTACK}_hitbox",[self.attack_hitbox])
 
          self.is_dashing = True
 

@@ -34,7 +34,8 @@ class KEYBIND_IDENTIFIERS:
    COMMA_KEY_UP = COMMA_KEY_DOWN + "-up"
    DOT_KEY_DOWN = "."
    DOT_KEY_UP = DOT_KEY_DOWN + "-up"
-
+   M_KEY_DOWN = "m"
+   M_KEY_UP = M_KEY_DOWN + "-up"
 
 class WORLD_CONSTANTS:
    GRAVITY_VELOCITY = math.pi * 2 
@@ -51,3 +52,7 @@ class ENTITY_CONSTANTS:
    PLAYER_SHADOW_CATCH_UP_INITIAL_DELAY = 0.1
    PLAYER_DASH_DURATION = 0.05
    PLAYER_DASH_DISTANCE = 15
+   PLAYER_DASH_KNOCKUP = 50
+   PLAYER_HEAVY_ATTACK_KNOCKUP = 75
+   # enemies fall slower than the player to make midair combos easier
+   ENEMY_MAX_FALL_SPEED = 15
