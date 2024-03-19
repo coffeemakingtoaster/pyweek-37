@@ -4,7 +4,7 @@ from direct.actor.Actor import Actor
 
 from panda3d.core import CollisionNode, Point3, CollisionBox, CollisionHandlerEvent, Vec3, CollisionEntry
 
-from helpers.constants import EVENT_NAMES, PLAYER_ATTACK_NAMES
+from helpers.constants import ENEMY_ATTACK_NAMES, EVENT_NAMES, PLAYER_ATTACK_NAMES
 from helpers.logging import debug_log
 from collections import defaultdict
 from time import time
@@ -37,6 +37,8 @@ class Player(Base_Entity):
       self.is_in_animation = False
 
       self.curr_dash_duration = 0
+
+      self.last_hit_timestamp = 0
 
       self.is_dashing = False
 
@@ -223,6 +225,12 @@ class Player(Base_Entity):
 
    def _enemy_hit(self, entry: CollisionEntry):
       print(entry.into_node.getName())
+      # Still in inv period 
+      if time() - self.last_hit_timestamp < ENTITY_CONSTANTS.PLAYER_POST_DAMAGE_INV_PERIOD:
+         return
+      if entry.into_node.getName() in [ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK]:
+         self._change_hp(-1)
+         self.last_hit_timestamp = time()
 
    def _shadow_ketchup(self,_):
       self.shadow_is_catching_up = True

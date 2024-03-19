@@ -55,6 +55,7 @@ class ENTITY_CONSTANTS:
    PLAYER_DASH_DISTANCE = 10
    PLAYER_DASH_KNOCKUP = 50
    PLAYER_HEAVY_ATTACK_KNOCKUP = 75
+   PLAYER_POST_DAMAGE_INV_PERIOD = 5 
    # enemies fall slower than the player to make midair combos easier
    ENEMY_MAX_FALL_SPEED = 15
    PLAYER_HEAVY_ATTACK_DURATION = 0.2
