@@ -36,7 +36,8 @@ class main_game(ShowBase):
         #messenger.toggleVerbose()
 
         # Set camera position
-        base.cam.setPos(0, -7, 1)
+        #base.cam.setPos(0, -7, 1)
+        base.cam.setPos(0, -30, 1)
 
         load_config(join("user_config.json"))
 

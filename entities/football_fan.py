@@ -45,19 +45,17 @@ class Football_Fan(Base_Enemy):
 
       self.notifier = CollisionHandlerEvent()
 
-      self.notifier.addInPattern("%fn-into-%in")
+      self.notifier.addInPattern("%fn-into")
 
-      self.accept(f"enemy-into-{PLAYER_ATTACK_NAMES.LIGHT_ATTACK}", self._player_hit)
-
-      self.accept(f"enemy-into-{PLAYER_ATTACK_NAMES.DASH_ATTACK}", self._player_hit)
-
-      self.accept(f"enemy-into-{PLAYER_ATTACK_NAMES.HEAVY_ATTACK}", self._player_hit)
+      self.accept(f"enemy-into", self._player_hit)
 
       base.cTrav.addCollider(self.collision, self.notifier)
 
       self.is_in_attack = False
 
       self.last_attack_time = 0
+
+      self.attack_hitbox = None
 
    def update(self, dt, player_pos):
       if self.is_dead:
@@ -101,7 +99,8 @@ class Football_Fan(Base_Enemy):
       #print(f"{self.parentNode.getX()}")
 
    def _attack(self):
-      if time() - self.last_attack_time < ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_CD:
+      # Enemy cannot attack midair and when last attack was recently
+      if time() - self.last_attack_time < ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_CD or self.parentNode.getZ() > 0.1:
          return
       self.is_in_attack = True
       self.attack_hitbox = self.model.attachNewNode(CollisionNode(ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK))
@@ -111,18 +110,21 @@ class Football_Fan(Base_Enemy):
       self.attack_hitbox.setPos(0,0,-1)
       self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.PLAYER)
       base.cTrav.addCollider(self.attack_hitbox, self.notifier)
-      base.taskMgr.doMethodLater(ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_DURATION, self._destroy_attack_hitbox,f"destroy_{ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK}_hitbox",[self.attack_hitbox])
+      base.taskMgr.doMethodLater(ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_DURATION, self._destroy_attack_hitbox,f"destroy_{ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK}_hitbox")
       self.last_attack_time = time()
 
-   def _destroy_attack_hitbox(self, hitbox):
-      if hitbox:
-         hitbox.removeNode()
+   def _destroy_attack_hitbox(self, _):
+      if self.attack_hitbox:
+         self.attack_hitbox.removeNode()
+         self.attack_hitbox = None
       self.is_in_attack = False
 
    def _player_hit(self, entry: CollisionEntry):
       if entry.from_node.getTag("id") != self.id:
          return
       attack_identifier = entry.into_node.getName()
+
+      self._destroy_attack_hitbox(None)
       if attack_identifier in [PLAYER_ATTACK_NAMES.HEAVY_ATTACK, PLAYER_ATTACK_NAMES.DASH_ATTACK]:
          if self.model.getZ() > 0.1:
             # Stop the fall
