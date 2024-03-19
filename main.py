@@ -112,7 +112,7 @@ class main_game(ShowBase):
         # Setup entities
         self.player = Player(0,0)
         
-        self.player.model.loop('idle')
+        self.player.main_model.loop('idle')
 
         self.enemies = [Sample_Enemy(10,0)]
 

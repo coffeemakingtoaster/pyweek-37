@@ -12,11 +12,9 @@ class Player(Base_Entity):
       super().__init__()
    
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
-      self.model = Actor("assets/anims/Secretary.egg",{
-         'idle': 'assets/anims/Secretary-Idle.egg'
-      })
+      
         
-      self.model.reparentTo(render)
+      
 
       self._load_models()
       self._set_model_pos(player_x, player_z)
@@ -45,11 +43,15 @@ class Player(Base_Entity):
 
    def _load_models(self):
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
-      self.main_model = Actor("assets/eggs/Player.egg",)
+      self.main_model = Actor("assets/anims/Secretary.egg",{
+         'idle': 'assets/anims/Secretary-Idle.egg'
+      })
         
       self.main_model.reparentTo(render)
 
-      self.shadow_model = Actor("assets/eggs/Player.egg")
+      self.shadow_model = Actor("assets/anims/Secretary.egg",{
+         'idle': 'assets/anims/Secretary-Idle.egg'
+      })
 
       self.shadow_model.reparentTo(render)
 
