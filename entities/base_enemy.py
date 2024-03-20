@@ -5,7 +5,7 @@ import uuid
 
 from config import ENTITY_CONSTANTS, TEAM_BITMASKS, WORLD_CONSTANTS
 from entities.base import Base_Entity
-from helpers.constants import PLAYER_ATTACK_NAMES
+from helpers.constants import EVENT_NAMES, PLAYER_ATTACK_NAMES
 
 class Base_Enemy(Base_Entity):
    def __init__(self) -> None:
@@ -100,6 +100,8 @@ class Base_Enemy(Base_Entity):
       if entry.from_node.getTag("id") != self.id:
          return
       attack_identifier = entry.into_node.getName()
+
+      messenger.send(EVENT_NAMES.INCREMENT_COMBO_COUNTER)
 
       self._destroy_attack_hitbox(None)
       # Allow light attack to stop enemy from being knocked back

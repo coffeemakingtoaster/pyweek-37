@@ -231,10 +231,10 @@ class Player(Base_Entity):
       self.is_in_animation = False
 
    def _enemy_hit(self, entry: CollisionEntry):
-      print(entry.into_node.getName())
       # Still in inv period 
       if time() - self.last_hit_timestamp < ENTITY_CONSTANTS.PLAYER_POST_DAMAGE_INV_PERIOD:
          return
+      messenger.send(EVENT_NAMES.RESET_COMBO_COUNTER)
       if entry.into_node.getName() in [ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK]:
          self._change_hp(-1)
          self.last_hit_timestamp = time()
