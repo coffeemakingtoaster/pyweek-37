@@ -1,5 +1,6 @@
 from entities.football_fan import Football_Fan
 from entities.sample_enemy import Sample_Enemy
+from handlers.hit_indicator_handler import Hit_Indicator_Handler
 from helpers.constants import EVENT_NAMES
 from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3, CollisionTraverser
 from entities.player import Player
@@ -28,9 +29,8 @@ loadPrcFile("./settings.prc")
 class main_game(ShowBase):
     player = None
     enemies = []
+    hit_indicator_handler = None
     def __init__(self):
-        
-        
 
         ShowBase.__init__(self)
         
@@ -38,7 +38,7 @@ class main_game(ShowBase):
         #messenger.toggleVerbose()
 
         # Set camera position
-        base.cam.setPos(0, -70, 1)
+        base.cam.setPos(0, -30, 1)
 
         load_config(join("user_config.json"))
 
@@ -46,6 +46,8 @@ class main_game(ShowBase):
 
         # This should be obvious
         base.enableParticles()
+
+        self.setupLights()
 
         self.current_hud = None
 
@@ -137,7 +139,8 @@ class main_game(ShowBase):
         self.tunnel = Tunnel()
         self.carriage = Carriage()
         self.station = Station()
-        
+
+        self.hit_indicator_handler = Hit_Indicator_Handler()
         
         self.player.main_model.loop('idle')
         self.player.shadow_model.loop('idle')
@@ -145,8 +148,6 @@ class main_game(ShowBase):
         self.enemies = [ Football_Fan(-10,0)]
         #[Sample_Enemy(10,0), Football_Fan(-10,0)]
 
-        self.setupLights()
-        
         self.gameState = GameFSM(self.player,self.tunnel,self.carriage,self.station)
         
         self.gameState.request('Drive')
@@ -190,6 +191,9 @@ class main_game(ShowBase):
         for enemy in self.enemies:
             enemy.destroy()
         self.enemies = []
+        if self.hit_indicator_handler is not None:
+            self.hit_indicator_handler.destroy()
+            self.hit_indicator_handler = None
 
     def toggle_settings(self):
         if self.game_status == GAME_STATUS.MAIN_MENU:

@@ -1,12 +1,10 @@
-from direct.showbase.PythonUtil import time
-from config import ENTITY_CONSTANTS
+from config import ENTITY_CONSTANTS, UI_CONSTANTS
 from helpers.constants import EVENT_NAMES
 from ui.ui_base import ui_base
-from helpers.utilities import format_float
 
 from os.path import join
 
-from panda3d.core import TransparencyAttrib
+from panda3d.core import TransparencyAttrib, Point3, Point2
 from direct.task.Task import Task
 
 from direct.gui.DirectGui import DirectLabel, OnscreenImage
@@ -40,14 +38,20 @@ class game_hud(ui_base):
 
         self.time_since_last_combo_attack = 0
 
+        self.hit_indicators = []
+        self.pooled_hit_indicators = [DirectLabel(text="BAM",scale=1.1, pos=Point3(0,0,0), text_font=self.font, relief=None, text_fg=(0,0,0,1))] * UI_CONSTANTS.MAX_HIT_INDICATORS
+        for item in self.pooled_hit_indicators:
+            item.hide()
+
     def _show_combo_counter(self, is_visible):
+        if self.combo_counter_display is None:
+            return
         if is_visible:
-            self.combo_counter_display.setPos(self.combo_counter_position)
+            self.combo_counter_display.show()
         else:
-            self.combo_counter_display.setPos(100,100,100)
+            self.combo_counter_display.hide()
 
     def _update_combo_timeframe(self, _):
-        print("tick")
         if self.time_since_last_combo_attack >= ENTITY_CONSTANTS.PLAYER_COMBO_TIMEFRAME:
             self.combo_count = 0 
             self._show_combo_counter(False)
@@ -84,6 +88,8 @@ class game_hud(ui_base):
         base.taskMgr.removeTasksMatching("hud_update*")
         try:
             super().destroy()
+            for indicator in self.hit_indicators + self.pooled_hit_indicators:
+                indicator.destroy()
         except:
             print("Nodes were already cleaned up")
 

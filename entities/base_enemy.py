@@ -102,6 +102,7 @@ class Base_Enemy(Base_Entity):
       attack_identifier = entry.into_node.getName()
 
       messenger.send(EVENT_NAMES.INCREMENT_COMBO_COUNTER)
+      messenger.send(EVENT_NAMES.DISPLAY_HIT, [self.parentNode.getPos()])
 
       self._destroy_attack_hitbox(None)
       # Allow light attack to stop enemy from being knocked back

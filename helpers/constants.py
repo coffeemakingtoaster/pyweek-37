@@ -7,6 +7,7 @@ class EVENT_NAMES:
    GOTO_MAIN_MENU_EVENT = "goto_main_menu"
    INCREMENT_COMBO_COUNTER = "increment_combo_counter"
    RESET_COMBO_COUNTER = "reset_combo_counter"
+   DISPLAY_HIT = "display_hit"
 
 class PLAYER_ATTACK_NAMES:
    LIGHT_ATTACK = "player_light_attack"
