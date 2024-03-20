@@ -6,7 +6,6 @@ import uuid
 
 from panda3d.core import CollisionEntry, CollisionNode,  CollisionBox, Point3, CollisionHandlerEvent
 
-from entities.player import Player
 from helpers.constants import ENEMY_ATTACK_NAMES, PLAYER_ATTACK_NAMES
 
 from time import time
@@ -57,6 +56,8 @@ class Football_Fan(Base_Enemy):
 
       self.attack_hitbox = None
 
+      self.knockback_velocity = 0
+
    def update(self, dt, player_pos):
       if self.is_dead:
          return
@@ -88,11 +89,11 @@ class Football_Fan(Base_Enemy):
 
       # gravity
       if self.parentNode.getZ() > 0.1  or self.z_velocity > 0:
-         self.z_velocity = max(self.z_velocity - WORLD_CONSTANTS.GRAVITY_VELOCITY, -ENTITY_CONSTANTS.ENEMY_MAX_FALL_SPEED) 
-         new_z = self.parentNode.getZ() + (self.z_velocity * dt)
-         x_movement = 0
+         self.z_velocity = max(self.z_velocity - (WORLD_CONSTANTS.GRAVITY_VELOCITY * WORLD_CONSTANTS.ENEMY_GRAVITY_MODIFIER), -ENTITY_CONSTANTS.ENEMY_MAX_FALL_SPEED) 
+         new_z = min(self.parentNode.getZ() + (self.z_velocity * dt), WORLD_CONSTANTS.MAP_HEIGHT)
+         x_movement = self.knockback_velocity * dt
       
-      new_x = self.parentNode.getX() + x_movement
+      new_x = max(min(self.parentNode.getX() + x_movement, WORLD_CONSTANTS.MAP_X_LIMIT), -WORLD_CONSTANTS.MAP_X_LIMIT)
       
       self.parentNode.setFluidPos(new_x, 0, new_z)
 
@@ -125,13 +126,21 @@ class Football_Fan(Base_Enemy):
       attack_identifier = entry.into_node.getName()
 
       self._destroy_attack_hitbox(None)
+      # Allow light attack to stop enemy from being knocked back
+      self.knockback_velocity = 0
       if attack_identifier in [PLAYER_ATTACK_NAMES.HEAVY_ATTACK, PLAYER_ATTACK_NAMES.DASH_ATTACK]:
+         # This is a CC attack
          if self.model.getZ() > 0.1:
             # Stop the fall
-            self.z_velocity = 0
+            self.z_velocity = 3 
          else:
             if attack_identifier == PLAYER_ATTACK_NAMES.HEAVY_ATTACK:
                self.z_velocity = ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_KNOCKUP
+               self.knockback_velocity = ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_KNOCKBACK
             else:
                self.z_velocity = ENTITY_CONSTANTS.PLAYER_DASH_KNOCKUP
+         # This adjusts the knockback direction based on enemy orientation
+         # This works because the enemy is always facing the player
+         if self.model.getH() > 0:
+            self.knockback_velocity *= -1
       self._update_hp(-1)

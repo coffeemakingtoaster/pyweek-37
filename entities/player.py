@@ -126,7 +126,6 @@ class Player(Base_Entity):
                self.z_vel /= 2 
 
       if self.is_dashing:
-         print("Dashing")
          if self.curr_dash_duration >= ENTITY_CONSTANTS.PLAYER_DASH_DURATION:
             self.is_dashing = False
             self.curr_dash_duration = 0
