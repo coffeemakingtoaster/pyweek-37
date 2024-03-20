@@ -36,6 +36,8 @@ class KEYBIND_IDENTIFIERS:
    DOT_KEY_UP = DOT_KEY_DOWN + "-up"
    M_KEY_DOWN = "m"
    M_KEY_UP = M_KEY_DOWN + "-up"
+   J_KEY_DOWN = "j"
+   K_KEY_DOWN = "k"
 
 class WORLD_CONSTANTS:
    GRAVITY_VELOCITY = math.pi * 8
@@ -44,7 +46,7 @@ class WORLD_CONSTANTS:
    # Make camera more dynamic
    CAMERA_X_LIMIT = MAP_X_LIMIT - 3
    TUNNEL_SPEED = 15
-   CARRIAGE_SPEED = 0
+   CARRIAGE_SPEED = 15
    ENEMY_GRAVITY_MODIFIER = 1/8
 
 class ENTITY_CONSTANTS:

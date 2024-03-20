@@ -17,6 +17,7 @@ class Tunnel(Base_Entity):
     def update(self, dt):
         if self.started:
             for model in self.segments:
+                
                 model.setFluidX(model.getX() - WORLD_CONSTANTS.TUNNEL_SPEED * dt)
                 if not self.station:
                     if model.getX() < -28:
@@ -35,7 +36,7 @@ class Tunnel(Base_Entity):
         self.segments.append(model1)
         
         model2 = Actor("assets/eggs/tunnel.egg")
-        model2.setPosHprScale(48,3,1, 90, 0, 0, 1, 1, 1)
+        model2.setPosHprScale(28,3,1, 90, 0, 0, 1, 1, 1)
         model2.reparentTo(render)
         
         self.segments.append(model2)

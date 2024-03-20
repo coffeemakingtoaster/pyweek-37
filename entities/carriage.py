@@ -9,48 +9,36 @@ class Carriage(Base_Entity):
     def __init__(self):
         super().__init__()
         
-        self.segments = []
+        self.model = Actor("assets/anims/Carriage.egg",{
+         'Close_Doors': 'assets/anims/Carriage-Close_Doors.egg','Open_Doors':'assets/anims/Carriage-Open_Doors.egg'
+      })
+        self.model.setPosHprScale(0,-1.5,-9, 90, 0, 0, 1, 1.5, 1)
+        self.model.reparentTo(render)
         self.started = False
+        self.goalX = 9999
         
-        model1 = Actor("assets/eggs/Carriage.egg")
-        model1.setPosHprScale(0,0,-7.5, 90, 0, 0, 1, 1, 1)
-        model1.reparentTo(render)
-       
-        self.segments.append(model1)
         
-        model2 = Actor("assets/eggs/Carriage.egg")
-        model2.setPosHprScale(16.4,0,-7.5, 90, 0, 0, 1, 1, 1)
-        model2.reparentTo(render)
         
-        self.segments.append(model2)
-        
-        model3 = Actor("assets/eggs/Carriage.egg")
-        model3.setPosHprScale(-16.4,0,-7.5, 90, 0, 0, 1, 1, 1)
-        model3.reparentTo(render)
-        
-        self.segments.append(model3)
         
     def arrive(self):
-        
-        for model in self.segments:
-            model.setX(model.getX()-40)
-            
+        self.model.setX(-100)
         self.started = True
+        self.goalX = 0
         
     def update(self,dt):       
         if self.started:
-            for model in self.segments:
-                model.setFluidX(model.getX() + WORLD_CONSTANTS.CARRIAGE_SPEED * dt)
-                if model.getX() >= 16.4:
-                    self.started = False
+            self.model.setFluidX(self.model.getX() + WORLD_CONSTANTS.CARRIAGE_SPEED * dt)
+            if self.model.getX() <= self.goalX+1 and self.model.getX() >= self.goalX-1:
+                self.started = False
     
     def leave(self):
-        print("Leaving")
+        print("Carriage Leaving")
+        self.started = True
+        self.goalX = 200
     def startEnemies(self):
         print("Starting Enemies")
     def stopEnemies(self):
         print("Stopping Enemies")
     
     def destroy(self):
-        for model in self.models:
-            model.cleanup()
+        self.model.cleanup()

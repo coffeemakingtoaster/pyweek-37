@@ -3,9 +3,9 @@ from entities.sample_enemy import Sample_Enemy
 from helpers.constants import EVENT_NAMES
 from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3, CollisionTraverser
 from entities.player import Player
-from entities.tunnel import Tunnel
+
 from entities.carriage import Carriage
-from entities.station import Station
+from entities.map import Map
 from helpers.logging import debug_log
 from ui.main_menu import main_menu
 from ui.pause_menu import pause_menu
@@ -38,7 +38,7 @@ class main_game(ShowBase):
         #messenger.toggleVerbose()
 
         # Set camera position
-        base.cam.setPos(0, -70, 1)
+        base.cam.setPos(0, -7, 1)
 
         load_config(join("user_config.json"))
 
@@ -65,6 +65,9 @@ class main_game(ShowBase):
         self.accept(EVENT_NAMES.GOTO_MAIN_MENU_EVENT, self.goto_to_main_menu)
         self.accept(EVENT_NAMES.TOGGLE_SETTINGS_EVENT, self.toggle_settings)
         
+        self.accept(KEYBIND_IDENTIFIERS.J_KEY_DOWN,self.set_Station)
+        self.accept(KEYBIND_IDENTIFIERS.K_KEY_DOWN,self.set_Drive)
+        
 
         self.gameTask = base.taskMgr.add(self.game_loop, "gameLoop")
 
@@ -82,7 +85,7 @@ class main_game(ShowBase):
 
     def setupLights(self):  
         ambientLight = AmbientLight("ambientLight")
-        ambientLight.setColor((.1, .1, .1, 1))
+        ambientLight.setColor((.4, .4, .4, 4))
         directionalLight = DirectionalLight("directionalLight")
         directionalLight.setDirection(LVector3(0, -45, -45))
         directionalLight.setColor((0.3, 0.3, 0.3, 1))
@@ -104,9 +107,10 @@ class main_game(ShowBase):
         dt = self.clock.dt
 
         self.player.update(dt)
-        self.tunnel.update(dt)
+        
         self.carriage.update(dt)
-        self.station.update(dt)
+        
+        self.map.update(dt)
         
         remaining_enemies = []
 
@@ -134,9 +138,10 @@ class main_game(ShowBase):
 
         # Setup entities
         self.player = Player(0,0)
-        self.tunnel = Tunnel()
+        
         self.carriage = Carriage()
-        self.station = Station()
+        
+        self.map = Map()
         
         
         self.player.main_model.loop('idle')
@@ -147,11 +152,19 @@ class main_game(ShowBase):
 
         self.setupLights()
         
-        self.gameState = GameFSM(self.player,self.tunnel,self.carriage,self.station)
+        self.gameState = GameFSM(self.player,self.map,self.carriage)
         
         self.gameState.request('Drive')
         
 
+
+    def set_Drive(self):
+        self.gameState.request('Drive')
+        
+    def set_Station(self):
+        self.gameState.request('Station')
+        
+            
     def set_game_status(self, status):
         self.status_display["text"] = status
         self.game_status = status
