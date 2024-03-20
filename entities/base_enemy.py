@@ -5,7 +5,7 @@ import uuid
 
 from config import ENTITY_CONSTANTS, TEAM_BITMASKS, WORLD_CONSTANTS
 from entities.base import Base_Entity
-from helpers.constants import PLAYER_ATTACK_NAMES
+from helpers.constants import EVENT_NAMES, PLAYER_ATTACK_NAMES
 
 class Base_Enemy(Base_Entity):
    def __init__(self) -> None:
@@ -101,6 +101,9 @@ class Base_Enemy(Base_Entity):
          return
       attack_identifier = entry.into_node.getName()
 
+      messenger.send(EVENT_NAMES.INCREMENT_COMBO_COUNTER)
+      messenger.send(EVENT_NAMES.DISPLAY_HIT, [self.parentNode.getPos()])
+
       self._destroy_attack_hitbox(None)
       # Allow light attack to stop enemy from being knocked back
       self.knockback_velocity = 0
@@ -115,6 +118,7 @@ class Base_Enemy(Base_Entity):
                self.knockback_velocity = ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_KNOCKBACK
             else:
                self.z_velocity = ENTITY_CONSTANTS.PLAYER_DASH_KNOCKUP
+               self.knockback_velocity = ENTITY_CONSTANTS.PLAYER_DASH_ATTACK_KNOCKBACK
          # This adjusts the knockback direction based on enemy orientation
          # This works because the enemy is always facing the player
          if self.model.getH() > 0:

@@ -5,6 +5,9 @@ class EVENT_NAMES:
    TOGGLE_SETTINGS_EVENT = "toggle_settings"
    PAUSE_GAME_EVENT = "pause_game"
    GOTO_MAIN_MENU_EVENT = "goto_main_menu"
+   INCREMENT_COMBO_COUNTER = "increment_combo_counter"
+   RESET_COMBO_COUNTER = "reset_combo_counter"
+   DISPLAY_HIT = "display_hit"
 
 class PLAYER_ATTACK_NAMES:
    LIGHT_ATTACK = "player_light_attack"

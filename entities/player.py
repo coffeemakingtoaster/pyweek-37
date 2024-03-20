@@ -42,6 +42,8 @@ class Player(Base_Entity):
 
       self.is_dashing = False
 
+      self.is_blocking = False
+
       self.cooldowns = defaultdict(lambda: 0.0)
 
       self.collision = self.main_model.attachNewNode(CollisionNode("player"))
@@ -68,15 +70,6 @@ class Player(Base_Entity):
         
       self.main_model.reparentTo(render)
 
-      self.shadow_model = Actor("assets/anims/Secretary.egg",{
-         'idle': 'assets/anims/Secretary-Idle.egg'
-      })
-
-      self.shadow_model.reparentTo(render)
-
-      self.shadow_is_detached = False
-      self.shadow_is_catching_up = False
-   
    def _setup_keybinds(self) -> None:
       self.accept(KEYBIND_IDENTIFIERS.A_KEY_DOWN, self._update_movement_status, ["left", True])
       self.accept(KEYBIND_IDENTIFIERS.A_KEY_UP, self._update_movement_status, ["left", False])
@@ -88,6 +81,8 @@ class Player(Base_Entity):
       self.accept(KEYBIND_IDENTIFIERS.COMMA_KEY_DOWN, self._light_attack)
       self.accept(KEYBIND_IDENTIFIERS.DOT_KEY_DOWN, self._heavy_attack)
       self.accept(KEYBIND_IDENTIFIERS.M_KEY_DOWN, self._dash_attack)
+      self.accept(KEYBIND_IDENTIFIERS.N_KEY_DOWN, self._block)
+      self.accept(KEYBIND_IDENTIFIERS.N_KEY_UP, self._end_block)
 
    def _update_movement_status(self, direction: str, pressed: bool) -> None:
       if pressed:
@@ -142,21 +137,6 @@ class Player(Base_Entity):
             
 
       self.main_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), 0, new_z)
-      if not self.shadow_is_detached:
-         self.shadow_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), 0, new_z)
-      else:
-         if self.shadow_is_catching_up:
-            diff_vect = Vec3(self.main_model.getPos() - self.shadow_model.getPos())
-            if diff_vect.length() < (ENTITY_CONSTANTS.PLAYER_SHADOW_CATCH_UP_SPEED * dt):
-               self.shadow_is_catching_up = False
-               self.shadow_is_detached = False
-               self.shadow_model.setFluidPos(self.main_model.getX(), 0, self.main_model.getZ())
-               self.shadow_model.setH(self.main_model.getH())
-            else:
-               diff_vect = diff_vect.normalized()
-               diff_vect = diff_vect.normalized() * (ENTITY_CONSTANTS.PLAYER_SHADOW_CATCH_UP_SPEED * dt)
-               self.shadow_model.setFluidPos(self.shadow_model.getX() + diff_vect.getX(), 0, self.shadow_model.getZ() + diff_vect.getZ())
-
  
       # Make camera follow player
       base.cam.setX(min(max(self.main_model.getX(), -WORLD_CONSTANTS.CAMERA_X_LIMIT),WORLD_CONSTANTS.CAMERA_X_LIMIT))
@@ -168,6 +148,12 @@ class Player(Base_Entity):
    def _change_hp(self, value):
       self.hp += value
       messenger.send(EVENT_NAMES.DISPLAY_PLAYER_HP_EVENT, [self.hp])
+
+   def _block(self):
+      self.is_blocking = True
+
+   def _end_block(self):
+      self.is_blocking = False
 
    def _light_attack(self):
       # Prevent animation cancel
@@ -207,12 +193,6 @@ class Player(Base_Entity):
          if (self.main_model.getH() < 0):
             self.dash_direction_x = - ENTITY_CONSTANTS.PLAYER_DASH_DISTANCE
 
-         # Second model logic
-         base.taskMgr.doMethodLater(ENTITY_CONSTANTS.PLAYER_DASH_DURATION + ENTITY_CONSTANTS.PLAYER_SHADOW_CATCH_UP_INITIAL_DELAY, self._shadow_ketchup, "shadow_catch_up", [0])
-         # detach second model for dash effect
-         self.shadow_is_detached = True
-         self.is_in_animation = True
-
    def _add_attack_hitbox(self, attack_name, box, attack_duration, is_light_attack = False):
          self.attack_hitbox = self.main_model.attachNewNode(CollisionNode(attack_name))
          self.attack_hitbox.show()
@@ -231,26 +211,19 @@ class Player(Base_Entity):
       self.is_in_animation = False
 
    def _enemy_hit(self, entry: CollisionEntry):
-      print(entry.into_node.getName())
       # Still in inv period 
-      if time() - self.last_hit_timestamp < ENTITY_CONSTANTS.PLAYER_POST_DAMAGE_INV_PERIOD:
+      if time() - self.last_hit_timestamp < ENTITY_CONSTANTS.PLAYER_POST_DAMAGE_INV_PERIOD or self.is_blocking:
          return
+      messenger.send(EVENT_NAMES.RESET_COMBO_COUNTER)
       if entry.into_node.getName() in [ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK]:
          self._change_hp(-1)
          self.last_hit_timestamp = time()
 
-   def _shadow_ketchup(self,_):
-      self.shadow_is_catching_up = True
-
    def _set_model_pos(self, x,z):
       self.main_model.setPos(x, 0, z)
-      if not self.shadow_is_detached:
-         self.shadow_model.setPos(x,0,z)
 
    def _set_model_h(self, h):
       self.main_model.setH(h)
-      if not self.shadow_is_detached:
-         self.shadow_model.setH(h)
 
    def getPos(self):
       return self.main_model.getPos()
@@ -258,4 +231,3 @@ class Player(Base_Entity):
    def destroy(self):
       self.ignore_all()
       self.main_model.removeNode()
-      self.shadow_model.removeNode()

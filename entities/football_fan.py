@@ -50,9 +50,9 @@ class Football_Fan(Base_Enemy):
 
          x_movement = self.movement_speed * dt 
 
-         if  x_diff_to_player < x_movement:
+         if  abs(x_diff_to_player) < x_movement:
             # prevent -inf exception
-            x_movement = max(x_diff_to_player, 0.3)
+            x_movement = max(x_diff_to_player, x_movement / 10)
          
          # Stop moving once close to avoid glitching in player
          if abs(x_diff_to_player) < (self.attack_range / 2):
