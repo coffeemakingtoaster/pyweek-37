@@ -143,7 +143,6 @@ class main_game(ShowBase):
         self.hit_indicator_handler = Hit_Indicator_Handler()
         
         self.player.main_model.loop('idle')
-        self.player.shadow_model.loop('idle')
 
         self.enemies = [ Football_Fan(-10,0)]
         #[Sample_Enemy(10,0), Football_Fan(-10,0)]

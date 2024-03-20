@@ -68,15 +68,6 @@ class Player(Base_Entity):
         
       self.main_model.reparentTo(render)
 
-      self.shadow_model = Actor("assets/anims/Secretary.egg",{
-         'idle': 'assets/anims/Secretary-Idle.egg'
-      })
-
-      self.shadow_model.reparentTo(render)
-
-      self.shadow_is_detached = False
-      self.shadow_is_catching_up = False
-   
    def _setup_keybinds(self) -> None:
       self.accept(KEYBIND_IDENTIFIERS.A_KEY_DOWN, self._update_movement_status, ["left", True])
       self.accept(KEYBIND_IDENTIFIERS.A_KEY_UP, self._update_movement_status, ["left", False])
@@ -142,21 +133,6 @@ class Player(Base_Entity):
             
 
       self.main_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), 0, new_z)
-      if not self.shadow_is_detached:
-         self.shadow_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), 0, new_z)
-      else:
-         if self.shadow_is_catching_up:
-            diff_vect = Vec3(self.main_model.getPos() - self.shadow_model.getPos())
-            if diff_vect.length() < (ENTITY_CONSTANTS.PLAYER_SHADOW_CATCH_UP_SPEED * dt):
-               self.shadow_is_catching_up = False
-               self.shadow_is_detached = False
-               self.shadow_model.setFluidPos(self.main_model.getX(), 0, self.main_model.getZ())
-               self.shadow_model.setH(self.main_model.getH())
-            else:
-               diff_vect = diff_vect.normalized()
-               diff_vect = diff_vect.normalized() * (ENTITY_CONSTANTS.PLAYER_SHADOW_CATCH_UP_SPEED * dt)
-               self.shadow_model.setFluidPos(self.shadow_model.getX() + diff_vect.getX(), 0, self.shadow_model.getZ() + diff_vect.getZ())
-
  
       # Make camera follow player
       base.cam.setX(min(max(self.main_model.getX(), -WORLD_CONSTANTS.CAMERA_X_LIMIT),WORLD_CONSTANTS.CAMERA_X_LIMIT))
@@ -207,12 +183,6 @@ class Player(Base_Entity):
          if (self.main_model.getH() < 0):
             self.dash_direction_x = - ENTITY_CONSTANTS.PLAYER_DASH_DISTANCE
 
-         # Second model logic
-         base.taskMgr.doMethodLater(ENTITY_CONSTANTS.PLAYER_DASH_DURATION + ENTITY_CONSTANTS.PLAYER_SHADOW_CATCH_UP_INITIAL_DELAY, self._shadow_ketchup, "shadow_catch_up", [0])
-         # detach second model for dash effect
-         self.shadow_is_detached = True
-         self.is_in_animation = True
-
    def _add_attack_hitbox(self, attack_name, box, attack_duration, is_light_attack = False):
          self.attack_hitbox = self.main_model.attachNewNode(CollisionNode(attack_name))
          self.attack_hitbox.show()
@@ -239,18 +209,11 @@ class Player(Base_Entity):
          self._change_hp(-1)
          self.last_hit_timestamp = time()
 
-   def _shadow_ketchup(self,_):
-      self.shadow_is_catching_up = True
-
    def _set_model_pos(self, x,z):
       self.main_model.setPos(x, 0, z)
-      if not self.shadow_is_detached:
-         self.shadow_model.setPos(x,0,z)
 
    def _set_model_h(self, h):
       self.main_model.setH(h)
-      if not self.shadow_is_detached:
-         self.shadow_model.setH(h)
 
    def getPos(self):
       return self.main_model.getPos()
@@ -258,4 +221,3 @@ class Player(Base_Entity):
    def destroy(self):
       self.ignore_all()
       self.main_model.removeNode()
-      self.shadow_model.removeNode()

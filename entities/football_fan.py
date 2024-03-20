@@ -50,9 +50,9 @@ class Football_Fan(Base_Enemy):
 
          x_movement = self.movement_speed * dt 
 
-         if  x_diff_to_player < x_movement:
+         if  abs(x_diff_to_player) < x_movement:
             # prevent -inf exception
-            x_movement = max(x_diff_to_player, 0.3)
+            x_movement = max(x_diff_to_player, x_movement / 10)
          
          # Stop moving once close to avoid glitching in player
          if abs(x_diff_to_player) < (self.attack_range / 2):
@@ -60,9 +60,11 @@ class Football_Fan(Base_Enemy):
 
          if x_diff_to_player < 0: 
             self.model.setH(90)
+            print(f"{x_movement} a")
          elif x_diff_to_player > 0:
             self.model.setH(-90)
             x_movement *= -1
+            print(f"{x_movement}b")
 
       new_z = 0
 

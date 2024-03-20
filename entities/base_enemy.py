@@ -118,6 +118,7 @@ class Base_Enemy(Base_Entity):
                self.knockback_velocity = ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_KNOCKBACK
             else:
                self.z_velocity = ENTITY_CONSTANTS.PLAYER_DASH_KNOCKUP
+               self.knockback_velocity = ENTITY_CONSTANTS.PLAYER_DASH_ATTACK_KNOCKBACK
          # This adjusts the knockback direction based on enemy orientation
          # This works because the enemy is always facing the player
          if self.model.getH() > 0:
