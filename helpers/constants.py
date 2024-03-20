@@ -10,3 +10,6 @@ class PLAYER_ATTACK_NAMES:
    LIGHT_ATTACK = "player_light_attack"
    HEAVY_ATTACK = "player_heavy_attack" 
    DASH_ATTACK = "player_dash_attack" 
+
+class ENEMY_ATTACK_NAMES:
+   FOOTBALL_FAN_ATTACK = "football_fan_attack"

@@ -30,8 +30,6 @@ class Sample_Enemy(Base_Enemy):
 
       self.attach_hp_bar_to_model()
 
-      self.accept("u", self._update_hp, [-1])
-
       self.id = str(uuid.uuid4())
 
       self.collision = self.model.attachNewNode(CollisionNode("enemy"))

@@ -2,9 +2,9 @@ from config import ENTITY_CONSTANTS, GAME_CONFIG, TEAM_BITMASKS, KEYBIND_IDENTIF
 from entities.base import Base_Entity
 from direct.actor.Actor import Actor
 
-from panda3d.core import CollisionNode, Point3, CollisionBox, CollisionHandlerEvent, Vec3
+from panda3d.core import CollisionNode, Point3, CollisionBox, CollisionHandlerEvent, Vec3, CollisionEntry
 
-from helpers.constants import EVENT_NAMES, PLAYER_ATTACK_NAMES
+from helpers.constants import ENEMY_ATTACK_NAMES, EVENT_NAMES, PLAYER_ATTACK_NAMES
 from helpers.logging import debug_log
 from collections import defaultdict
 from time import time
@@ -38,9 +38,27 @@ class Player(Base_Entity):
 
       self.curr_dash_duration = 0
 
+      self.last_hit_timestamp = 0
+
       self.is_dashing = False
 
       self.cooldowns = defaultdict(lambda: 0.0)
+
+      self.collision = self.main_model.attachNewNode(CollisionNode("player"))
+
+      self.collision.node().addSolid(CollisionBox(Point3(0,-0.25,0),(1,0.25,1.5)))
+
+      self.collision.show()
+        
+      self.collision.node().setCollideMask(TEAM_BITMASKS.PLAYER)
+
+      self.notifier = CollisionHandlerEvent()
+
+      self.notifier.addInPattern("%fn-into")
+
+      self.accept(f"player-into", self._enemy_hit)
+
+      base.cTrav.addCollider(self.collision, self.notifier)
 
    def _load_models(self):
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
@@ -108,11 +126,12 @@ class Player(Base_Entity):
          if self.is_in_light_attack:
             new_z = self.main_model.getZ()
          else:
-            self.z_vel = max(self.z_vel - WORLD_CONSTANTS.GRAVITY_VELOCITY, -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
-            new_z = self.main_model.getZ() + (self.z_vel * dt)
+            self.z_vel = max(self.z_vel - (WORLD_CONSTANTS.GRAVITY_VELOCITY * dt), -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
+            new_z = min(self.main_model.getZ() + (self.z_vel * dt), WORLD_CONSTANTS.MAP_HEIGHT)
+            if new_z == WORLD_CONSTANTS.MAP_HEIGHT and self.z_vel > 0:
+               self.z_vel /= 2 
 
       if self.is_dashing:
-         print("Dashing")
          if self.curr_dash_duration >= ENTITY_CONSTANTS.PLAYER_DASH_DURATION:
             self.is_dashing = False
             self.curr_dash_duration = 0
@@ -155,7 +174,7 @@ class Player(Base_Entity):
       if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.LIGHT_ATTACK] < ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_CD:
          return
       if self.main_model:
-         self._add_attack_hitbox(PLAYER_ATTACK_NAMES.LIGHT_ATTACK, CollisionBox(Point3(0,-1,2),1,1,1), ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_DURATION, True)
+         self._add_attack_hitbox(PLAYER_ATTACK_NAMES.LIGHT_ATTACK, CollisionBox(Point3(0,-0.3,1.75),1,0.3,0.75), ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_DURATION, True)
       self.is_in_light_attack = True
       self.is_in_animation = True
       self.cooldowns[PLAYER_ATTACK_NAMES.LIGHT_ATTACK] = time()
@@ -165,7 +184,7 @@ class Player(Base_Entity):
       if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.HEAVY_ATTACK] < ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_CD:
          return
       if self.main_model:
-         self._add_attack_hitbox(PLAYER_ATTACK_NAMES.HEAVY_ATTACK,CollisionBox(Point3(0,-2,2),1,2,1), ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_DURATION)
+         self._add_attack_hitbox(PLAYER_ATTACK_NAMES.HEAVY_ATTACK,CollisionBox(Point3(0,-0.5,1.7),1,0.5,0.3), ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_DURATION)
       self.is_in_animation = True
       self.cooldowns[PLAYER_ATTACK_NAMES.HEAVY_ATTACK] = time()
         
@@ -204,14 +223,21 @@ class Player(Base_Entity):
          base.cTrav.addCollider(self.attack_hitbox, self.notifier)
          base.taskMgr.doMethodLater(attack_duration, self._destroy_attack_hitbox,f"destroy_{attack_name}_hitbox",[self.attack_hitbox, is_light_attack])
 
-
-
    def _destroy_attack_hitbox(self, hitbox, is_light_attack=False):
       if hitbox:
          hitbox.removeNode()
       if is_light_attack:
          self.is_in_light_attack = False
       self.is_in_animation = False
+
+   def _enemy_hit(self, entry: CollisionEntry):
+      print(entry.into_node.getName())
+      # Still in inv period 
+      if time() - self.last_hit_timestamp < ENTITY_CONSTANTS.PLAYER_POST_DAMAGE_INV_PERIOD:
+         return
+      if entry.into_node.getName() in [ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK]:
+         self._change_hp(-1)
+         self.last_hit_timestamp = time()
 
    def _shadow_ketchup(self,_):
       self.shadow_is_catching_up = True
@@ -232,3 +258,4 @@ class Player(Base_Entity):
    def destroy(self):
       self.ignore_all()
       self.main_model.removeNode()
+      self.shadow_model.removeNode()

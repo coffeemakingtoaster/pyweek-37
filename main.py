@@ -1,3 +1,4 @@
+from entities.football_fan import Football_Fan
 from entities.sample_enemy import Sample_Enemy
 from helpers.constants import EVENT_NAMES
 from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3, CollisionTraverser
@@ -141,7 +142,8 @@ class main_game(ShowBase):
         self.player.main_model.loop('idle')
         self.player.shadow_model.loop('idle')
 
-        self.enemies = [Sample_Enemy(10,0)]
+        self.enemies = [ Football_Fan(-10,0)]
+        #[Sample_Enemy(10,0), Football_Fan(-10,0)]
 
         self.setupLights()
         
