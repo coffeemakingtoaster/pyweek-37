@@ -6,6 +6,8 @@ from panda3d.core import TransparencyAttrib
 from direct.interval.ActorInterval import ActorInterval
 from direct.interval.IntervalGlobal import *
 
+from helpers.constants import EVENT_NAMES
+
 
 class Carriage(Base_Entity):
     def __init__(self):
@@ -27,11 +29,11 @@ class Carriage(Base_Entity):
         self.send_station_leave_signal_interval = Func(self.send_station_leave_signal)
         self.leave_interval = Func(self.leave)
         self.arrive_interval = Func(self.arrive)
-        self.arrived_sequence = Sequence(self.open_doors_interval,Wait(1),self.send_player_leave_signal_interval,Wait(1),self.close_doors_interval,self.leave_interval)
+        self.spawn_boss_signal = Func(messenger.send,EVENT_NAMES.SPAWN_BOSS_EVENT))
+        self.arrived_sequence = Sequence(self.open_doors_interval,Wait(1),self.send_player_leave_signal_interval,Wait(1),self.close_doors_interval,self.leave_interval, Wait(15), self.spawn_boss_signal)
         self.leave_sequence = Sequence(self.open_doors_interval,Wait(1),self.send_player_enter_signal_interval,Wait(1),self.close_doors_interval,Wait(1),self.send_station_leave_signal_interval)
         self.arriving = False
         self.leavingBool = False
-    
     
     def send_player_leave_signal(self):
         messenger.send('arrived_open_leave')

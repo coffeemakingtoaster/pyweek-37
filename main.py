@@ -68,7 +68,9 @@ class main_game(ShowBase):
         
         self.accept(KEYBIND_IDENTIFIERS.J_KEY_DOWN,self.set_Station)
         self.accept(KEYBIND_IDENTIFIERS.K_KEY_DOWN,self.set_Drive)
-        
+
+        self.accept(EVENT_NAMES.SPAWN_BOSS_EVENT, self.spawn_boss)
+        self.accept(EVENT_NAMES.DEFEAT_BOSS_EVENT, self.set_Drive)
 
         self.gameTask = base.taskMgr.add(self.game_loop, "gameLoop")
 
@@ -213,6 +215,14 @@ class main_game(ShowBase):
             self.active_ui.destroy()
             self.active_ui = main_menu()
             self.set_game_status(GAME_STATUS.MAIN_MENU)
+
+    def spawn_boss(self):
+        if self.game_status != GAME_STATUS.RUNNING:
+            return
+        for enemy in self.enemies:
+            enemy.destroy()
+        self.enemies = []
+        self.enemies.append(Boss(0,0))
 
     def finish_game(self, success: bool):
         self.set_game_status(GAME_STATUS.GAME_FINISH)

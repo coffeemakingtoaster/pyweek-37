@@ -8,6 +8,8 @@ class EVENT_NAMES:
    INCREMENT_COMBO_COUNTER = "increment_combo_counter"
    RESET_COMBO_COUNTER = "reset_combo_counter"
    DISPLAY_HIT = "display_hit"
+   SPAWN_BOSS_EVENT = "spawn_boss"
+   DEFEAT_BOSS_EVENT = "deveat_boss"
 
 class PLAYER_ATTACK_NAMES:
    LIGHT_ATTACK = "player_light_attack"

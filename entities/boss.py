@@ -23,7 +23,7 @@ class Boss(Base_Enemy):
         
       self.model.reparentTo(self.parentNode)
 
-      self.parentNode.setPos(boss_x, 0, boss_z)
+      self.parentNode.setPos(boss_x, 4, boss_z)
 
       self.hp = ENTITY_CONSTANTS.BOSS_HP
       self.max_hp = ENTITY_CONSTANTS.BOSS_HP 
@@ -92,7 +92,7 @@ class Boss(Base_Enemy):
       
       new_x = max(min(self.parentNode.getX() + x_movement, WORLD_CONSTANTS.MAP_X_LIMIT), -WORLD_CONSTANTS.MAP_X_LIMIT)
       
-      self.parentNode.setFluidPos(new_x, 0, new_z)
+      self.parentNode.setFluidPos(new_x, 4, new_z)
 
       self.time_since_last_range_attack += dt
       self.time_since_last_melee_attack += dt
@@ -149,6 +149,8 @@ class Boss(Base_Enemy):
       messenger.send(EVENT_NAMES.DISPLAY_HIT, [self.parentNode.getPos()])
 
       self._update_hp(-1)
+      if self.hp <= 0:
+         messenger.send(EVENT_NAMES.DEFEAT_BOSS_EVENT)
    
    def destroy(self):
       super().destroy()

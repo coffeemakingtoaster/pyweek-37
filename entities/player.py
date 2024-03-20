@@ -155,7 +155,6 @@ class Player(Base_Entity):
          else:
             new_x = self.main_model.getX() + (self.dash_direction_x * ( dt / ENTITY_CONSTANTS.PLAYER_DASH_DURATION))
             self.curr_dash_duration += dt
-            
 
       self.main_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), self.currentY, new_z)
  
