@@ -4,7 +4,7 @@ from ui.ui_base import ui_base
 
 from os.path import join
 
-from panda3d.core import TransparencyAttrib, Point3, Point2
+from panda3d.core import TransparencyAttrib, Point3
 from direct.task.Task import Task
 
 from direct.gui.DirectGui import DirectLabel, OnscreenImage

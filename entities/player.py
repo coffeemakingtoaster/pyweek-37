@@ -251,4 +251,5 @@ class Player(Base_Entity):
 
    def destroy(self):
       self.ignore_all()
+      self.main_model.cleanup()
       self.main_model.removeNode()

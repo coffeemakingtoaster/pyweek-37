@@ -16,3 +16,4 @@ class PLAYER_ATTACK_NAMES:
 
 class ENEMY_ATTACK_NAMES:
    FOOTBALL_FAN_ATTACK = "football_fan_attack"
+   BOSS_MELEE_ATTACK = "boss_melee_attack"

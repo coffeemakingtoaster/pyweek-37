@@ -22,4 +22,5 @@ class Hit_Indicator(Base_Entity):
       self.model.show()
   
    def destroy(self):
+      self.model.cleanup()
       self.model.removeNode()

@@ -2,11 +2,9 @@ from config import ENTITY_CONSTANTS, TEAM_BITMASKS, WORLD_CONSTANTS
 from entities.base_enemy import Base_Enemy
 from direct.actor.Actor import Actor
 
-import uuid
+from panda3d.core import CollisionNode,  CollisionBox, Point3
 
-from panda3d.core import CollisionEntry, CollisionNode,  CollisionBox, Point3, CollisionHandlerEvent
-
-from helpers.constants import ENEMY_ATTACK_NAMES, PLAYER_ATTACK_NAMES
+from helpers.constants import ENEMY_ATTACK_NAMES
 
 from time import time
 
@@ -25,8 +23,8 @@ class Football_Fan(Base_Enemy):
 
       self.z_velocity = 0
 
-      self.hp = 15
-      self.max_hp = 15
+      self.hp = ENTITY_CONSTANTS.FOOTBALL_FAN_HP
+      self.max_hp = ENTITY_CONSTANTS.FOOTBALL_FAN_HP
 
       self.attach_hp_bar_to_model()
       self.add_collision_node()
@@ -75,8 +73,6 @@ class Football_Fan(Base_Enemy):
       new_x = max(min(self.parentNode.getX() + x_movement, WORLD_CONSTANTS.MAP_X_LIMIT), -WORLD_CONSTANTS.MAP_X_LIMIT)
       
       self.parentNode.setFluidPos(new_x, 0, new_z)
-
-      #print(f"{self.parentNode.getX()}")
 
    def _attack(self):
       # Enemy cannot attack midair and when last attack was recently
