@@ -11,7 +11,7 @@ class Can(Base_Entity):
       self.model = Actor(join("assets", "eggs", "Player.egg"))
       
       # TODO: Adjust y coord for the boss stage
-      self.model.setPos(can_x, 0, can_z)
+      self.model.setPos(can_x, 4, can_z)
 
       self.model.reparentTo(render)
 

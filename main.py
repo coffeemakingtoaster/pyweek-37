@@ -3,6 +3,7 @@ from handlers.hit_indicator_handler import Hit_Indicator_Handler
 from helpers.constants import EVENT_NAMES
 from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3, CollisionTraverser
 from entities.player import Player
+from entities.football_fan import Football_Fan
 
 from entities.carriage import Carriage
 from entities.map import Map
@@ -150,8 +151,8 @@ class main_game(ShowBase):
         
         self.player.main_model.loop('idle')
 
-        #self.enemies = [ Football_Fan(-10,0)]
-        self.enemies = [Boss(-10,0)]
+        self.enemies = [ Football_Fan(-10,0)]
+        #self.enemies = [Boss(-10,0)]
         #[Sample_Enemy(10,0), Football_Fan(-10,0)]
         
         self.gameState = GameFSM(self.player,self.map,self.carriage)

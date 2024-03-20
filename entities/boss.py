@@ -135,7 +135,7 @@ class Boss(Base_Enemy):
       base.taskMgr.doMethodLater(ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_DURATION, self._destroy_attack_hitbox,f"destroy_{ENEMY_ATTACK_NAMES.BOSS_MELEE_ATTACK}_hitbox")
 
    def _range_attack(self):
-      if self.time_since_last_range_attack < ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_CD or self.time_since_last_melee_attack < ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_CD:
+      if self.time_since_last_range_attack < ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_CD or self.time_since_last_melee_attack < ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_CD:
          return
       self.thrown_cans = 0
       self.is_throwing_cans = True
