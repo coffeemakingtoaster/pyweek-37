@@ -42,6 +42,8 @@ class Player(Base_Entity):
 
       self.is_dashing = False
 
+      self.is_blocking = False
+
       self.cooldowns = defaultdict(lambda: 0.0)
 
       self.collision = self.main_model.attachNewNode(CollisionNode("player"))
@@ -79,6 +81,8 @@ class Player(Base_Entity):
       self.accept(KEYBIND_IDENTIFIERS.COMMA_KEY_DOWN, self._light_attack)
       self.accept(KEYBIND_IDENTIFIERS.DOT_KEY_DOWN, self._heavy_attack)
       self.accept(KEYBIND_IDENTIFIERS.M_KEY_DOWN, self._dash_attack)
+      self.accept(KEYBIND_IDENTIFIERS.N_KEY_DOWN, self._block)
+      self.accept(KEYBIND_IDENTIFIERS.N_KEY_UP, self._end_block)
 
    def _update_movement_status(self, direction: str, pressed: bool) -> None:
       if pressed:
@@ -145,6 +149,12 @@ class Player(Base_Entity):
       self.hp += value
       messenger.send(EVENT_NAMES.DISPLAY_PLAYER_HP_EVENT, [self.hp])
 
+   def _block(self):
+      self.is_blocking = True
+
+   def _end_block(self):
+      self.is_blocking = False
+
    def _light_attack(self):
       # Prevent animation cancel
       if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.LIGHT_ATTACK] < ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_CD:
@@ -202,7 +212,7 @@ class Player(Base_Entity):
 
    def _enemy_hit(self, entry: CollisionEntry):
       # Still in inv period 
-      if time() - self.last_hit_timestamp < ENTITY_CONSTANTS.PLAYER_POST_DAMAGE_INV_PERIOD:
+      if time() - self.last_hit_timestamp < ENTITY_CONSTANTS.PLAYER_POST_DAMAGE_INV_PERIOD or self.is_blocking:
          return
       messenger.send(EVENT_NAMES.RESET_COMBO_COUNTER)
       if entry.into_node.getName() in [ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK]:

@@ -60,11 +60,9 @@ class Football_Fan(Base_Enemy):
 
          if x_diff_to_player < 0: 
             self.model.setH(90)
-            print(f"{x_movement} a")
          elif x_diff_to_player > 0:
             self.model.setH(-90)
             x_movement *= -1
-            print(f"{x_movement}b")
 
       new_z = 0
 

@@ -36,6 +36,8 @@ class KEYBIND_IDENTIFIERS:
    DOT_KEY_UP = DOT_KEY_DOWN + "-up"
    M_KEY_DOWN = "m"
    M_KEY_UP = M_KEY_DOWN + "-up"
+   N_KEY_DOWN = "n"
+   N_KEY_UP = N_KEY_DOWN + "-up"
 
 class WORLD_CONSTANTS:
    GRAVITY_VELOCITY = math.pi * 8
