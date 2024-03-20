@@ -59,8 +59,29 @@ class Player(Base_Entity):
       self.notifier.addInPattern("%fn-into")
 
       self.accept(f"player-into", self._enemy_hit)
+      
+      self.accept('arrived_open_leave',self.enter_station)
+      self.accept('arrived_open_enter',self.enter_carriage)
+      
+      self.currentY = 0
 
       base.cTrav.addCollider(self.collision, self.notifier)
+
+   def enter_station(self):
+      
+      self.currentY = 4
+      #TODO Camera
+      #TODO Anim
+      
+   def enter_carriage(self):
+      
+      self.currentY = 0
+      #TODO Camera
+      #TODO Anim
+      
+   def leave_station(self):
+      print("player Leaving")
+      self.currentY = 0
 
    def _load_models(self):
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
@@ -136,7 +157,7 @@ class Player(Base_Entity):
             self.curr_dash_duration += dt
             
 
-      self.main_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), 0, new_z)
+      self.main_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), self.currentY, new_z)
  
       # Make camera follow player
       base.cam.setX(min(max(self.main_model.getX(), -WORLD_CONSTANTS.CAMERA_X_LIMIT),WORLD_CONSTANTS.CAMERA_X_LIMIT))

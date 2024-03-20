@@ -21,14 +21,14 @@ class GameFSM(FSM):
 
     def enterStation(self):
         print("Enter Station")
-        #self.station.arrive()
-        self.carriage.leave()
-        self.player.offboard()
+        
+        
+        #self.player.offboard()
         #self.station.startBoss()
         
     def exitStation(self):
         self.carriage.arrive()
-        self.map.leaveStation()
+        #self.map.leaveStation()
         #self.station.stopBoss()
         #self.station.leave()
 

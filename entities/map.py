@@ -13,6 +13,8 @@ class Map(Base_Entity):
         self.enteringStation = False
         self.leavingStation = False
         self.moving = True
+        self.accept('station_leave',self.leaveStation)
+        
         
     
     def update(self, dt):
@@ -23,12 +25,15 @@ class Map(Base_Entity):
             elif self.model.getX() < -220 and not self.leavingStation:
                 self.moving = False
                 self.enteringStation = False
+                print("Arrived")
+                messenger.send('arrived')
             elif self.model.getX() < -250:
                 self.leavingStation = False
                 self.model.setX(60)
     
     def enterStation(self):
         self.enteringStation = True
+    
     def leaveStation(self):
         self.leavingStation = True
         self.moving = True
