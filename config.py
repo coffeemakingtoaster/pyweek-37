@@ -43,6 +43,7 @@ class WORLD_CONSTANTS:
    # Make camera more dynamic
    CAMERA_X_LIMIT = MAP_X_LIMIT - 10
    TUNNEL_SPEED = 15
+   CARRIAGE_SPEED = 0
 
 class ENTITY_CONSTANTS:
    PLAYER_MOVEMENT_SPEED = 5

@@ -82,6 +82,12 @@ class Player(Base_Entity):
       if self.main_model.getZ() < 0.1:
          self.z_vel = ENTITY_CONSTANTS.PLAYER_JUMP_VELOCITY
 
+   def offboard(self):
+      print("offBoarding")
+   
+   def board(self):
+      print("boarding carriage")
+   
    def update(self, dt):
       # Clear current status
       self.main_model.node().resetAllPrevTransform()

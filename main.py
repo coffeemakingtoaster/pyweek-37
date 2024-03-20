@@ -4,6 +4,7 @@ from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3, 
 from entities.player import Player
 from entities.tunnel import Tunnel
 from entities.carriage import Carriage
+from entities.station import Station
 from helpers.logging import debug_log
 from ui.main_menu import main_menu
 from ui.pause_menu import pause_menu
@@ -16,6 +17,7 @@ from helpers.utilities import load_config, lock_mouse_in_window, release_mouse_f
 from direct.showbase.ShowBase import ShowBase
 from direct.task.Task import Task
 from direct.gui.OnscreenText import OnscreenText
+from gameState import GameFSM
 
 from os.path import join
 
@@ -27,7 +29,7 @@ class main_game(ShowBase):
     enemies = []
     def __init__(self):
         
-        self.map_status = "DRIVING"
+        
 
         ShowBase.__init__(self)
         
@@ -35,7 +37,7 @@ class main_game(ShowBase):
         #messenger.toggleVerbose()
 
         # Set camera position
-        base.cam.setPos(0, -7, 1)
+        base.cam.setPos(0, -70, 1)
 
         load_config(join("user_config.json"))
 
@@ -61,6 +63,7 @@ class main_game(ShowBase):
 
         self.accept(EVENT_NAMES.GOTO_MAIN_MENU_EVENT, self.goto_to_main_menu)
         self.accept(EVENT_NAMES.TOGGLE_SETTINGS_EVENT, self.toggle_settings)
+        
 
         self.gameTask = base.taskMgr.add(self.game_loop, "gameLoop")
 
@@ -101,6 +104,8 @@ class main_game(ShowBase):
 
         self.player.update(dt)
         self.tunnel.update(dt)
+        self.carriage.update(dt)
+        self.station.update(dt)
         
         remaining_enemies = []
 
@@ -130,6 +135,8 @@ class main_game(ShowBase):
         self.player = Player(0,0)
         self.tunnel = Tunnel()
         self.carriage = Carriage()
+        self.station = Station()
+        
         
         self.player.main_model.loop('idle')
         self.player.shadow_model.loop('idle')
@@ -137,12 +144,18 @@ class main_game(ShowBase):
         self.enemies = [Sample_Enemy(10,0)]
 
         self.setupLights()
+        
+        self.gameState = GameFSM(self.player,self.tunnel,self.carriage,self.station)
+        
+        self.gameState.request('Drive')
+        
 
     def set_game_status(self, status):
         self.status_display["text"] = status
         self.game_status = status
 
     def toggle_pause(self):
+        #self.gameState.request('Station')
         if self.game_status == GAME_STATUS.RUNNING:
             self.set_game_status(GAME_STATUS.PAUSED)
             # Not needed as of now as gui does not exist
