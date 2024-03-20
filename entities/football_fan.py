@@ -29,34 +29,13 @@ class Football_Fan(Base_Enemy):
       self.max_hp = 15
 
       self.attach_hp_bar_to_model()
-
-      self.id = str(uuid.uuid4())
-
-      self.collision = self.model.attachNewNode(CollisionNode("enemy"))
+      self.add_collision_node()
 
       self.collision.node().addSolid(CollisionBox(Point3(0,-1,0),(1,1,2)))
 
-      self.collision.show()
-        
-      self.collision.node().setCollideMask(TEAM_BITMASKS.ENEMY)
+      self.attack_range = ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_RANGE
 
-      self.collision.setTag("id", self.id)
-
-      self.notifier = CollisionHandlerEvent()
-
-      self.notifier.addInPattern("%fn-into")
-
-      self.accept(f"enemy-into", self._player_hit)
-
-      base.cTrav.addCollider(self.collision, self.notifier)
-
-      self.is_in_attack = False
-
-      self.last_attack_time = 0
-
-      self.attack_hitbox = None
-
-      self.knockback_velocity = 0
+      self.movement_speed = ENTITY_CONSTANTS.FOOTBALL_FAN_MOVEMENT_SPEED
 
    def update(self, dt, player_pos):
       if self.is_dead:
@@ -66,17 +45,17 @@ class Football_Fan(Base_Enemy):
       if not self.is_in_attack:
          x_diff_to_player = self.parentNode.getX() - player_pos.getX()
 
-         if abs(x_diff_to_player) < ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_RANGE:
+         if abs(x_diff_to_player) < self.attack_range:
             self._attack()
 
-         x_movement = ENTITY_CONSTANTS.FOOTBALL_FAN_MOVEMENT_SPEED * dt 
+         x_movement = self.movement_speed * dt 
 
          if  x_diff_to_player < x_movement:
             # prevent -inf exception
             x_movement = max(x_diff_to_player, 0.3)
          
          # Stop moving once close to avoid glitching in player
-         if abs(x_diff_to_player) < (ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_RANGE / 2):
+         if abs(x_diff_to_player) < (self.attack_range / 2):
             x_movement = 0
 
          if x_diff_to_player < 0: 
@@ -114,33 +93,3 @@ class Football_Fan(Base_Enemy):
       base.taskMgr.doMethodLater(ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_DURATION, self._destroy_attack_hitbox,f"destroy_{ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK}_hitbox")
       self.last_attack_time = time()
 
-   def _destroy_attack_hitbox(self, _):
-      if self.attack_hitbox:
-         self.attack_hitbox.removeNode()
-         self.attack_hitbox = None
-      self.is_in_attack = False
-
-   def _player_hit(self, entry: CollisionEntry):
-      if entry.from_node.getTag("id") != self.id:
-         return
-      attack_identifier = entry.into_node.getName()
-
-      self._destroy_attack_hitbox(None)
-      # Allow light attack to stop enemy from being knocked back
-      self.knockback_velocity = 0
-      if attack_identifier in [PLAYER_ATTACK_NAMES.HEAVY_ATTACK, PLAYER_ATTACK_NAMES.DASH_ATTACK]:
-         # This is a CC attack
-         if self.model.getZ() > 0.1:
-            # Stop the fall
-            self.z_velocity = 3 
-         else:
-            if attack_identifier == PLAYER_ATTACK_NAMES.HEAVY_ATTACK:
-               self.z_velocity = ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_KNOCKUP
-               self.knockback_velocity = ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_KNOCKBACK
-            else:
-               self.z_velocity = ENTITY_CONSTANTS.PLAYER_DASH_KNOCKUP
-         # This adjusts the knockback direction based on enemy orientation
-         # This works because the enemy is always facing the player
-         if self.model.getH() > 0:
-            self.knockback_velocity *= -1
-      self._update_hp(-1)
