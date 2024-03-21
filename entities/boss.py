@@ -11,6 +11,7 @@ from helpers.constants import ENEMY_ATTACK_NAMES, EVENT_NAMES
 
 from entities.can import Can
 
+import random
 
 class Boss(Base_Enemy):
    def __init__(self, boss_x, boss_z) -> None:
@@ -24,7 +25,28 @@ class Boss(Base_Enemy):
                   "Light-Punch": join("assets", "anims", "Boss1-Light Punch"),
                   "Jump-Attack": join("assets", "anims", "Boss1-Jump_Attack"),
                   "Fire-Ball": join("assets", "anims", "Boss1-Fire Roll.egg"),
+                  "Fire-Ball": join("assets", "anims", "Boss1-Fire Ball.egg"),
+                  "Fire-Roll": join("assets", "anims", "Boss1-Fire Roll.egg"),
       })
+
+      self.melee_attacks = {
+         "Kick":{
+            "hitbox": CollisionBox(Point3(0,-0.5,2),1,0.5,1),
+            "duration": 1.3
+            }, 
+         "Long-Punch": {
+            "hitbox": CollisionBox(Point3(0,-0.8,2),1,0.8,0.3),
+            "duration": 1.6,
+            }, 
+         "Light-Punch":{
+            "hitbox":  CollisionBox(Point3(0,-0.3,2),1,0.3,1),
+            "duration": 1.3
+            }, 
+         "Jump-Attack":{
+            "hitbox":  CollisionBox(Point3(0,0,1),1,1,1),
+            "duration": 1.3
+            }, 
+      }
 
       # Set initial rotation
       self.model.setH(90)
@@ -41,7 +63,7 @@ class Boss(Base_Enemy):
       self.attach_hp_bar_to_model()
       self.add_collision_node()
 
-      self.collision.node().addSolid(CollisionBox(Point3(0,-1,0),(1,1,2)))
+      self.collision.node().addSolid(CollisionBox(Point3(0,-0.6,0),(1,0.6,2)))
 
       self.attack_range = ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_RANGE
 
@@ -121,7 +143,7 @@ class Boss(Base_Enemy):
 
       if self.is_throwing_cans and self.time_since_last_can >= ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_INTERVAL:
          # Actually execute ranged attack
-         self.model.play("Fire-Ball")
+         self.model.play("Fire-Roll")
          direction = 1
          if self.model.getH() < 90:
             direction = -1
@@ -136,17 +158,18 @@ class Boss(Base_Enemy):
    def _melee_attack(self):
       if self.time_since_last_melee_attack < ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_CD or self.time_since_last_range_attack < ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_CD:
          return
+      attack = random.choice(list(self.melee_attacks.keys()))
       self.is_in_attack = True
-      self.model.play("Kick")
+      self.model.play(attack)
       self.attack_hitbox = self.model.attachNewNode(CollisionNode(ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK))
       self.attack_hitbox.show()
-      self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-1,2),1,1,1))
+      self.attack_hitbox.node().addSolid(self.melee_attacks[attack]["hitbox"])
       self.attack_hitbox.setTag("team", "enemy")
       self.attack_hitbox.setPos(0,0,-1)
       self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.PLAYER)
       base.cTrav.addCollider(self.attack_hitbox, self.notifier)
       self.time_since_last_melee_attack = 0
-      base.taskMgr.doMethodLater(ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_DURATION, self._destroy_attack_hitbox,f"destroy_{ENEMY_ATTACK_NAMES.BOSS_MELEE_ATTACK}_hitbox")
+      base.taskMgr.doMethodLater(self.melee_attacks[attack]["duration"], self._destroy_attack_hitbox,f"destroy_{ENEMY_ATTACK_NAMES.BOSS_MELEE_ATTACK}_hitbox")
 
    def _range_attack(self):
       if self.time_since_last_range_attack < ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_CD or self.time_since_last_melee_attack < ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_CD:
