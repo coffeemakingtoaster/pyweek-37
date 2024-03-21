@@ -88,6 +88,8 @@ class Base_Enemy(Base_Entity):
          self.is_dead = True
 
    def destroy(self):
+      if self.model is not None:
+         self.model.cleanup()
       self.parentNode.removeNode()
 
    def _destroy_attack_hitbox(self, _):

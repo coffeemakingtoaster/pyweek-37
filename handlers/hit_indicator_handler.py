@@ -21,7 +21,6 @@ class Hit_Indicator_Handler(Base_Entity):
       indicator = self.pool.pop()
       indicator.move_to(pos)
       self.used.append(indicator)
-      print(f"Pool contains: {len(self.pool)} items")
       base.taskMgr.doMethodLater(UI_CONSTANTS.HIT_INDICATOR_DISPLAY_TIME, self._release_indicator, "release_indicator_to_pool")
 
    def _release_indicator(self,_):

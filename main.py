@@ -1,9 +1,9 @@
-from entities.football_fan import Football_Fan
-from entities.sample_enemy import Sample_Enemy
+from entities.boss import Boss
 from handlers.hit_indicator_handler import Hit_Indicator_Handler
 from helpers.constants import EVENT_NAMES
 from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3, CollisionTraverser
 from entities.player import Player
+from entities.football_fan import Football_Fan
 
 from entities.carriage import Carriage
 from entities.map import Map
@@ -69,7 +69,9 @@ class main_game(ShowBase):
         
         self.accept(KEYBIND_IDENTIFIERS.J_KEY_DOWN,self.set_Station)
         self.accept(KEYBIND_IDENTIFIERS.K_KEY_DOWN,self.set_Drive)
-        
+
+        self.accept(EVENT_NAMES.SPAWN_BOSS_EVENT, self.spawn_boss)
+        self.accept(EVENT_NAMES.DEFEAT_BOSS_EVENT, self.set_Drive)
 
         self.gameTask = base.taskMgr.add(self.game_loop, "gameLoop")
 
@@ -144,23 +146,18 @@ class main_game(ShowBase):
         self.carriage = Carriage()
         
         self.map = Map()
-        
-        
 
         self.hit_indicator_handler = Hit_Indicator_Handler()
         
         self.player.main_model.loop('idle')
 
         self.enemies = [ Football_Fan(-10,0)]
+        #self.enemies = [Boss(-10,0)]
         #[Sample_Enemy(10,0), Football_Fan(-10,0)]
-
-        
         
         self.gameState = GameFSM(self.player,self.map,self.carriage)
         
         self.gameState.request('Drive')
-        
-
 
     def set_Drive(self):
         self.gameState.request('Drive')
@@ -190,7 +187,6 @@ class main_game(ShowBase):
             self.set_game_status(GAME_STATUS.RUNNING)
 
     def goto_to_main_menu(self):
-        print("Return to main menu")
         # no hud yet
         if self.active_ui is not None:
             self.active_ui.destroy()
@@ -220,6 +216,14 @@ class main_game(ShowBase):
             self.active_ui.destroy()
             self.active_ui = main_menu()
             self.set_game_status(GAME_STATUS.MAIN_MENU)
+
+    def spawn_boss(self):
+        if self.game_status != GAME_STATUS.RUNNING:
+            return
+        for enemy in self.enemies:
+            enemy.destroy()
+        self.enemies = []
+        self.enemies.append(Boss(0,0))
 
     def finish_game(self, success: bool):
         self.set_game_status(GAME_STATUS.GAME_FINISH)
