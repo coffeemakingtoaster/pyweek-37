@@ -23,7 +23,7 @@ class Boss(Base_Enemy):
                   "Long-Punch": join("assets", "anims", "Boss1-Long Punch"),
                   "Light-Punch": join("assets", "anims", "Boss1-Light Punch"),
                   "Jump-Attack": join("assets", "anims", "Boss1-Jump_Attack"),
-                  "Fire-Ball": join("assets", "anims", "Boss1-Fire Ball.egg"),
+                  "Fire-Ball": join("assets", "anims", "Boss1-Fire Roll.egg"),
       })
 
       # Set initial rotation
