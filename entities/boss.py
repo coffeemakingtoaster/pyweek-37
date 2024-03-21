@@ -24,8 +24,6 @@ class Boss(Base_Enemy):
                   "Light-Punch": join("assets", "anims", "Boss1-Light Punch"),
                   "Jump-Attack": join("assets", "anims", "Boss1-Jump_Attack"),
                   "Fire-Ball": join("assets", "anims", "Boss1-Fire Ball.egg"),
-
-
       })
 
       # Set initial rotation
@@ -61,6 +59,7 @@ class Boss(Base_Enemy):
 
       self.cans = []
 
+      self.death_animation_duration = 0.7
 
    def update(self, dt, player_pos):
       
@@ -121,6 +120,8 @@ class Boss(Base_Enemy):
       self.cans = remaining_cans
 
       if self.is_throwing_cans and self.time_since_last_can >= ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_INTERVAL:
+         # Actually execute ranged attack
+         self.model.play("Fire-Ball")
          direction = 1
          if self.model.getH() < 90:
             direction = -1
@@ -136,6 +137,7 @@ class Boss(Base_Enemy):
       if self.time_since_last_melee_attack < ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_CD or self.time_since_last_range_attack < ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_CD:
          return
       self.is_in_attack = True
+      self.model.play("Kick")
       self.attack_hitbox = self.model.attachNewNode(CollisionNode(ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK))
       self.attack_hitbox.show()
       self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-1,2),1,1,1))
@@ -154,7 +156,7 @@ class Boss(Base_Enemy):
       self.is_in_attack = True
 
    def _player_hit(self, entry: CollisionEntry):
-      if entry.from_node.getTag("id") != self.id:
+      if entry.from_node.getTag("id") != self.id or self._is_dead:
          return
 
       messenger.send(EVENT_NAMES.INCREMENT_COMBO_COUNTER)
