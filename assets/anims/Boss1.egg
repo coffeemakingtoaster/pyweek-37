@@ -80,7 +80,6 @@
   <Scalar> magfilter { linear }
   <Scalar> wrapu { repeat }
   <Scalar> wrapv { repeat }
-  <Scalar> alpha { off }
 }
 
 <Texture> "gentleman-angry-3d-model-low-poly-blend (1).jpg" {
@@ -92,7 +91,6 @@
   <Scalar> magfilter { linear }
   <Scalar> wrapu { repeat }
   <Scalar> wrapv { repeat }
-  <Scalar> alpha { off }
 }
 
   <Group> Armature {
