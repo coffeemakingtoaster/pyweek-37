@@ -42,7 +42,7 @@ class KEYBIND_IDENTIFIERS:
    N_KEY_UP = N_KEY_DOWN + "-up"
 
 class WORLD_CONSTANTS:
-   GRAVITY_VELOCITY = math.pi * 8
+   GRAVITY_VELOCITY = math.pi * 5
    MAP_X_LIMIT = 8
    MAP_HEIGHT = 0.8
    # Make camera more dynamic

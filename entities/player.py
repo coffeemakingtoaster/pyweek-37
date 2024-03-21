@@ -86,7 +86,11 @@ class Player(Base_Entity):
    def _load_models(self):
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
       self.main_model = Actor("assets/anims/Secretary.egg",{
-         'idle': 'assets/anims/Secretary-Idle.egg'
+         'idle': 'assets/anims/Secretary-Idle.egg',
+         'Light-Punch-1':'assets/anims/Secretary-Light Punch.egg',
+         'Light-Punch-2':'assets/anims/Secretary-Light Punch 2.egg',
+         'Heavy-Punch-1':'assets/anims/Secretary-Heavy Punch.egg',
+         'Jump':'assets/anims/Secretary-Jump.egg'
       })
         
       self.main_model.reparentTo(render)
@@ -114,6 +118,7 @@ class Player(Base_Entity):
    def _jump(self):
       # Player cannot jump again if midair
       if self.main_model.getZ() < 0.1:
+         self.main_model.play('Jump')
          self.z_vel = ENTITY_CONSTANTS.PLAYER_JUMP_VELOCITY
 
    def offboard(self):
@@ -181,6 +186,7 @@ class Player(Base_Entity):
       if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.LIGHT_ATTACK] < ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_CD:
          return
       if self.main_model:
+         self.main_model.play('Light-Punch-1')
          self._add_attack_hitbox(PLAYER_ATTACK_NAMES.LIGHT_ATTACK, CollisionBox(Point3(0,-0.3,1.75),1,0.3,0.75), ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_DURATION, True)
       self.is_in_light_attack = True
       self.is_in_animation = True
@@ -191,6 +197,7 @@ class Player(Base_Entity):
       if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.HEAVY_ATTACK] < ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_CD:
          return
       if self.main_model:
+         self.main_model.play('Heavy-Punch-1')
          self._add_attack_hitbox(PLAYER_ATTACK_NAMES.HEAVY_ATTACK,CollisionBox(Point3(0,-0.5,1.7),1,0.5,0.3), ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_DURATION)
       self.is_in_animation = True
       self.cooldowns[PLAYER_ATTACK_NAMES.HEAVY_ATTACK] = time()
