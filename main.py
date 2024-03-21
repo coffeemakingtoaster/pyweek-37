@@ -120,7 +120,7 @@ class main_game(ShowBase):
 
         for enemy in self.enemies:
             enemy.update(dt, self.player.getPos())
-            if enemy.is_dead:
+            if enemy.is_dead():
                 enemy.destroy()
                 continue
             # Is this inefficient? Probably yes...
@@ -149,9 +149,7 @@ class main_game(ShowBase):
 
         self.hit_indicator_handler = Hit_Indicator_Handler()
         
-        self.player.main_model.loop('idle')
-
-        self.enemies = [ Football_Fan(-10,0)]
+        self.enemies = [ Football_Fan(0,0)]
         #self.enemies = [Boss(-10,0)]
         #[Sample_Enemy(10,0), Football_Fan(-10,0)]
         
@@ -164,7 +162,6 @@ class main_game(ShowBase):
         
     def set_Station(self):
         self.gameState.request('Station')
-        
             
     def set_game_status(self, status):
         self.status_display["text"] = status

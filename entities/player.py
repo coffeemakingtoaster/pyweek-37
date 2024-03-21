@@ -9,6 +9,8 @@ from helpers.logging import debug_log
 from collections import defaultdict
 from time import time
 
+import random
+
 class Player(Base_Entity):
    def __init__(self, player_x, player_z) -> None:
       super().__init__()
@@ -67,11 +69,14 @@ class Player(Base_Entity):
 
       base.cTrav.addCollider(self.collision, self.notifier)
 
+      self.max_jump_height = WORLD_CONSTANTS.MAP_HEIGHT
+
    def enter_station(self):
       
       self.currentY = 4
       #TODO Camera
       #TODO Anim
+      self.max_jump_height = 3
       
    def enter_carriage(self):
       
@@ -82,18 +87,23 @@ class Player(Base_Entity):
    def leave_station(self):
       print("player Leaving")
       self.currentY = 0
+      self.max_jump_height = WORLD_CONSTANTS.MAP_HEIGHT
 
    def _load_models(self):
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
       self.main_model = Actor("assets/anims/Secretary.egg",{
-         'idle': 'assets/anims/Secretary-Idle.egg',
+         'Idle': 'assets/anims/Secretary-Idle.egg',
          'Light-Punch-1':'assets/anims/Secretary-Light Punch.egg',
          'Light-Punch-2':'assets/anims/Secretary-Light Punch 2.egg',
          'Heavy-Punch-1':'assets/anims/Secretary-Heavy Punch.egg',
-         'Jump':'assets/anims/Secretary-Jump.egg'
+         'Jump':'assets/anims/Secretary-Jump.egg',
+         'Block': 'assets/anims/Secretary-Block',
+         'Walk': 'assets/anims/Secretary-Walk',
       })
         
       self.main_model.reparentTo(render)
+
+      self.main_model.loop("Idle")
 
    def _setup_keybinds(self) -> None:
       self.accept(KEYBIND_IDENTIFIERS.A_KEY_DOWN, self._update_movement_status, ["left", True])
@@ -132,6 +142,8 @@ class Player(Base_Entity):
       self.main_model.node().resetAllPrevTransform()
       
       x_movement = ((self.movement_status["left"] * -1 ) + self.movement_status["right"]) * ENTITY_CONSTANTS.PLAYER_MOVEMENT_SPEED 
+      if self.is_blocking:
+         x_movement = 0
       new_x = self.main_model.getX() + x_movement* dt
       new_z = 0
 
@@ -144,13 +156,10 @@ class Player(Base_Entity):
 
       # Is player in midair? -> Gravity OR did player just start jumping -> Also gravity
       if self.main_model.getZ() > 0.1  or self.z_vel > 0:
-         if self.is_in_light_attack:
-            new_z = self.main_model.getZ()
-         else:
-            self.z_vel = max(self.z_vel - (WORLD_CONSTANTS.GRAVITY_VELOCITY * dt), -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
-            new_z = min(self.main_model.getZ() + (self.z_vel * dt), WORLD_CONSTANTS.MAP_HEIGHT)
-            if new_z == WORLD_CONSTANTS.MAP_HEIGHT and self.z_vel > 0:
-               self.z_vel /= 2 
+         self.z_vel = max(self.z_vel - (WORLD_CONSTANTS.GRAVITY_VELOCITY * dt), -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
+         new_z = min(self.main_model.getZ() + (self.z_vel * dt), self.max_jump_height)
+         if new_z == WORLD_CONSTANTS.MAP_HEIGHT and self.z_vel > 0:
+            self.z_vel /= 2 
 
       if self.is_dashing:
          if self.curr_dash_duration >= ENTITY_CONSTANTS.PLAYER_DASH_DURATION:
@@ -168,6 +177,15 @@ class Player(Base_Entity):
 
       self.last_position = self.main_model.getPos()
 
+      # Animation handling
+      if self.is_dashing or self.is_in_animation:
+         return
+      current_animation = self.main_model.getCurrentAnim() 
+      if abs(x_movement) > 0 and current_animation != "Walk":
+         self.main_model.loop("Walk")
+      elif x_movement == 0 and current_animation == "Walk":
+         self.main_model.loop("Idle")
+
       #debug_log(f'{self.main_model.getX(), self.main_model.getZ()}')
 
    def _change_hp(self, value):
@@ -176,16 +194,18 @@ class Player(Base_Entity):
 
    def _block(self):
       self.is_blocking = True
+      self.main_model.loop("Block")
 
    def _end_block(self):
       self.is_blocking = False
+      self.main_model.loop("Idle")
 
    def _light_attack(self):
       # Prevent animation cancel
       if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.LIGHT_ATTACK] < ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_CD:
          return
       if self.main_model:
-         self.main_model.play('Light-Punch-1')
+         self.main_model.play(random.choice(['Light-Punch-1', 'Light-Punch-2']))
          self._add_attack_hitbox(PLAYER_ATTACK_NAMES.LIGHT_ATTACK, CollisionBox(Point3(0,-0.3,1.75),1,0.3,0.75), ENTITY_CONSTANTS.PLAYER_LIGHT_ATTACK_DURATION, True)
       self.is_in_light_attack = True
       self.is_in_animation = True
@@ -203,7 +223,7 @@ class Player(Base_Entity):
         
    def _dash_attack(self):
       # Prevent animation cancel
-      if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.DASH_ATTACK] < ENTITY_CONSTANTS.PLAYER_DASH_ATTACK_CD:
+      if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.DASH_ATTACK] < ENTITY_CONSTANTS.PLAYER_DASH_ATTACK_CD or self.is_blocking:
          return
       if self.main_model:
          box = CollisionBox(Point3(0,-(ENTITY_CONSTANTS.PLAYER_DASH_DISTANCE / 2),2),1,ENTITY_CONSTANTS.PLAYER_DASH_DISTANCE/2,1)

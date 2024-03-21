@@ -1,17 +1,44 @@
 from direct.actor.Actor import Actor
 
-from config import ENTITY_CONSTANTS, WORLD_CONSTANTS
+from config import ENTITY_CONSTANTS, TEAM_BITMASKS, WORLD_CONSTANTS
 from entities.base import Base_Entity
 from os.path import join
+
+import uuid
+
+from panda3d.core import CollisionNode, CollisionBox, Point3, CollisionHandlerEvent
 
 class Can(Base_Entity):
    def __init__(self, can_x, can_z, direction) -> None:
       super().__init__()
 
-      self.model = Actor(join("assets", "eggs", "Player.egg"))
+      self.model = Actor(join("assets", "eggs", "Fireball.egg"))
       
+      self.model.setScale(0.3)
+      self.id = str(uuid.uuid4())
+
       # TODO: Adjust y coord for the boss stage
-      self.model.setPos(can_x, 4, can_z)
+      self.model.setPos(can_x, 4, can_z + 0.25)
+
+      self.collision = self.model.attachNewNode(CollisionNode("fireball"))
+
+      self.collision.node().addSolid(CollisionBox(Point3(-0.8,-0.8,-0.8),(0.8,0.8,0.8)))
+
+      self.collision.setTag("id", self.id)
+
+      self.collision.show()
+        
+      self.collision.node().setCollideMask(TEAM_BITMASKS.PLAYER)
+
+      self.notifier = CollisionHandlerEvent()
+
+      self.notifier.addInPattern("%fn-into")
+
+      self.accept(f"fireball-into", self._player_hit)
+      
+      self.currentY = 0
+
+      base.cTrav.addCollider(self.collision, self.notifier)
 
       self.model.reparentTo(render)
 
@@ -20,6 +47,9 @@ class Can(Base_Entity):
       self.direction = direction
 
       self.is_dead = False
+
+   def _player_hit(self, _):
+      self.is_dead = True
 
    def update(self, dt):
 
