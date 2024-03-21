@@ -16,10 +16,22 @@ class Boss(Base_Enemy):
    def __init__(self, boss_x, boss_z) -> None:
       super().__init__()
 
-      self.model = Actor(join("assets", "eggs", "Player.egg"))
-   
+      self.model = Actor(join("assets", "anims", "Boss1.egg"),{
+                  "Idle": join("assets", "anims", "Boss1-Idle.egg"),
+                  "Dead": join("assets", "anims", "Boss1-Dead.egg"),
+                  "Kick": join("assets", "anims", "Boss1-Kick.egg"),
+                  "Long-Punch": join("assets", "anims", "Boss1-Long Punch"),
+                  "Light-Punch": join("assets", "anims", "Boss1-Light Punch"),
+                  "Jump-Attack": join("assets", "anims", "Boss1-Jump_Attack"),
+                  "Fire-Ball": join("assets", "anims", "Boss1-Fire Ball.egg"),
+
+
+      })
+
       # Set initial rotation
       self.model.setH(90)
+
+      self.model.loop("Idle")
         
       self.model.reparentTo(self.parentNode)
 
@@ -52,7 +64,7 @@ class Boss(Base_Enemy):
 
    def update(self, dt, player_pos):
       
-      if self.is_dead:
+      if self._is_dead:
          return
       
       x_movement = 0

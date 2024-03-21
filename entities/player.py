@@ -69,11 +69,14 @@ class Player(Base_Entity):
 
       base.cTrav.addCollider(self.collision, self.notifier)
 
+      self.max_jump_height = WORLD_CONSTANTS.MAP_HEIGHT
+
    def enter_station(self):
       
       self.currentY = 4
       #TODO Camera
       #TODO Anim
+      self.max_jump_height = 3
       
    def enter_carriage(self):
       
@@ -84,6 +87,7 @@ class Player(Base_Entity):
    def leave_station(self):
       print("player Leaving")
       self.currentY = 0
+      self.max_jump_height = WORLD_CONSTANTS.MAP_HEIGHT
 
    def _load_models(self):
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
@@ -153,7 +157,7 @@ class Player(Base_Entity):
       # Is player in midair? -> Gravity OR did player just start jumping -> Also gravity
       if self.main_model.getZ() > 0.1  or self.z_vel > 0:
          self.z_vel = max(self.z_vel - (WORLD_CONSTANTS.GRAVITY_VELOCITY * dt), -ENTITY_CONSTANTS.PLAYER_MAX_FALL_SPEED) 
-         new_z = min(self.main_model.getZ() + (self.z_vel * dt), WORLD_CONSTANTS.MAP_HEIGHT)
+         new_z = min(self.main_model.getZ() + (self.z_vel * dt), self.max_jump_height)
          if new_z == WORLD_CONSTANTS.MAP_HEIGHT and self.z_vel > 0:
             self.z_vel /= 2 
 

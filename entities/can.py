@@ -8,10 +8,12 @@ class Can(Base_Entity):
    def __init__(self, can_x, can_z, direction) -> None:
       super().__init__()
 
-      self.model = Actor(join("assets", "eggs", "Player.egg"))
+      self.model = Actor(join("assets", "eggs", "Fireball.egg"))
+      
+      self.model.setScale(0.3)
       
       # TODO: Adjust y coord for the boss stage
-      self.model.setPos(can_x, 4, can_z)
+      self.model.setPos(can_x, 4, can_z + 0.25)
 
       self.model.reparentTo(render)
 
