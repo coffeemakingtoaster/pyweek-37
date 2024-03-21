@@ -23,8 +23,8 @@
   <Scalar> local { 1 }
 }
 
-<Texture> fire-ground-textures-wall-seamless-260nw-1570716382.webp {
-  "./tex/fire-ground-textures-wall-seamless-260nw-1570716382.webp"
+<Texture> fire-ground-textures-wall-seamless-260nw-1570716382.jpg {
+  "./tex/fire-ground-textures-wall-seamless-260nw-1570716382.jpg"
   <Scalar> format { rgb }
   <Scalar> envtype { modulate }
   <Scalar> uv-name { UVMap }
@@ -1730,560 +1730,560 @@
     
     
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.102381 -0.315090 -0.943523}
       <BFace> { 1 }
       <VertexRef> { 0 1 2 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.700224 -0.268032 -0.661699}
       <BFace> { 1 }
       <VertexRef> { 3 4 5 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.268034 -0.194736 -0.943523}
       <BFace> { 1 }
       <VertexRef> { 6 7 8 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.268034 0.194736 -0.943523}
       <BFace> { 1 }
       <VertexRef> { 9 10 11 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.102381 0.315090 -0.943523}
       <BFace> { 1 }
       <VertexRef> { 12 13 14 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.904989 -0.268031 -0.330385}
       <BFace> { 1 }
       <VertexRef> { 15 16 17 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.024747 -0.943521 -0.330386}
       <BFace> { 1 }
       <VertexRef> { 18 19 20 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.889697 -0.315095 -0.330385}
       <BFace> { 1 }
       <VertexRef> { 21 22 23 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.574602 0.748784 -0.330388}
       <BFace> { 1 }
       <VertexRef> { 24 25 26 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.534576 0.777865 -0.330387}
       <BFace> { 1 }
       <VertexRef> { 27 28 29 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.802609 -0.583126 -0.125627}
       <BFace> { 1 }
       <VertexRef> { 30 31 32 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.306569 -0.943522 -0.125629}
       <BFace> { 1 }
       <VertexRef> { 33 34 35 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.992077 0.000000 -0.125628}
       <BFace> { 1 }
       <VertexRef> { 36 37 38 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.306569 0.943522 -0.125629}
       <BFace> { 1 }
       <VertexRef> { 39 40 41 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.802609 0.583126 -0.125627}
       <BFace> { 1 }
       <VertexRef> { 42 43 44 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.408946 -0.628425 0.661698}
       <BFace> { 1 }
       <VertexRef> { 45 46 47 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.471300 -0.583122 0.661699}
       <BFace> { 1 }
       <VertexRef> { 48 49 50 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.700224 0.268032 0.661699}
       <BFace> { 1 }
       <VertexRef> { 51 52 53 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.038530 0.748779 0.661699}
       <BFace> { 1 }
       <VertexRef> { 54 55 56 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.724042 0.194736 0.661695}
       <BFace> { 1 }
       <VertexRef> { 57 58 59 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.268034 0.194737 0.943523}
       <BFace> { 1 }
       <VertexRef> { 60 61 62 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.491119 0.356821 0.794657}
       <BFace> { 1 }
       <VertexRef> { 63 64 65 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.408946 0.628425 0.661699}
       <BFace> { 1 }
       <VertexRef> { 66 67 68 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.102381 0.315090 0.943523}
       <BFace> { 1 }
       <VertexRef> { 69 70 71 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.187594 0.577345 0.794658}
       <BFace> { 1 }
       <VertexRef> { 72 73 74 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.471300 0.583122 0.661699}
       <BFace> { 1 }
       <VertexRef> { 75 76 77 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.331305 0.000000 0.943524}
       <BFace> { 1 }
       <VertexRef> { 78 79 80 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.607061 0.000000 0.794656}
       <BFace> { 1 }
       <VertexRef> { 81 82 83 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.700224 -0.268032 0.661699}
       <BFace> { 1 }
       <VertexRef> { 84 85 86 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.102381 -0.315090 0.943523}
       <BFace> { 1 }
       <VertexRef> { 87 88 89 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.187594 -0.577345 0.794658}
       <BFace> { 1 }
       <VertexRef> { 90 91 92 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.038530 -0.748779 0.661699}
       <BFace> { 1 }
       <VertexRef> { 93 94 95 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.268034 -0.194737 0.943523}
       <BFace> { 1 }
       <VertexRef> { 96 97 98 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.491119 -0.356821 0.794657}
       <BFace> { 1 }
       <VertexRef> { 99 100 101 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.724042 -0.194736 0.661695}
       <BFace> { 1 }
       <VertexRef> { 102 103 104 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.889697 0.315095 0.330385}
       <BFace> { 1 }
       <VertexRef> { 105 106 107 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.794656 0.577348 0.187595}
       <BFace> { 1 }
       <VertexRef> { 108 109 110 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.574602 0.748784 0.330388}
       <BFace> { 1 }
       <VertexRef> { 111 112 113 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.024747 0.943521 0.330386}
       <BFace> { 1 }
       <VertexRef> { 114 115 116 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.303531 0.934171 0.187597}
       <BFace> { 1 }
       <VertexRef> { 117 118 119 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.534576 0.777865 0.330387}
       <BFace> { 1 }
       <VertexRef> { 120 121 122 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.904989 0.268031 0.330385}
       <BFace> { 1 }
       <VertexRef> { 123 124 125 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.982246 0.000000 0.187599}
       <BFace> { 1 }
       <VertexRef> { 126 127 128 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.904989 -0.268031 0.330385}
       <BFace> { 1 }
       <VertexRef> { 129 130 131 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.534576 -0.777865 0.330387}
       <BFace> { 1 }
       <VertexRef> { 132 133 134 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.303531 -0.934171 0.187597}
       <BFace> { 1 }
       <VertexRef> { 135 136 137 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.024747 -0.943521 0.330386}
       <BFace> { 1 }
       <VertexRef> { 138 139 140 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.574602 -0.748784 0.330388}
       <BFace> { 1 }
       <VertexRef> { 141 142 143 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.794656 -0.577348 0.187595}
       <BFace> { 1 }
       <VertexRef> { 144 145 146 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.889697 -0.315095 0.330385}
       <BFace> { 1 }
       <VertexRef> { 147 148 149 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.306569 0.943522 0.125629}
       <BFace> { 1 }
       <VertexRef> { 150 151 152 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.303531 0.934171 -0.187597}
       <BFace> { 1 }
       <VertexRef> { 153 154 155 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.024747 0.943521 -0.330386}
       <BFace> { 1 }
       <VertexRef> { 156 157 158 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.802609 0.583126 0.125627}
       <BFace> { 1 }
       <VertexRef> { 159 160 161 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.794656 0.577348 -0.187595}
       <BFace> { 1 }
       <VertexRef> { 162 163 164 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.889697 0.315095 -0.330385}
       <BFace> { 1 }
       <VertexRef> { 165 166 167 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.802609 -0.583126 0.125627}
       <BFace> { 1 }
       <VertexRef> { 168 169 170 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.794656 -0.577348 -0.187595}
       <BFace> { 1 }
       <VertexRef> { 171 172 173 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.574602 -0.748784 -0.330388}
       <BFace> { 1 }
       <VertexRef> { 174 175 176 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.306569 -0.943522 0.125629}
       <BFace> { 1 }
       <VertexRef> { 177 178 179 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.303531 -0.934171 -0.187597}
       <BFace> { 1 }
       <VertexRef> { 180 181 182 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.534576 -0.777865 -0.330387}
       <BFace> { 1 }
       <VertexRef> { 183 184 185 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.992077 0.000000 0.125628}
       <BFace> { 1 }
       <VertexRef> { 186 187 188 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.982246 0.000000 -0.187599}
       <BFace> { 1 }
       <VertexRef> { 189 190 191 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.904989 0.268031 -0.330385}
       <BFace> { 1 }
       <VertexRef> { 192 193 194 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.471300 0.583122 -0.661699}
       <BFace> { 1 }
       <VertexRef> { 195 196 197 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.187594 0.577345 -0.794658}
       <BFace> { 1 }
       <VertexRef> { 198 199 200 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.038530 0.748779 -0.661699}
       <BFace> { 1 }
       <VertexRef> { 201 202 203 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.408946 0.628425 -0.661698}
       <BFace> { 1 }
       <VertexRef> { 204 205 206 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.491119 0.356821 -0.794657}
       <BFace> { 1 }
       <VertexRef> { 207 208 209 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.724042 0.194736 -0.661695}
       <BFace> { 1 }
       <VertexRef> { 210 211 212 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.724042 -0.194736 -0.661695}
       <BFace> { 1 }
       <VertexRef> { 213 214 215 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.491119 -0.356821 -0.794657}
       <BFace> { 1 }
       <VertexRef> { 216 217 218 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.408946 -0.628425 -0.661698}
       <BFace> { 1 }
       <VertexRef> { 219 220 221 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.700224 0.268032 -0.661699}
       <BFace> { 1 }
       <VertexRef> { 222 223 224 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.607061 0.000000 -0.794656}
       <BFace> { 1 }
       <VertexRef> { 225 226 227 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.331305 0.000000 -0.943524}
       <BFace> { 1 }
       <VertexRef> { 228 229 230 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {-0.038530 -0.748779 -0.661699}
       <BFace> { 1 }
       <VertexRef> { 231 232 233 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.187594 -0.577345 -0.794658}
       <BFace> { 1 }
       <VertexRef> { 234 235 236 <Ref> { Icosphere }} 
     }
     <Polygon> {
-      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.webp }
+      <TRef> { fire-ground-textures-wall-seamless-260nw-1570716382.jpg }
       <MRef> { Fie }
       <Normal> {0.471300 -0.583122 -0.661699}
       <BFace> { 1 }

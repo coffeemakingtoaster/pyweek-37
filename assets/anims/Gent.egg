@@ -1,20 +1,20 @@
 <CoordinateSystem> { Z-up } 
-<Material> FFan {
-  <Scalar> baser { 1.0 }
-  <Scalar> baseg { 1.0 }
-  <Scalar> baseb { 1.0 }
+<Material> Material {
+  <Scalar> baser { 0.004895644728094339 }
+  <Scalar> baseg { 0.004895644728094339 }
+  <Scalar> baseb { 0.004895644728094339 }
   <Scalar> basea { 1.0 }
-  <Scalar> ambr { 1.0 }
-  <Scalar> ambg { 1.0 }
-  <Scalar> ambb { 1.0 }
+  <Scalar> ambr { 0.004895644728094339 }
+  <Scalar> ambg { 0.004895644728094339 }
+  <Scalar> ambb { 0.004895644728094339 }
   <Scalar> amba { 1.0 }
   <Scalar> emitr { 0.0 }
   <Scalar> emitg { 0.0 }
   <Scalar> emitb { 0.0 }
   <Scalar> emita { 1.0 }
-  <Scalar> specr { 1.0 }
-  <Scalar> specg { 1.0 }
-  <Scalar> specb { 1.0 }
+  <Scalar> specr { 0.004895644728094339 }
+  <Scalar> specg { 0.004895644728094339 }
+  <Scalar> specb { 0.004895644728094339 }
   <Scalar> speca { 1.0 }
   <Scalar> shininess { 0.5 }
   <Scalar> roughness { 0.5 }
@@ -47,22 +47,22 @@
   <Scalar> local { 1 }
 }
 
-<Material> Material {
-  <Scalar> baser { 0.004895644728094339 }
-  <Scalar> baseg { 0.004895644728094339 }
-  <Scalar> baseb { 0.004895644728094339 }
+<Material> FFan {
+  <Scalar> baser { 1.0 }
+  <Scalar> baseg { 1.0 }
+  <Scalar> baseb { 1.0 }
   <Scalar> basea { 1.0 }
-  <Scalar> ambr { 0.004895644728094339 }
-  <Scalar> ambg { 0.004895644728094339 }
-  <Scalar> ambb { 0.004895644728094339 }
+  <Scalar> ambr { 1.0 }
+  <Scalar> ambg { 1.0 }
+  <Scalar> ambb { 1.0 }
   <Scalar> amba { 1.0 }
   <Scalar> emitr { 0.0 }
   <Scalar> emitg { 0.0 }
   <Scalar> emitb { 0.0 }
   <Scalar> emita { 1.0 }
-  <Scalar> specr { 0.004895644728094339 }
-  <Scalar> specg { 0.004895644728094339 }
-  <Scalar> specb { 0.004895644728094339 }
+  <Scalar> specr { 1.0 }
+  <Scalar> specg { 1.0 }
+  <Scalar> specb { 1.0 }
   <Scalar> speca { 1.0 }
   <Scalar> shininess { 0.5 }
   <Scalar> roughness { 0.5 }
