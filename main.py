@@ -45,7 +45,7 @@ class main_game(ShowBase):
         self.game_status = GAME_STATUS.MAIN_MENU
 
         # This should be obvious
-        base.enableParticles()
+        #base.enableParticles()
 
         self.setupLights()
 

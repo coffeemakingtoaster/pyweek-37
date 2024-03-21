@@ -6,7 +6,41 @@ on:
       - "main"
 
 jobs:
-  build:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install panda
+        run: python3 -m pip install -r requirements.txt
+
+      - name: build
+        run: python3 setup.py build_apps 
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Tube_Win
+          path: ./build/win_amd64/
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install panda
+        run: python3 -m pip install -r requirements.txt
+
+      - name: build
+        run: python3 setup.py build_apps 
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Tube_OSX
+          path: ./build/macosx_10_9_x86_64/
+
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,19 +50,9 @@ jobs:
         run: python3 -m pip install -r requirements.txt
 
       - name: build
-        run: python setup.py build_apps 
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Tube_Win
-          path: ./build/win_amd64/
+        run: python3 setup.py build_apps 
 
       - uses: actions/upload-artifact@v3
         with:
           name: Tube_Linux 
           path: ./build/manylinux2010_x86_64/ 
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Tube_OSX
-          path: ./build/macosx_10_9_x86_64/
