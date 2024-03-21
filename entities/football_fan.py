@@ -12,8 +12,7 @@ class Football_Fan(Base_Enemy):
    def __init__(self, enemy_x, enemy_z) -> None:
       super().__init__()
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
-      self.model = Actor("assets/eggs/Player.egg",)
-   
+      self._load_model() 
       # Set initial rotation
       self.model.setH(90)
         
@@ -26,17 +25,29 @@ class Football_Fan(Base_Enemy):
       self.hp = ENTITY_CONSTANTS.FOOTBALL_FAN_HP
       self.max_hp = ENTITY_CONSTANTS.FOOTBALL_FAN_HP
 
-      self.attach_hp_bar_to_model()
+      self.attach_hp_bar_to_model(x_offset=-0.5, z_offset=2)
       self.add_collision_node()
 
-      self.collision.node().addSolid(CollisionBox(Point3(0,-1,0),(1,1,2)))
+      self.collision.node().addSolid(CollisionBox(Point3(0,-0.5,0),(1,0.5,2)))
 
       self.attack_range = ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_RANGE
 
       self.movement_speed = ENTITY_CONSTANTS.FOOTBALL_FAN_MOVEMENT_SPEED
 
+      self.death_animation_duration = 0.5
+
+   def _load_model(self):
+      self.model = Actor("assets/anims/Enemy.egg",{
+         "Light-Punch": "assets/anims/Enemy-Light Punch.egg",
+         "Dead": "assets/anims/Enemy-Dead.egg",
+         "Idle": "assets/anims/Enemy-Idle.egg",
+         "Knockup": "assets/anims/Enemy-Knockup.egg",
+      })
+
+      self.model.loop("Idle")
+
    def update(self, dt, player_pos):
-      if self.is_dead:
+      if self._is_dead:
          return
       
       x_movement = 0
@@ -55,12 +66,13 @@ class Football_Fan(Base_Enemy):
          # Stop moving once close to avoid glitching in player
          if abs(x_diff_to_player) < (self.attack_range / 2):
             x_movement = 0
-
-         if x_diff_to_player < 0: 
-            self.model.setH(90)
-         elif x_diff_to_player > 0:
-            self.model.setH(-90)
-            x_movement *= -1
+         
+         if self.parentNode.getZ() < 0.1:
+            if x_diff_to_player < 0: 
+               self.model.setH(90)
+            elif x_diff_to_player > 0:
+               self.model.setH(-90)
+               x_movement *= -1
 
       new_z = 0
 
@@ -78,10 +90,14 @@ class Football_Fan(Base_Enemy):
       # Enemy cannot attack midair and when last attack was recently
       if time() - self.last_attack_time < ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_CD or self.parentNode.getZ() > 0.1:
          return
+      self.model.play("Light-Punch")
       self.is_in_attack = True
+      base.taskMgr.doMethodLater(0.05, self._spawn_attack_hitbox,f"spawn_{ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK}_hitbox")
+
+   def _spawn_attack_hitbox(self, _):
       self.attack_hitbox = self.model.attachNewNode(CollisionNode(ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK))
       self.attack_hitbox.show()
-      self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-1,2),1,1,1))
+      self.attack_hitbox.node().addSolid(CollisionBox(Point3(0,-0.3,2),1,0.2,1))
       self.attack_hitbox.setTag("team", "enemy")
       self.attack_hitbox.setPos(0,0,-1)
       self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.PLAYER)

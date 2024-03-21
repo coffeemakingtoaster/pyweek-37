@@ -1,7 +1,7 @@
 from panda3d.core import CardMaker, CollisionNode, CollisionHandlerEvent, CollisionEntry
 
 import uuid 
-
+from time import time
 
 from config import ENTITY_CONSTANTS, TEAM_BITMASKS, WORLD_CONSTANTS
 from entities.base import Base_Entity
@@ -17,7 +17,7 @@ class Base_Enemy(Base_Entity):
       self.hp = 5
       self.max_hp = 5
       self.model = None
-      self.is_dead = False
+      self._is_dead = False
    
       self.z_velocity = 0
 
@@ -39,6 +39,15 @@ class Base_Enemy(Base_Entity):
 
       self.movement_speed = 0
 
+      self.death_animation_duration = 0
+
+      self.time_of_death = 0
+
+   def is_dead(self):
+      if time() - self.time_of_death > self.death_animation_duration:
+         return self._is_dead
+      return False
+
    def add_collision_node(self):
 
       if self.model is None:
@@ -59,8 +68,6 @@ class Base_Enemy(Base_Entity):
       self.accept(f"enemy-into", self._player_hit)
 
       base.cTrav.addCollider(self.collision, self.notifier)
-
-
 
    def attach_hp_bar_to_model(self, x_offset=-0.5, z_offset=3):
       cmfg = CardMaker('fg')
@@ -85,7 +92,9 @@ class Base_Enemy(Base_Entity):
       self.hp += value
       self._update_hp_display()
       if self.hp <= 0:
-         self.is_dead = True
+         self._is_dead = True
+         self.time_of_death = time()
+         self.model.play("Dead")
 
    def destroy(self):
       if self.model is not None:
@@ -96,10 +105,12 @@ class Base_Enemy(Base_Entity):
       if self.attack_hitbox:
          self.attack_hitbox.removeNode()
          self.attack_hitbox = None
+      if self.model:
+         self.model.loop("Idle")
       self.is_in_attack = False
 
    def _player_hit(self, entry: CollisionEntry):
-      if entry.from_node.getTag("id") != self.id:
+      if entry.from_node.getTag("id") != self.id or self._is_dead:
          return
       attack_identifier = entry.into_node.getName()
 
@@ -110,6 +121,7 @@ class Base_Enemy(Base_Entity):
       # Allow light attack to stop enemy from being knocked back
       self.knockback_velocity = 0
       if attack_identifier in [PLAYER_ATTACK_NAMES.HEAVY_ATTACK, PLAYER_ATTACK_NAMES.DASH_ATTACK]:
+         self.model.play("Knockup")
          # This is a CC attack
          if self.model.getZ() > 0.1:
             # Stop the fall
