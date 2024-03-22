@@ -130,7 +130,6 @@ class main_game(ShowBase):
         
         remaining_enemies = []
         
-        
         if len(self.enemies) < 5 and self.state == "Drive" and self.backup > 1:
             if self.phase == 1:
                 self.enemies.append(Football_Fan(-10,0))
@@ -155,12 +154,11 @@ class main_game(ShowBase):
         self.enemies = remaining_enemies
 
         return Task.cont
-    
 
     def load_game(self):
         print("Loading game")
         self.active_ui.destroy()
-        self.setBackgroundColor((255, 255, 255, 1))
+        self.setBackgroundColor((0,0,0, 1))
 
         self.active_ui = game_hud()
 

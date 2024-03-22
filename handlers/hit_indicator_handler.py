@@ -2,6 +2,7 @@ from config import UI_CONSTANTS
 from entities.base import Base_Entity
 from entities.hit_indicator import Hit_Indicator
 from helpers.constants import EVENT_NAMES
+from time import time
 
 from direct.task.Task import Task
 
@@ -12,12 +13,19 @@ class Hit_Indicator_Handler(Base_Entity):
          self.pool.append(Hit_Indicator())
       self.used = []
       self.accept(EVENT_NAMES.DISPLAY_HIT, self._display_hit)
+      self.time_since_last_indicator = 0 
 
    def _display_hit(self, pos):
       if len(self.pool) == 0:
          return
+      
+      # Dont spam multiple at once
+      if time() - self.time_since_last_indicator < 0.1:
+         return
+      
+      self.time_since_last_indicator = 0
+
       # Move point towards camera so it covers other entities
-      pos.setY(-1) 
       indicator = self.pool.pop()
       indicator.move_to(pos)
       self.used.append(indicator)

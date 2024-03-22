@@ -1,4 +1,4 @@
-from panda3d.core import CardMaker, CollisionNode, CollisionHandlerEvent, CollisionEntry
+from panda3d.core import CardMaker, CollisionNode, CollisionHandlerEvent, CollisionEntry, TextNode
 
 import uuid 
 from time import time
@@ -43,6 +43,8 @@ class Base_Enemy(Base_Entity):
 
       self.time_of_death = 0
 
+      self.time_since_last_hit = 0
+
    def is_dead(self):
       if time() - self.time_of_death > self.death_animation_duration:
          return self._is_dead
@@ -71,7 +73,16 @@ class Base_Enemy(Base_Entity):
 
       base.cTrav.addCollider(self.collision, self.notifier)
 
-   def attach_hp_bar_to_model(self, x_offset=-0.5, z_offset=3):
+   def add_enemy_name(self,name, x_offset=-0.5, z_offset=2.0):
+      self.name_node = TextNode('Enemy Name')
+      self.name_node.setTextColor(255,255,255,1)
+      self.name_node.setText(name)
+      self.name_display = self.parentNode.attachNewNode(self.name_node)
+      self.name_display.setPos(x_offset, 0, z_offset)
+      self.name_display.setScale(0.2)
+
+
+   def attach_hp_bar_to_model(self, x_offset=-0.5, z_offset=3.0):
       cmfg = CardMaker('fg')
       cmfg.setFrame(0, 1, -0.1, 0.1)
       self.fg = self.parentNode.attachNewNode(cmfg.generate())
@@ -83,7 +94,9 @@ class Base_Enemy(Base_Entity):
       #self.bg.setPos(-1, 1, 1)
 
       self.fg.setColor(255, 0, 0, 1)
-      #self.bg.setColor(255, 255, 255, 1)
+      #self.bg.setColor(255, 255, 255, 1)S
+
+
 
    def _update_hp_display(self):
       hp_fraction = min(max(self.hp/self.max_hp,0.001), 1)
@@ -114,7 +127,12 @@ class Base_Enemy(Base_Entity):
    def _player_hit(self, entry: CollisionEntry):
       if entry.from_node.getTag("id") != self.id or self._is_dead or entry.from_node.getTag("team") == entry.into_node.getTag("team"):
          return
-
+      
+      # Prevent multiple hits with same strike
+      if time() - self.time_since_last_hit < 0.5:
+         return
+      
+      self.time_since_last_hit = 0
       attack_identifier = entry.into_node.getName()
 
       messenger.send(EVENT_NAMES.INCREMENT_COMBO_COUNTER)

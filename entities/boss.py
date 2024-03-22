@@ -60,7 +60,8 @@ class Boss(Base_Enemy):
       self.hp = ENTITY_CONSTANTS.BOSS_HP
       self.max_hp = ENTITY_CONSTANTS.BOSS_HP 
 
-      self.attach_hp_bar_to_model()
+      self.attach_hp_bar_to_model(x_offset=-0.5, z_offset=1.6)
+      self.add_enemy_name("Jeffrey", x_offset=-0.1, z_offset=2)
       self.add_collision_node()
 
       self.collision.node().addSolid(CollisionBox(Point3(0,-0.6,0),(1,0.6,2)))
@@ -82,6 +83,7 @@ class Boss(Base_Enemy):
       self.cans = []
 
       self.death_animation_duration = 0.7
+
 
    def update(self, dt, player_pos):
       
