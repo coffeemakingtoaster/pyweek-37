@@ -262,7 +262,8 @@ class Player(Base_Entity):
       if time() - self.last_hit_timestamp < ENTITY_CONSTANTS.PLAYER_POST_DAMAGE_INV_PERIOD or self.is_blocking:
          return
       messenger.send(EVENT_NAMES.RESET_COMBO_COUNTER)
-      if entry.into_node.getName() in [ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK]:
+      #if entry.into_node.getName() in [ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK]:
+      if entry.into_node.getTag("team") == "enemy":
          self._change_hp(-1)
          self.last_hit_timestamp = time()
 

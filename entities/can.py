@@ -27,6 +27,8 @@ class Can(Base_Entity):
 
       self.collision.setTag("id", self.id)
 
+      self.collision.setTag("team", "enemy")
+
       #self.collision.show()
         
       self.collision.node().setCollideMask(TEAM_BITMASKS.PLAYER)
