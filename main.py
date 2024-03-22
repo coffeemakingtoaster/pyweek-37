@@ -15,7 +15,7 @@ from ui.pause_menu import pause_menu
 from ui.settings_menu import settings_menu
 from ui.victory_screen import victory_screen
 from ui.hud import game_hud
-from config import GAME_STATUS, KEYBIND_IDENTIFIERS
+from config import GAME_STATUS, KEYBIND_IDENTIFIERS, TEAM_BITMASKS
 from helpers.utilities import load_config, lock_mouse_in_window, release_mouse_from_window
 
 from direct.showbase.ShowBase import ShowBase
@@ -35,7 +35,7 @@ class main_game(ShowBase):
     def __init__(self):
 
         ShowBase.__init__(self)
-        
+
         # Print all occuring events
         #messenger.toggleVerbose()
 

@@ -61,6 +61,8 @@ class Base_Enemy(Base_Entity):
 
       self.collision.setTag("id", self.id)
 
+      self.collision.setTag("team", "enemy")
+
       self.notifier = CollisionHandlerEvent()
 
       self.notifier.addInPattern("%fn-into")
@@ -110,8 +112,9 @@ class Base_Enemy(Base_Entity):
       self.is_in_attack = False
 
    def _player_hit(self, entry: CollisionEntry):
-      if entry.from_node.getTag("id") != self.id or self._is_dead:
+      if entry.from_node.getTag("id") != self.id or self._is_dead or entry.from_node.getTag("team") == entry.into_node.getTag("team"):
          return
+
       attack_identifier = entry.into_node.getName()
 
       messenger.send(EVENT_NAMES.INCREMENT_COMBO_COUNTER)
