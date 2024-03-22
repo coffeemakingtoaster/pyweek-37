@@ -152,7 +152,7 @@ class main_game(ShowBase):
                 continue
             # Is this inefficient? Probably yes...
             remaining_enemies.append(enemy)
-            self.enemies = remaining_enemies
+        self.enemies = remaining_enemies
 
         return Task.cont
     
