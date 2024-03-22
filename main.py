@@ -268,7 +268,7 @@ class main_game(ShowBase):
             enemy.destroy()
         self.enemies = []
         if self.phase == 1:
-            self.enemies.append(Queen(0,0)) #TODO BOSS
+            self.enemies.append(Boss(0,0)) #TODO BOSS
         else:
             self.enemies.append(Queen(0,0))
 

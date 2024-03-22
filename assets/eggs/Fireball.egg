@@ -24,7 +24,7 @@
 }
 
 <Texture> fire-ground-textures-wall-seamless-260nw-1570716382.jpg {
-  "./tex/fire-ground-textures-wall-seamless-260nw-1570716382.jpg"
+  "./assets/eggs/tex/fire-ground-textures-wall-seamless-260nw-1570716382.jpg"
   <Scalar> format { rgb }
   <Scalar> envtype { modulate }
   <Scalar> uv-name { UVMap }

@@ -72,6 +72,8 @@ class Queen(Base_Enemy):
       self.time_since_last_attack = 0
 
       self.time_since_last_can = 0
+      
+      self.ShootDirection = 1
 
       self.is_throwing_cans = False
       
@@ -85,17 +87,21 @@ class Queen(Base_Enemy):
       
       self.endAttackInterval = Func(self.endAttack)
       
+      self.endFireAttackInterval = Func(self.endFireAttack)
+      
       self.KickInterval = Func(self.kick)
+      
+      self.ShootInterval = Func(self.shoot)
       
       self.KickAnimInterval = self.model.actorInterval("Kick")
     
-      
+      self.FireAnimInterval = self.model.actorInterval("Fire-Roll")
       self.KickSequence = Sequence(Wait(0.3),self.KickInterval,Wait(0.3),self.endAttackInterval)
      
-    
+      self.FireAttackSequence = Sequence(Wait(0.5),self.ShootInterval,Wait(0.2),self.ShootInterval,Wait(0.2),self.ShootInterval,Wait(0.2),Wait(1),self.endFireAttackInterval)
       
       self.meleeAttackParallel = Parallel(self.KickAnimInterval,self.KickSequence)
-      #self.fireAttackParallel = Parallel(self.FireAnimInterval,)
+      self.fireAttackParallel = Parallel(self.FireAnimInterval,self.FireAttackSequence)
       
 
     def update(self, dt, player_pos):
@@ -116,9 +122,9 @@ class Queen(Base_Enemy):
             self.meleeAttackParallel.start()
             self.is_in_attack = True
             
-         if abs(x_diff_to_player) > self.attack_range+3 and self.time_since_last_attack > ENTITY_CONSTANTS.QUEEN_MELEE_ATTACK_CD:
+         if abs(x_diff_to_player) > self.attack_range+2 and self.time_since_last_attack > ENTITY_CONSTANTS.QUEEN_MELEE_ATTACK_CD:
             self.time_since_last_attack = 0
-            self.meleeAttackParallel.start()
+            self.fireAttackParallel.start()
             self.is_in_attack = True
             
          self.time_since_last_attack += dt
@@ -135,8 +141,10 @@ class Queen(Base_Enemy):
 
          if x_diff_to_player < 0: 
             self.model.setH(90)
+            self.ShootDirection = 1
          elif x_diff_to_player > 0:
             self.model.setH(-90)
+            self.ShootDirection = -1
             x_movement *= -1
 
       new_z = 0
@@ -151,7 +159,15 @@ class Queen(Base_Enemy):
       
       self.parentNode.setFluidPos(new_x, 4, new_z)
 
-      
+      remaining_cans = []
+      for can in self.cans:
+         if can.is_dead:
+            can.destroy()
+            continue
+         can.update(dt)
+         remaining_cans.append(can)
+
+      self.cans = remaining_cans
       
    
     def kick(self):
@@ -168,6 +184,16 @@ class Queen(Base_Enemy):
        self.is_in_attack = False
        self._destroy_attack_hitbox(f"destroy_{ENEMY_ATTACK_NAMES.BOSS_MELEE_ATTACK}_hitbox")
 
+    def shoot(self):
+        random_z = random.uniform(-2, -0.5)
+        self.cans.append(Can(self.parentNode.getX(), self.parentNode.getZ()+4,self.ShootDirection,random_z))
+    
+    def endFireAttack(self):
+        self.is_in_attack = False
+        for can in self.cans:
+            can.destroy()
+        self.cans = []
+    
     def _player_hit(self, entry: CollisionEntry):
       if entry.from_node.getTag("id") != self.id or self._is_dead:
          return

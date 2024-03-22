@@ -147,7 +147,7 @@ class Boss(Base_Enemy):
          direction = 1
          if self.model.getH() < 90:
             direction = -1
-         self.cans.append(Can(self.parentNode.getX(), self.parentNode.getZ(), direction))
+         self.cans.append(Can(self.parentNode.getX(), self.parentNode.getZ(), direction,0))
          self.thrown_cans += 1
          self.time_since_last_can = 0
          if self.thrown_cans >= ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_RANGED_AMOUNT:

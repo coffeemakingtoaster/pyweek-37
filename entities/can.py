@@ -3,13 +3,14 @@ from direct.actor.Actor import Actor
 from config import ENTITY_CONSTANTS, TEAM_BITMASKS, WORLD_CONSTANTS
 from entities.base import Base_Entity
 from os.path import join
+from panda3d.core import Vec3
 
 import uuid
 
 from panda3d.core import CollisionNode, CollisionBox, Point3, CollisionHandlerEvent
 
 class Can(Base_Entity):
-   def __init__(self, can_x, can_z, direction) -> None:
+   def __init__(self, can_x, can_z, x_direction, z_direction) -> None:
       super().__init__()
 
       self.model = Actor(join("assets", "eggs", "Fireball.egg"))
@@ -44,7 +45,9 @@ class Can(Base_Entity):
 
       self.traveled_distance = 0
 
-      self.direction = direction
+      self.x_direction = x_direction
+      
+      self.z_direction = z_direction
 
       self.is_dead = False
 
@@ -57,7 +60,7 @@ class Can(Base_Entity):
 
       self.traveled_distance += x_movement
 
-      self.model.setFluidX(max(min(self.model.getX() + (x_movement * self.direction), WORLD_CONSTANTS.MAP_X_LIMIT),-WORLD_CONSTANTS.MAP_X_LIMIT))
+      self.model.setFluidPos((max(min(self.model.getX() + (x_movement * self.x_direction), WORLD_CONSTANTS.MAP_X_LIMIT),-WORLD_CONSTANTS.MAP_X_LIMIT)),4,(self.model.getZ()+x_movement*self.z_direction))
 
       if abs(self.model.getX()) >= WORLD_CONSTANTS.MAP_X_LIMIT or self.traveled_distance >= ENTITY_CONSTANTS.CAN_RANGE:
          self.is_dead = True
