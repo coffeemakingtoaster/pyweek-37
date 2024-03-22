@@ -6,6 +6,7 @@ from panda3d.core import CollisionNode,  CollisionBox, Point3
 
 from helpers.constants import ENEMY_ATTACK_NAMES
 
+import random
 from time import time
 
 class Football_Fan(Base_Enemy):
@@ -32,7 +33,7 @@ class Football_Fan(Base_Enemy):
 
       self.attack_range = ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_RANGE
 
-      self.movement_speed = ENTITY_CONSTANTS.FOOTBALL_FAN_MOVEMENT_SPEED
+      self.movement_speed = ENTITY_CONSTANTS.FOOTBALL_FAN_MOVEMENT_SPEED + random.uniform(-1,1)
 
       self.death_animation_duration = 0.5
 
@@ -42,7 +43,8 @@ class Football_Fan(Base_Enemy):
          "Dead": "assets/anims/Enemy-Dead.egg",
          "Idle": "assets/anims/Enemy-Idle.egg",
          "Knockup": "assets/anims/Enemy-Knockup.egg",
-         "Walk": "assets/anims/Enemy-Walk.egg"
+         "Walk": "assets/anims/Enemy-Walk.egg",
+         "Flinch": "assets/anims/Enemy-Flinch.egg"
       })
 
       self.model.loop("Idle")

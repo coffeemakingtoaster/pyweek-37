@@ -13,9 +13,9 @@ from helpers.logging import debug_log
 from ui.main_menu import main_menu
 from ui.pause_menu import pause_menu
 from ui.settings_menu import settings_menu
-from ui.victory_screen import victory_screen
+from ui.victory import victory_screen
 from ui.hud import game_hud
-from config import GAME_STATUS, KEYBIND_IDENTIFIERS, TEAM_BITMASKS
+from config import GAME_STATUS, KEYBIND_IDENTIFIERS
 from helpers.utilities import load_config, lock_mouse_in_window, release_mouse_from_window
 
 from direct.showbase.ShowBase import ShowBase
@@ -191,8 +191,15 @@ class main_game(ShowBase):
             self.Win()
     
     def Win(self):
-        print("You Win")
-    
+        self.set_game_status(GAME_STATUS.GAME_FINISH)
+        self.current_hud.destroy()
+        self.active_ui = victory_screen(0, True)
+
+    def Lose(self):
+        self.set_game_status(GAME_STATUS.GAME_FINISH)
+        self.current_hud.destroy()
+        self.active_ui = victory_screen(0, False)
+   
     def set_Drive(self):
         
         self.gameState.request('Drive')

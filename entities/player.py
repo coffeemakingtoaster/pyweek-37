@@ -115,9 +115,9 @@ class Player(Base_Entity):
       self.accept(KEYBIND_IDENTIFIERS.P_KEY_DOWN, self._change_hp, [1])
       self.accept(KEYBIND_IDENTIFIERS.COMMA_KEY_DOWN, self._light_attack)
       self.accept(KEYBIND_IDENTIFIERS.DOT_KEY_DOWN, self._heavy_attack)
-      self.accept(KEYBIND_IDENTIFIERS.M_KEY_DOWN, self._dash_attack)
-      self.accept(KEYBIND_IDENTIFIERS.N_KEY_DOWN, self._block)
-      self.accept(KEYBIND_IDENTIFIERS.N_KEY_UP, self._end_block)
+      self.accept(KEYBIND_IDENTIFIERS.M_KEY_DOWN, self._block)
+      self.accept(KEYBIND_IDENTIFIERS.M_KEY_UP, self._end_block)
+      self.accept(KEYBIND_IDENTIFIERS.N_KEY_DOWN, self._dash_attack)
 
    def _update_movement_status(self, direction: str, pressed: bool) -> None:
       if pressed:

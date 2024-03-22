@@ -24,27 +24,31 @@ class Boss(Base_Enemy):
                   "Long-Punch": join("assets", "anims", "Boss1-Long Punch"),
                   "Light-Punch": join("assets", "anims", "Boss1-Light Punch"),
                   "Jump-Attack": join("assets", "anims", "Boss1-Jump_Attack"),
-                  
                   "Fire-Ball": join("assets", "anims", "Boss1-Fire Ball.egg"),
                   "Fire-Roll": join("assets", "anims", "Boss1-Fire Roll.egg"),
+                  "Flinch": join("assets","anims", "Boss1-Flinch.egg")
       })
 
       self.melee_attacks = {
          "Kick":{
-            "hitbox": CollisionBox(Point3(0,-0.5,2),1,0.5,1),
-            "duration": 1.3
+            "hitbox": CollisionBox(Point3(0,-0.5,1.2),1,0.5,1),
+            "windup": 0.5,
+            "duration": 0.6
             }, 
          "Long-Punch": {
             "hitbox": CollisionBox(Point3(0,-0.8,2),1,0.8,0.3),
-            "duration": 1.6,
+            "windup": 0.5,
+            "duration": 0.6,
             }, 
          "Light-Punch":{
             "hitbox":  CollisionBox(Point3(0,-0.3,2),1,0.3,1),
-            "duration": 1.3
+            "windup": 0.3,
+            "duration": 0.6
             }, 
          "Jump-Attack":{
             "hitbox":  CollisionBox(Point3(0,0,1),1,1,1),
-            "duration": 1.3
+            "windup": 0.7,
+            "duration": 0.3 
             }, 
       }
 
@@ -61,7 +65,7 @@ class Boss(Base_Enemy):
       self.max_hp = ENTITY_CONSTANTS.BOSS_HP 
 
       self.attach_hp_bar_to_model(x_offset=-0.5, z_offset=1.6)
-      self.add_enemy_name("Jeffrey", x_offset=-0.1, z_offset=2)
+      self.add_enemy_name("Jeffrey", x_offset=-0.3, z_offset=2)
       self.add_collision_node()
 
       self.collision.node().addSolid(CollisionBox(Point3(0,-0.6,0),(1,0.6,2)))
@@ -83,7 +87,6 @@ class Boss(Base_Enemy):
       self.cans = []
 
       self.death_animation_duration = 0.7
-
 
    def update(self, dt, player_pos):
       
@@ -146,23 +149,18 @@ class Boss(Base_Enemy):
       if self.is_throwing_cans and self.time_since_last_can >= ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_INTERVAL:
          # Actually execute ranged attack
          self.model.play("Fire-Roll")
-         direction = 1
-         if self.model.getH() < 90:
-            direction = -1
-         self.cans.append(Can(self.parentNode.getX(), self.parentNode.getZ(), direction,0))
-         self.thrown_cans += 1
          self.time_since_last_can = 0
-         if self.thrown_cans >= ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_RANGED_AMOUNT:
-            self.is_throwing_cans = False
-            self.is_in_attack = False
-            self.time_since_last_range_attack = 0
-
+         base.taskMgr.doMethodLater(0.2, self._do_ranged,f"do_ranged")
+      
    def _melee_attack(self):
       if self.time_since_last_melee_attack < ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_CD or self.time_since_last_range_attack < ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_CD:
          return
       attack = random.choice(list(self.melee_attacks.keys()))
       self.is_in_attack = True
       self.model.play(attack)
+      base.taskMgr.doMethodLater(self.melee_attacks[attack]["windup"], self._do_melee,f"destroy_{ENEMY_ATTACK_NAMES.BOSS_MELEE_ATTACK}_hitbox",[attack])
+
+   def _do_melee(self, attack):
       self.attack_hitbox = self.model.attachNewNode(CollisionNode(ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK))
       self.attack_hitbox.show()
       self.attack_hitbox.node().addSolid(self.melee_attacks[attack]["hitbox"])
@@ -172,6 +170,17 @@ class Boss(Base_Enemy):
       base.cTrav.addCollider(self.attack_hitbox, self.notifier)
       self.time_since_last_melee_attack = 0
       base.taskMgr.doMethodLater(self.melee_attacks[attack]["duration"], self._destroy_attack_hitbox,f"destroy_{ENEMY_ATTACK_NAMES.BOSS_MELEE_ATTACK}_hitbox")
+
+   def _do_ranged(self,_):
+      direction = 1
+      if self.model.getH() < 90:
+         direction = -1
+      self.cans.append(Can(self.parentNode.getX(), self.parentNode.getZ(), direction,0))
+      self.thrown_cans += 1
+      if self.thrown_cans >= ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_RANGED_AMOUNT:
+         self.is_throwing_cans = False
+         self.is_in_attack = False
+         self.time_since_last_range_attack = 0
 
    def _range_attack(self):
       if self.time_since_last_range_attack < ENTITY_CONSTANTS.BOSS_RANGED_ATTACK_CD or self.time_since_last_melee_attack < ENTITY_CONSTANTS.BOSS_MELEE_ATTACK_CD:

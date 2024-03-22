@@ -8,7 +8,6 @@ from direct.interval.IntervalGlobal import *
 
 from helpers.constants import EVENT_NAMES
 
-
 class Carriage(Base_Entity):
     def __init__(self):
         super().__init__()

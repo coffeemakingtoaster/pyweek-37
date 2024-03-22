@@ -96,8 +96,6 @@ class Base_Enemy(Base_Entity):
       self.fg.setColor(255, 0, 0, 1)
       #self.bg.setColor(255, 255, 255, 1)S
 
-
-
    def _update_hp_display(self):
       hp_fraction = min(max(self.hp/self.max_hp,0.001), 1)
       self.fg.setScale(hp_fraction, 1, 1)
@@ -137,6 +135,8 @@ class Base_Enemy(Base_Entity):
 
       messenger.send(EVENT_NAMES.INCREMENT_COMBO_COUNTER)
       messenger.send(EVENT_NAMES.DISPLAY_HIT, [self.parentNode.getPos()])
+
+      self.model.play("Flinch")
 
       self._destroy_attack_hitbox(None)
       # Allow light attack to stop enemy from being knocked back

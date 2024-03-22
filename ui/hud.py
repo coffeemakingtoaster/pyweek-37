@@ -86,6 +86,7 @@ class game_hud(ui_base):
     def destroy(self) -> None:
         self.ignoreAll()
         base.taskMgr.removeTasksMatching("hud_update*")
+        base.taskMgr.removeTasksMatching("combo_timeframe_watcher")
         try:
             super().destroy()
             for indicator in self.hit_indicators + self.pooled_hit_indicators:

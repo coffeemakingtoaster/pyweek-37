@@ -25,6 +25,7 @@ class Queen(Base_Enemy):
                   "Kick": join("assets", "anims", "qUEEN-Standard Attack.egg"),
                   "Long-Punch": join("assets", "anims", "qUEEN-StandardAttackLong"),
                   "Fire-Roll": join("assets", "anims", "qUEEN-Fireattack1.egg"),
+                  "Flinch": join("assets", "anims", "qUEEN-Flinch.egg")
       })
 
       self.melee_attacks = {
@@ -58,7 +59,7 @@ class Queen(Base_Enemy):
       self.hp = ENTITY_CONSTANTS.QUEEN_HP
       self.max_hp = ENTITY_CONSTANTS.QUEEN_HP 
 
-      self.attach_hp_bar_to_model()
+      self.attach_hp_bar_to_model(x_offset=-0.5, z_offset=1.7)
       self.add_enemy_name("THE QUEEN")
       self.add_collision_node()
 
