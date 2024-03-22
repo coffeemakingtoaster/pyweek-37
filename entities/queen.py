@@ -116,10 +116,10 @@ class Queen(Base_Enemy):
             self.meleeAttackParallel.start()
             self.is_in_attack = True
             
-         #if abs(x_diff_to_player) > self.attack_range+3 and self.time_since_last_attack > ENTITY_CONSTANTS.QUEEN_MELEE_ATTACK_CD:
-            #self.time_since_last_attack = 0
-            #self.meleeAttackParallel.start()
-            #self.is_in_attack = True
+         if abs(x_diff_to_player) > self.attack_range+3 and self.time_since_last_attack > ENTITY_CONSTANTS.QUEEN_MELEE_ATTACK_CD:
+            self.time_since_last_attack = 0
+            self.meleeAttackParallel.start()
+            self.is_in_attack = True
             
          self.time_since_last_attack += dt
 

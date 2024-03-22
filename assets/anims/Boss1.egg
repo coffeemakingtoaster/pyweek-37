@@ -72,7 +72,7 @@
 }
 
 <Texture> DEC20-Slovakia-v-England-Euro-2016-Group-B.jpg {
-  "./tex/DEC20-Slovakia-v-England-Euro-2016-Group-B.jpg"
+  ".assets/anims/tex/DEC20-Slovakia-v-England-Euro-2016-Group-B.jpg"
   <Scalar> format { rgb }
   <Scalar> envtype { modulate }
   <Scalar> uv-name { UVMap }
@@ -83,7 +83,7 @@
 }
 
 <Texture> "gentleman-angry-3d-model-low-poly-blend (1).jpg" {
-  "./tex/gentleman-angry-3d-model-low-poly-blend (1).jpg"
+  ".assets/anims/tex/gentleman-angry-3d-model-low-poly-blend (1).jpg"
   <Scalar> format { rgb }
   <Scalar> envtype { modulate }
   <Scalar> uv-name { UVMap }

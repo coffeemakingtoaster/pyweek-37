@@ -130,7 +130,7 @@ class main_game(ShowBase):
         
         remaining_enemies = []
         
-        print(len(self.enemies))
+        
         if len(self.enemies) < 5 and self.state == "Drive" and self.backup > 1:
             if self.phase == 1:
                 self.enemies.append(Football_Fan(-10,0))
