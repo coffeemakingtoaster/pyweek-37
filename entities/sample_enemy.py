@@ -36,7 +36,7 @@ class Sample_Enemy(Base_Enemy):
 
       self.collision.node().addSolid(CollisionBox(Point3(0,-1,0),(1,1,2)))
 
-      self.collision.show()
+      #self.collision.show()
         
       self.collision.node().setCollideMask(TEAM_BITMASKS.ENEMY)
 

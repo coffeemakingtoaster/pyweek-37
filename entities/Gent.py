@@ -8,7 +8,7 @@ from helpers.constants import ENEMY_ATTACK_NAMES
 
 from time import time
 
-class Football_Fan(Base_Enemy):
+class Gent(Base_Enemy):
    def __init__(self, enemy_x, enemy_z) -> None:
       super().__init__()
       # We dont need coordinates because we use the coordinates of the model. This assures that the visual representation of the player is correct.
@@ -106,4 +106,3 @@ class Football_Fan(Base_Enemy):
       base.cTrav.addCollider(self.attack_hitbox, self.notifier)
       base.taskMgr.doMethodLater(ENTITY_CONSTANTS.FOOTBALL_FAN_ATTACK_DURATION, self._destroy_attack_hitbox,f"destroy_{ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK}_hitbox")
       self.last_attack_time = time()
-

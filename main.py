@@ -1,9 +1,11 @@
 from entities.boss import Boss
+from entities.queen import Queen
 from handlers.hit_indicator_handler import Hit_Indicator_Handler
 from helpers.constants import EVENT_NAMES
 from panda3d.core import loadPrcFile, DirectionalLight, AmbientLight, LVector3, CollisionTraverser
 from entities.player import Player
 from entities.football_fan import Football_Fan
+from entities.Gent import Gent
 
 from entities.carriage import Carriage
 from entities.map import Map
@@ -47,7 +49,15 @@ class main_game(ShowBase):
         # This should be obvious
         #base.enableParticles()
 
+        self.phase = 1
+        
+        self.state = "Drive"
+        
+        self.backup = 8 #TODO 20
+
         self.setupLights()
+        
+        self.map = None
 
         self.current_hud = None
 
@@ -71,7 +81,9 @@ class main_game(ShowBase):
         self.accept(KEYBIND_IDENTIFIERS.K_KEY_DOWN,self.set_Drive)
 
         self.accept(EVENT_NAMES.SPAWN_BOSS_EVENT, self.spawn_boss)
-        self.accept(EVENT_NAMES.DEFEAT_BOSS_EVENT, self.set_Drive)
+        self.accept(EVENT_NAMES.DEFEAT_BOSS_EVENT, self.bossDied)
+        
+        self.accept('station_leave',self.setStateDrive)
 
         self.gameTask = base.taskMgr.add(self.game_loop, "gameLoop")
 
@@ -117,6 +129,21 @@ class main_game(ShowBase):
         self.map.update(dt)
         
         remaining_enemies = []
+        
+        print(len(self.enemies))
+        if len(self.enemies) < 5 and self.state == "Drive" and self.backup > 1:
+            if self.phase == 1:
+                self.enemies.append(Football_Fan(-10,0))
+                self.enemies.append(Football_Fan(20,0))
+                self.backup -= 2
+            else:
+                self.enemies.append(Gent(-10,0))
+                self.enemies.append(Gent(20,0))
+                self.backup -= 2
+                
+                    
+        if len(self.enemies) <= 2 and self.state == "Drive" and self.backup == 0:
+            self.set_Station()
 
         for enemy in self.enemies:
             enemy.update(dt, self.player.getPos())
@@ -149,7 +176,7 @@ class main_game(ShowBase):
 
         self.hit_indicator_handler = Hit_Indicator_Handler()
         
-        self.enemies = [ Football_Fan(0,0)]
+        self.enemies = [ Football_Fan(-10,0),Football_Fan(4,0),Football_Fan(40,0)]
         #self.enemies = [Boss(-10,0)]
         #[Sample_Enemy(10,0), Football_Fan(-10,0)]
         
@@ -157,10 +184,26 @@ class main_game(ShowBase):
         
         self.gameState.request('Drive')
 
+    def bossDied(self):
+        if self.phase == 1:
+            self.phase = 2
+            self.backup = 26
+            self.set_Drive()
+        else:
+            self.Win()
+    
+    def Win(self):
+        print("You Win")
+    
     def set_Drive(self):
+        
         self.gameState.request('Drive')
         
+    def setStateDrive(self):
+        self.state = "Drive"
+        
     def set_Station(self):
+        self.state = "Station"
         self.gameState.request('Station')
             
     def set_game_status(self, status):
@@ -197,6 +240,10 @@ class main_game(ShowBase):
         if self.player is not None:
             self.player.destroy()
             self.player = None
+        
+        if self.map is not None:
+            self.map.destroy()
+        
         for enemy in self.enemies:
             enemy.destroy()
         self.enemies = []
@@ -220,8 +267,12 @@ class main_game(ShowBase):
         for enemy in self.enemies:
             enemy.destroy()
         self.enemies = []
-        self.enemies.append(Boss(0,0))
+        if self.phase == 1:
+            self.enemies.append(Queen(0,0)) #TODO BOSS
+        else:
+            self.enemies.append(Queen(0,0))
 
+        
     def finish_game(self, success: bool):
         self.set_game_status(GAME_STATUS.GAME_FINISH)
         self.active_ui.destroy()

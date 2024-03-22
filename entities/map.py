@@ -37,3 +37,7 @@ class Map(Base_Entity):
     def leaveStation(self):
         self.leavingStation = True
         self.moving = True
+        
+    def destroy(self):
+        self.model.cleanup()
+        self.model.removeNode()

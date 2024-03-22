@@ -52,7 +52,7 @@ class Player(Base_Entity):
 
       self.collision.node().addSolid(CollisionBox(Point3(0,-0.25,0),(1,0.25,1.5)))
 
-      self.collision.show()
+      #self.collision.show()
         
       self.collision.node().setCollideMask(TEAM_BITMASKS.PLAYER)
 
@@ -242,7 +242,7 @@ class Player(Base_Entity):
 
    def _add_attack_hitbox(self, attack_name, box, attack_duration, is_light_attack = False):
          self.attack_hitbox = self.main_model.attachNewNode(CollisionNode(attack_name))
-         self.attack_hitbox.show()
+         #self.attack_hitbox.show()
          self.attack_hitbox.node().addSolid(box)
          self.attack_hitbox.setTag("team", "player")
          self.attack_hitbox.setPos(0,0,-1)

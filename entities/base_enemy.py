@@ -55,7 +55,7 @@ class Base_Enemy(Base_Entity):
 
       self.collision = self.model.attachNewNode(CollisionNode("enemy"))
 
-      self.collision.show()
+      #self.collision.show()
         
       self.collision.node().setCollideMask(TEAM_BITMASKS.ENEMY)
 
