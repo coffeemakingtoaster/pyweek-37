@@ -10,9 +10,8 @@ class Station(Base_Entity):
         self.moving = False
         self.goalX = 120
         self.model = Actor("assets/eggs/Station.egg")
-        self.model.setPosHprScale(60, 1,0, 90, 0, 0, 1, 1, 1)
         self.model.reparentTo(render)
-           
+        self.model.setPosHprScale(60, 1,0, 90, 0, 0, 1, 1, 1)
         
     def startBoss(self):
         print("Start Boss")
@@ -24,7 +23,6 @@ class Station(Base_Entity):
     def leave(self):
         self.moving = True
         self.goalX = -60
-        
         
     def update(self,dt):
         if self.moving:

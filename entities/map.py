@@ -8,21 +8,20 @@ class Map(Base_Entity):
         super().__init__()
         
         self.model = Actor("assets/eggs/Map.egg")
-        self.model.setPosHprScale(60, 1,0, 90, 0, 0, 1, 1, 1)
+
         self.model.reparentTo(render)
+        self.model.setPosHprScale(60, 1,0, 90, 0, 0, 1, 1, 1)
         self.enteringStation = False
         self.leavingStation = False
         self.moving = True
         self.accept('station_leave',self.leaveStation)
-        
-        
     
     def update(self, dt):
         if self.moving:    
             self.model.setFluidX(self.model.getX() - WORLD_CONSTANTS.TUNNEL_SPEED * dt)
             if self.model.getX() < -180 and not (self.enteringStation or self.leavingStation) :
                 self.model.setX(60)
-            elif self.model.getX() < -220 and not self.leavingStation:
+            elif self.model.getX() < -218.5 and not self.leavingStation:
                 self.moving = False
                 self.enteringStation = False
                 print("Arrived")

@@ -16,8 +16,8 @@ class Carriage(Base_Entity):
         self.model = Actor("assets/anims/Carriage.egg",{
          'Close_Doors': 'assets/anims/Carriage-Close_Doors.egg','Open_Doors':'assets/anims/Carriage-Open_Doors.egg'
       })
-        self.model.setPosHprScale(0,-1.5,-9, 90, 0, 0, 1, 1.5, 1)
         self.model.reparentTo(render)
+        self.model.setPosHprScale(1,-1.5,-9, 90, 0, 0, 1, 1.5, 1)
         self.started = False
         self.goalX = 9999
         self.accept('arrived',self.arrived)
@@ -55,7 +55,7 @@ class Carriage(Base_Entity):
         self.arriving = True
         self.model.setX(-100)
         self.started = True
-        self.goalX = 0
+        self.goalX = 1.5 
         
     def update(self,dt):       
         if self.started:
