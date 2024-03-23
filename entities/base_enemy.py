@@ -153,6 +153,8 @@ class Base_Enemy(Base_Entity):
 
       random.choice(self.ouch_audio).play()
 
+      self.is_in_attack = False
+
       # Allow light attack to stop enemy from being knocked back
       self.knockback_velocity = 0
       if attack_identifier in [PLAYER_ATTACK_NAMES.HEAVY_ATTACK, PLAYER_ATTACK_NAMES.DASH_ATTACK]:

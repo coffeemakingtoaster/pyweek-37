@@ -159,6 +159,7 @@ class main_game(ShowBase):
         for enemy in self.enemies:
             enemy.update(dt, self.player.getPos())
             if enemy.is_dead():
+                self.player._change_hp(1)
                 enemy.destroy()
                 continue
             # Is this inefficient? Probably yes...

@@ -244,6 +244,7 @@ class Player(Base_Entity):
 
    def _change_hp(self, value):
       self.hp += value
+      self.hp = min(self.hp, ENTITY_CONSTANTS.PLAYER_MAX_HP)
       messenger.send(EVENT_NAMES.DISPLAY_PLAYER_HP_EVENT, [self.hp])
       if self.hp <= 0:
          self.is_dead = True

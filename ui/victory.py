@@ -30,7 +30,7 @@ class victory_screen(ui_base):
             timer_info = DirectLabel(text=(format_seconds(run_duration)), pos=(0,0,-.4), scale=0.1 , text_font=self.font, relief=None, text_fg=(255,255,255,1))
             self.ui_elements.append(timer_info)
         else:
-            timer_info = DirectLabel(text=("Better luck next time"), pos=(0,0,-.4), scale=0.05, text_font=self.font, relief=None, text_fg=(255,255,255,1))
+            timer_info = DirectLabel(text=("Better luck next time"), pos=(0,0,-.4), scale=0.05, text_font=self.main_font, relief=None, text_fg=(255,255,255,1))
             self.ui_elements.append(timer_info)
         
         main_menu_button = DirectButton(text=("Return to main menu"), pos=(0,0,-0.7), scale=0.1, command=self.goto_main_menu, text_font=self.main_font, relief=None, text_fg =(255,255,255,1))
