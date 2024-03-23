@@ -103,6 +103,8 @@ class main_game(ShowBase):
 
         self._cached_entities = [Player(-10000,0),Carriage(),Map()]
 
+        self.current_run_duration = 0
+
     def setupLights(self):  
         ambientLight = AmbientLight("ambientLight")
         ambientLight.setColor((.4, .4, .4, 4))
@@ -131,6 +133,8 @@ class main_game(ShowBase):
         dt = self.clock.dt
 
         self.player.update(dt)
+
+        self.current_run_duration += dt
         
         self.carriage.update(dt)
         
@@ -197,6 +201,7 @@ class main_game(ShowBase):
             entity.destroy()
         self._cached_entities = []    
 
+        self.current_run_duration = 0
 
     def bossDied(self):
         if self.phase == 1:
@@ -210,13 +215,13 @@ class main_game(ShowBase):
         self.set_game_status(GAME_STATUS.GAME_FINISH)
         if self.current_hud:
             self.current_hud.destroy()
-        self.active_ui = victory_screen(0, True)
+        self.active_ui = victory_screen(self.current_run_duration, True)
 
     def lose_game(self):
         self.set_game_status(GAME_STATUS.GAME_FINISH)
         if self.current_hud:
             self.current_hud.destroy()
-        self.active_ui = victory_screen(0, False)
+        self.active_ui = victory_screen(self.current_run_duration, False)
    
     def set_Drive(self):
         
