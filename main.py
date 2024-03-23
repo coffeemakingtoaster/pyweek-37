@@ -152,7 +152,7 @@ class main_game(ShowBase):
                 self.enemies.append(Gent(20,0))
                 self.backup -= 2
                     
-        if len(self.enemies) <= 2 and self.state == "Drive" and self.backup == 0:
+        if len(self.enemies) <= 0 and self.state == "Drive" and self.backup == 0:
             self.set_Station()
 
         for enemy in self.enemies:
