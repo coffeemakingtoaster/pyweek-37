@@ -186,9 +186,9 @@ class main_game(ShowBase):
 
         self.hit_indicator_handler = Hit_Indicator_Handler()
 
-        self.backup = 8 #TODO 20
+        self.backup = 20
         
-        self.enemies = [Queen(0,0)]
+        self.enemies = []
         
         self.gameState = GameFSM(self.player,self.map,self.carriage)
         
@@ -282,6 +282,9 @@ class main_game(ShowBase):
         if self.hit_indicator_handler is not None:
             self.hit_indicator_handler.destroy()
             self.hit_indicator_handler = None
+            
+        self.phase = 1
+        self.backup = 20
 
     def toggle_settings(self):
         if self.game_status == GAME_STATUS.MAIN_MENU:
