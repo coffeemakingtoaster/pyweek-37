@@ -50,7 +50,7 @@ class main_game(ShowBase):
         
         self.state = "Drive"
         
-        self.backup = 8 #TODO 20
+        self.backup = 12
 
         self.setupLights()
         
@@ -201,7 +201,7 @@ class main_game(ShowBase):
 
         self.hit_indicator_handler = Hit_Indicator_Handler()
 
-        self.backup = 8
+        self.backup = 12
         
         self.enemies = []
         
@@ -222,7 +222,7 @@ class main_game(ShowBase):
         self.player.fullHeal()
         if self.phase == 1:
             self.phase = 2
-            self.backup = 8
+            self.backup = 12
             self.set_Drive()
         else:
             self.win_game()
@@ -301,7 +301,7 @@ class main_game(ShowBase):
             self.hit_indicator_handler = None
             
         self.phase = 1
-        self.backup = 8
+        self.backup = 12
 
     def toggle_settings(self):
         if self.game_status == GAME_STATUS.MAIN_MENU:
