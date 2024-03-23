@@ -88,9 +88,9 @@ class Football_Fan(Base_Enemy):
 
       # Animation handling
       current_animation = self.model.getCurrentAnim() 
-      if abs(x_movement) > 0 and current_animation != "Walk":
+      if abs(x_movement) > 0 and current_animation != "Walk" and current_animation != "Knockup":
          self.model.loop("Walk")
-      elif (x_movement == 0 or self.parentNode.getZ() > 0.1) and current_animation == "Walk":
+      elif (x_movement == 0 or self.parentNode.getZ() > 0.1) and current_animation == "Walk" and current_animation != "Knockup":
          self.model.loop("Idle")
       
       new_x = max(min(self.parentNode.getX() + x_movement, WORLD_CONSTANTS.MAP_X_LIMIT), -WORLD_CONSTANTS.MAP_X_LIMIT)

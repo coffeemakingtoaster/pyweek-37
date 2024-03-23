@@ -143,6 +143,7 @@ class Base_Enemy(Base_Entity):
       # Allow light attack to stop enemy from being knocked back
       self.knockback_velocity = 0
       if attack_identifier in [PLAYER_ATTACK_NAMES.HEAVY_ATTACK, PLAYER_ATTACK_NAMES.DASH_ATTACK]:
+         print("kncking up")
          self.model.play("Knockup")
          # This is a CC attack
          if self.model.getZ() > 0.1:

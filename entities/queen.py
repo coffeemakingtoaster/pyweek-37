@@ -85,7 +85,7 @@ class Queen(Base_Enemy):
 
       self.cans = []
 
-      self.death_animation_duration = 0.7
+      self.death_animation_duration = 1.5
       
       self.endAttackInterval = Func(self.endAttack)
       
