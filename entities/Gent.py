@@ -128,7 +128,7 @@ class Gent(Base_Enemy):
 
    def _spawn_attack_hitbox(self, attack):
       self.attack_hitbox = self.model.attachNewNode(CollisionNode("Gent attack"))
-      self.attack_hitbox.show()
+      #self.attack_hitbox.show()
       self.attack_hitbox.node().addSolid(self.attacks[attack]["hitbox"])
       self.attack_hitbox.setTag("team", "enemy")
       self.attack_hitbox.setPos(0,0,-1)

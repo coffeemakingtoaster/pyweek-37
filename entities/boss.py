@@ -173,7 +173,7 @@ class Boss(Base_Enemy):
 
    def _do_melee(self, attack):
       self.attack_hitbox = self.model.attachNewNode(CollisionNode(ENEMY_ATTACK_NAMES.FOOTBALL_FAN_ATTACK))
-      self.attack_hitbox.show()
+      #self.attack_hitbox.show()
       self.attack_hitbox.node().addSolid(self.melee_attacks[attack]["hitbox"])
       self.attack_hitbox.setTag("team", "enemy")
       self.attack_hitbox.setPos(0,0,-1)
