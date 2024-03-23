@@ -17,14 +17,14 @@ class main_menu(ui_base):
         
         self.load_background_image()
         
-        start_button = DirectButton(text="start",pos=(0,0,0), scale=0.2, command=self.start_game, text_font=self.font)
+        start_button = DirectButton(text="start",pos=(0,0,-0.1), scale=0.3, command=self.start_game, text_font=self.main_font, text_fg=(255,255,255,1), relief=None)
         self.ui_elements.append(start_button)
         
         settings_button = DirectButton(image=join("assets", "icons", "main menu","settings.png"), scale=0.1, pos=(-1.6,0,0.85), command=self.open_settings, relief=None)
         settings_button.setTransparency(TransparencyAttrib.MAlpha)
         self.ui_elements.append(settings_button)
         
-        quit_button = DirectButton(text=("quit"), pos=(0,0,-0.6), scale=0.2, command=self.quit_game, text_font=self.font)
+        quit_button = DirectButton(text=("quit"), pos=(0,0,-0.6), scale=0.2, command=self.quit_game, text_font=self.main_font, text_fg=(255,255,255,1), relief=None)
         self.ui_elements.append(quit_button)
 
     def start_game(self):

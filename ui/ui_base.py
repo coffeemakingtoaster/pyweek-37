@@ -16,6 +16,8 @@ class ui_base(DirectObject.DirectObject):
 
         self.font: TextFont = loader.loadFont(join("assets","fonts", "VCR_OSD_MONO_1.001.ttf"))
 
+        self.main_font: TextFont = loader.loadFont(join("assets","fonts","Ballistone.ttf"))
+
     def destroy(self):
         for ui_element in self.ui_elements:
             ui_element.destroy()
@@ -25,5 +27,5 @@ class ui_base(DirectObject.DirectObject):
             ui_element.hide()
 
     def load_background_image(self):
-        background = OnscreenImage(join("assets", "images","TitleScreen.png"), pos=(0,0,0), scale=(1521 * 0.0012,1,859 * 0.0012))
+        background = OnscreenImage(join("assets", "images","TitleScreen.png"), pos=(-0.1,0,0), scale=(1521 * 0.00125,1,859 * 0.00125))
         self.ui_elements.append(background)

@@ -24,7 +24,7 @@ class game_hud(ui_base):
         self.hp_display_background = OnscreenImage(scale=(self.hp_display_x_scale,1, 0.05), pos=(-1.35, 0, 0.95), image=join("assets", "icons", "hud", "hp_display_backplane.png"))
         self.hp_display_background.setTransparency(TransparencyAttrib.MAlpha)
         self.ui_elements.append(self.hp_display_background)
-        self.hp_display = DirectLabel(text="{}".format(ENTITY_CONSTANTS.PLAYER_MAX_HP), scale=0.1, pos=(-0.008, 0, -0.74), text_font=self.font, relief=None, text_fg=(0,0,0,1))
+        self.hp_display = DirectLabel(text="{}".format(ENTITY_CONSTANTS.PLAYER_MAX_HP), scale=0.1, pos=(-0.009, 0, -0.74), text_font=self.font, relief=None, text_fg=(0,0,0,1))
         self.ui_elements.append(self.hp_display)
 
         self.combo_counter_display = DirectLabel(text="", scale=0.1, pos=self.combo_counter_position, text_font=self.font, relief = None, text_fg=(0,0,0,1))
