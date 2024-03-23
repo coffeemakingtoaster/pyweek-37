@@ -25,9 +25,5 @@ class ui_base(DirectObject.DirectObject):
             ui_element.hide()
 
     def load_background_image(self):
-        r = random.randint(0,21)
-        if r == 5:
-            background = OnscreenImage(join("assets","images", "background_2.png"), pos=(0,0,0))
-        else:
-            background = OnscreenImage(join("assets", "images","TitleScreen.png"), pos=(-0.1,0,0), scale=(1521 * 0.0012,1,859 * 0.0012))
+        background = OnscreenImage(join("assets", "images","TitleScreen.png"), pos=(0,0,0), scale=(1521 * 0.0012,1,859 * 0.0012))
         self.ui_elements.append(background)

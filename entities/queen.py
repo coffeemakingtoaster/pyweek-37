@@ -107,12 +107,9 @@ class Queen(Base_Enemy):
       
 
     def update(self, dt, player_pos):
-       
-   
       
       if self._is_dead:
          return
-      
       
       x_movement = 0
 
@@ -160,6 +157,11 @@ class Queen(Base_Enemy):
       new_x = max(min(self.parentNode.getX() + x_movement, WORLD_CONSTANTS.MAP_X_LIMIT), -WORLD_CONSTANTS.MAP_X_LIMIT)
       
       self.parentNode.setFluidPos(new_x, 4, new_z)
+
+      current_anim = self.model.getCurrentAnim()
+
+      if current_anim != "Idle" and not self.is_in_attack:
+         self.model.loop("Idle")
 
       remaining_cans = []
       for can in self.cans:
