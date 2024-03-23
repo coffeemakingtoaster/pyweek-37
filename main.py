@@ -206,7 +206,7 @@ class main_game(ShowBase):
     def bossDied(self):
         if self.phase == 1:
             self.phase = 2
-            self.backup = 26
+            self.backup = 8
             self.set_Drive()
         else:
             self.win_game()
