@@ -126,6 +126,8 @@ class Base_Enemy(Base_Entity):
       if entry.from_node.getTag("id") != self.id or self._is_dead or entry.from_node.getTag("team") == entry.into_node.getTag("team"):
          return
       
+      self._destroy_attack_hitbox(None)
+
       # Prevent multiple hits with same strike
       if time() - self.time_since_last_hit < 0.5:
          return
@@ -138,7 +140,6 @@ class Base_Enemy(Base_Entity):
 
       self.model.play("Flinch")
 
-      self._destroy_attack_hitbox(None)
       # Allow light attack to stop enemy from being knocked back
       self.knockback_velocity = 0
       if attack_identifier in [PLAYER_ATTACK_NAMES.HEAVY_ATTACK, PLAYER_ATTACK_NAMES.DASH_ATTACK]:

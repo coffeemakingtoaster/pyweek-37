@@ -36,6 +36,7 @@ class main_game(ShowBase):
 
         ShowBase.__init__(self)
 
+        
         # Print all occuring events
         #messenger.toggleVerbose()
 
@@ -46,9 +47,6 @@ class main_game(ShowBase):
 
         self.game_status = GAME_STATUS.MAIN_MENU
 
-        # This should be obvious
-        #base.enableParticles()
-
         self.phase = 1
         
         self.state = "Drive"
@@ -58,6 +56,8 @@ class main_game(ShowBase):
         self.setupLights()
         
         self.map = None
+
+        self.carriage = None
 
         self.current_hud = None
 
@@ -85,6 +85,8 @@ class main_game(ShowBase):
         
         self.accept('station_leave',self.setStateDrive)
 
+        self.accept('player_died', self.lose_game)
+
         self.gameTask = base.taskMgr.add(self.game_loop, "gameLoop")
 
         # Load music
@@ -99,6 +101,8 @@ class main_game(ShowBase):
         self.cTrav = CollisionTraverser()
         base.cTrav.setRespectPrevTransform(True)
 
+        self._cached_entities = [Player(-10000,0),Carriage(),Map()]
+
     def setupLights(self):  
         ambientLight = AmbientLight("ambientLight")
         ambientLight.setColor((.4, .4, .4, 4))
@@ -108,7 +112,7 @@ class main_game(ShowBase):
         render.setLight(render.attachNewNode(directionalLight))
         render.setLight(render.attachNewNode(ambientLight))
 
-    def game_loop(self, task):
+    def game_loop(self, _):
 
         if self.game_status == GAME_STATUS.STARTING:
             print("Starting")
@@ -120,6 +124,10 @@ class main_game(ShowBase):
         if self.game_status != GAME_STATUS.RUNNING:
            return Task.cont
 
+        if self.player.is_dead:
+            self.lose_game()
+            return Task.cont
+
         dt = self.clock.dt
 
         self.player.update(dt)
@@ -129,7 +137,7 @@ class main_game(ShowBase):
         self.map.update(dt)
         
         remaining_enemies = []
-        
+
         if len(self.enemies) < 5 and self.state == "Drive" and self.backup > 1:
             if self.phase == 1:
                 self.enemies.append(Football_Fan(-10,0))
@@ -139,7 +147,6 @@ class main_game(ShowBase):
                 self.enemies.append(Gent(-10,0))
                 self.enemies.append(Gent(20,0))
                 self.backup -= 2
-                
                     
         if len(self.enemies) <= 2 and self.state == "Drive" and self.backup == 0:
             self.set_Station()
@@ -157,6 +164,7 @@ class main_game(ShowBase):
 
     def load_game(self):
         print("Loading game")
+
         self.active_ui.destroy()
         self.setBackgroundColor((0,0,0, 1))
 
@@ -173,14 +181,22 @@ class main_game(ShowBase):
         self.map = Map()
 
         self.hit_indicator_handler = Hit_Indicator_Handler()
+
+        self.backup = 8 #TODO 20
         
-        self.enemies = [ Football_Fan(-10,0),Football_Fan(4,0),Football_Fan(40,0)]
-        #self.enemies = [Boss(-10,0)]
-        #[Sample_Enemy(10,0), Football_Fan(-10,0)]
+        self.enemies = []
         
         self.gameState = GameFSM(self.player,self.map,self.carriage)
         
         self.gameState.request('Drive')
+        
+        self.state = "Drive"
+
+        # destroy cache
+        for entity in self._cached_entities:
+            entity.destroy()
+        self._cached_entities = []    
+
 
     def bossDied(self):
         if self.phase == 1:
@@ -188,16 +204,18 @@ class main_game(ShowBase):
             self.backup = 26
             self.set_Drive()
         else:
-            self.Win()
+            self.win_game()
     
-    def Win(self):
+    def win_game(self):
         self.set_game_status(GAME_STATUS.GAME_FINISH)
-        self.current_hud.destroy()
+        if self.current_hud:
+            self.current_hud.destroy()
         self.active_ui = victory_screen(0, True)
 
-    def Lose(self):
+    def lose_game(self):
         self.set_game_status(GAME_STATUS.GAME_FINISH)
-        self.current_hud.destroy()
+        if self.current_hud:
+            self.current_hud.destroy()
         self.active_ui = victory_screen(0, False)
    
     def set_Drive(self):
@@ -248,6 +266,10 @@ class main_game(ShowBase):
         
         if self.map is not None:
             self.map.destroy()
+
+        if self.carriage is not None:
+            self.carriage.destroy()
+
         
         for enemy in self.enemies:
             enemy.destroy()

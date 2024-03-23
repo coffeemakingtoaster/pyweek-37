@@ -127,6 +127,13 @@ class Boss(Base_Enemy):
          self.z_velocity = max(self.z_velocity - (WORLD_CONSTANTS.GRAVITY_VELOCITY * WORLD_CONSTANTS.ENEMY_GRAVITY_MODIFIER), -ENTITY_CONSTANTS.ENEMY_MAX_FALL_SPEED) 
          new_z = min(self.parentNode.getZ() + (self.z_velocity * dt), WORLD_CONSTANTS.MAP_HEIGHT)
          x_movement = self.knockback_velocity * dt
+
+      # Animation handling
+      current_animation = self.model.getCurrentAnim() 
+      if abs(x_movement) > 0 and current_animation != "Walk" and not self.is_in_attack:
+         self.model.loop("Walk")
+      elif (x_movement == 0 or self.parentNode.getZ() > 0.1) and current_animation == "Walk" and not self.is_in_attack:
+         self.model.loop("Idle")
       
       new_x = max(min(self.parentNode.getX() + x_movement, WORLD_CONSTANTS.MAP_X_LIMIT), -WORLD_CONSTANTS.MAP_X_LIMIT)
       

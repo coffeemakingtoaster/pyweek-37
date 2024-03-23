@@ -1,3 +1,4 @@
+from direct.showbase.ShowBase import messenger
 from config import ENTITY_CONSTANTS, GAME_CONFIG, TEAM_BITMASKS, KEYBIND_IDENTIFIERS, WORLD_CONSTANTS
 from entities.base import Base_Entity
 from direct.actor.Actor import Actor
@@ -44,6 +45,8 @@ class Player(Base_Entity):
 
       self.is_dashing = False
 
+      self.is_dead = False
+
       self.is_blocking = False
 
       self.cooldowns = defaultdict(lambda: 0.0)
@@ -83,6 +86,7 @@ class Player(Base_Entity):
       self.currentY = 0
       #TODO Camera
       #TODO Anim
+      self.max_jump_height = WORLD_CONSTANTS.MAP_HEIGHT
       
    def leave_station(self):
       print("player Leaving")
@@ -120,12 +124,14 @@ class Player(Base_Entity):
       self.accept(KEYBIND_IDENTIFIERS.N_KEY_DOWN, self._dash_attack)
 
    def _update_movement_status(self, direction: str, pressed: bool) -> None:
+      messenger.send('user_input')
       if pressed:
          self.movement_status[direction] = 1 
       else:
          self.movement_status[direction] = 0
 
    def _jump(self):
+      messenger.send('user_input')
       # Player cannot jump again if midair
       if self.main_model.getZ() < 0.1:
          self.main_model.play('Jump')
@@ -191,6 +197,8 @@ class Player(Base_Entity):
    def _change_hp(self, value):
       self.hp += value
       messenger.send(EVENT_NAMES.DISPLAY_PLAYER_HP_EVENT, [self.hp])
+      if self.hp <= 0:
+         self.is_dead = True
 
    def _block(self):
       self.is_blocking = True
