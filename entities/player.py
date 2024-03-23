@@ -73,6 +73,12 @@ class Player(Base_Entity):
       base.cTrav.addCollider(self.collision, self.notifier)
 
       self.max_jump_height = WORLD_CONSTANTS.MAP_HEIGHT
+      
+      self.isBeingKicked = False
+      
+      self.canBeKicked = False
+      
+      self.currentQueenX = 0
 
    def enter_station(self):
       
@@ -122,6 +128,8 @@ class Player(Base_Entity):
       self.accept(KEYBIND_IDENTIFIERS.M_KEY_DOWN, self._block)
       self.accept(KEYBIND_IDENTIFIERS.M_KEY_UP, self._end_block)
       self.accept(KEYBIND_IDENTIFIERS.N_KEY_DOWN, self._dash_attack)
+      self.accept("isKicking",self.canBeKicked)
+      self.accept("isNotKicking",self.cantBeKickedAnymore)
 
    def _update_movement_status(self, direction: str, pressed: bool) -> None:
       messenger.send('user_input')
@@ -130,6 +138,13 @@ class Player(Base_Entity):
       else:
          self.movement_status[direction] = 0
 
+   def canBeKicked(self,queenX):
+      self.canBeKicked = True
+      self.currentQueenX = queenX
+      
+   def cantBeKickedAnymore(self):
+      self.canBeKicked = False
+   
    def _jump(self):
       messenger.send('user_input')
       # Player cannot jump again if midair
@@ -143,13 +158,19 @@ class Player(Base_Entity):
    def board(self):
       print("boarding carriage")
    
+   def fullHeal(self):
+      self._change_hp(ENTITY_CONSTANTS.PLAYER_MAX_HP-self.hp)
+   
    def update(self, dt):
       # Clear current status
+      
+      
       self.main_model.node().resetAllPrevTransform()
       
       x_movement = ((self.movement_status["left"] * -1 ) + self.movement_status["right"]) * ENTITY_CONSTANTS.PLAYER_MOVEMENT_SPEED 
       if self.is_blocking:
          x_movement = 0
+      
       new_x = self.main_model.getX() + x_movement* dt
       new_z = 0
 
@@ -175,9 +196,19 @@ class Player(Base_Entity):
          else:
             new_x = self.main_model.getX() + (self.dash_direction_x * ( dt / ENTITY_CONSTANTS.PLAYER_DASH_DURATION))
             self.curr_dash_duration += dt
-
-      self.main_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), self.currentY, new_z)
- 
+      if not self.isBeingKicked:
+         self.main_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), self.currentY, new_z)
+      else:
+         if self.curr_dash_duration >= ENTITY_CONSTANTS.PLAYER_DASH_DURATION:
+            self.isBeingKicked = False
+            self.curr_dash_duration = 0
+         else:
+            if self.currentQueenX > self.main_model.getX():
+               new_x = self.main_model.getX() + (-5 * ( dt / ENTITY_CONSTANTS.PLAYER_DASH_DURATION))
+            else:
+               new_x = self.main_model.getX() + (5 * ( dt / ENTITY_CONSTANTS.PLAYER_DASH_DURATION))
+            self.main_model.setFluidPos(min(max(new_x, -WORLD_CONSTANTS.MAP_X_LIMIT),WORLD_CONSTANTS.MAP_X_LIMIT), self.currentY, new_z)
+            self.curr_dash_duration += dt
       # Make camera follow player
       base.cam.setX(min(max(self.main_model.getX(), -WORLD_CONSTANTS.CAMERA_X_LIMIT),WORLD_CONSTANTS.CAMERA_X_LIMIT))
 
@@ -191,6 +222,9 @@ class Player(Base_Entity):
          self.main_model.loop("Walk")
       elif x_movement == 0 and current_animation == "Walk":
          self.main_model.loop("Idle")
+         
+      if self.isBeingKicked:
+         print("isBeingKicked")
 
       #debug_log(f'{self.main_model.getX(), self.main_model.getZ()}')
 
@@ -274,6 +308,10 @@ class Player(Base_Entity):
       if entry.into_node.getTag("team") == "enemy":
          self._change_hp(-1)
          self.last_hit_timestamp = time()
+         if self.canBeKicked:
+            self.isBeingKicked = True
+            
+         
 
    def _set_model_pos(self, x,z):
       self.main_model.setPos(x, 0, z)

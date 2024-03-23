@@ -121,14 +121,14 @@ class Queen(Base_Enemy):
             self.meleeAttackParallel.start()
             self.is_in_attack = True
             
-         if abs(x_diff_to_player) > self.attack_range+2 and self.time_since_last_attack > ENTITY_CONSTANTS.QUEEN_MELEE_ATTACK_CD:
+         if abs(x_diff_to_player) > self.attack_range+1 and self.time_since_last_attack > ENTITY_CONSTANTS.QUEEN_MELEE_ATTACK_CD:
             self.time_since_last_attack = 0
             self.fireAttackParallel.start()
             self.is_in_attack = True
             
          self.time_since_last_attack += dt
 
-         x_movement = self.movement_speed * dt 
+         x_movement = self.movement_speed * dt
 
          if  abs(x_diff_to_player) < x_movement:
             # prevent -inf exception
@@ -183,9 +183,11 @@ class Queen(Base_Enemy):
        self.attack_hitbox.setPos(0,0,-1)
        self.attack_hitbox.node().setCollideMask(TEAM_BITMASKS.PLAYER)
        base.cTrav.addCollider(self.attack_hitbox, self.notifier)
+       messenger.send("isKicking",[self.parentNode.getX()])
        
     def endAttack(self):
        self.is_in_attack = False
+       messenger.send("isNotKicking")
        self._destroy_attack_hitbox(f"destroy_{ENEMY_ATTACK_NAMES.BOSS_MELEE_ATTACK}_hitbox")
 
     def shoot(self):

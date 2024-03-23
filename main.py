@@ -186,7 +186,7 @@ class main_game(ShowBase):
 
         self.hit_indicator_handler = Hit_Indicator_Handler()
 
-        self.backup = 20
+        self.backup = 8
         
         self.enemies = []
         
@@ -204,6 +204,7 @@ class main_game(ShowBase):
         self.current_run_duration = 0
 
     def bossDied(self):
+        self.player.fullHeal()
         if self.phase == 1:
             self.phase = 2
             self.backup = 8
@@ -284,7 +285,7 @@ class main_game(ShowBase):
             self.hit_indicator_handler = None
             
         self.phase = 1
-        self.backup = 20
+        self.backup = 8
 
     def toggle_settings(self):
         if self.game_status == GAME_STATUS.MAIN_MENU:
