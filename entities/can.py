@@ -13,6 +13,10 @@ class Can(Base_Entity):
    def __init__(self, can_x, can_z, x_direction, z_direction) -> None:
       super().__init__()
 
+      self.sound = base.loader.loadSfx(join("assets", "sfx", "fireball.wav"))
+
+      self.sound.play()
+
       self.model = Actor(join("assets", "eggs", "Fireball.egg"))
       
       self.model.setScale(0.3)
@@ -52,6 +56,8 @@ class Can(Base_Entity):
       self.z_direction = z_direction
 
       self.is_dead = False
+
+
 
    def _player_hit(self, _):
       self.is_dead = True

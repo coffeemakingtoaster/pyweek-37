@@ -35,7 +35,6 @@ class main_game(ShowBase):
     def __init__(self):
 
         ShowBase.__init__(self)
-
         
         # Print all occuring events
         #messenger.toggleVerbose()
@@ -104,6 +103,8 @@ class main_game(ShowBase):
         self._cached_entities = [Player(-10000,0),Carriage(),Map()]
 
         self.current_run_duration = 0
+
+        self.announcement_sound = base.loader.loadSfx(join("assets", "sfx", "next_station_bell.wav"))
 
     def setupLights(self):  
         ambientLight = AmbientLight("ambientLight")
@@ -233,6 +234,7 @@ class main_game(ShowBase):
         
     def set_Station(self):
         self.state = "Station"
+        self.announcement_sound.play()
         self.gameState.request('Station')
             
     def set_game_status(self, status):

@@ -38,7 +38,7 @@ class Boss(Base_Enemy):
          "Long-Punch": {
             "hitbox": CollisionBox(Point3(0,-0.8,2),1,0.8,0.3),
             "windup": 0.5,
-            "duration": 0.6,
+            "duration": 0.2,
             }, 
          "Light-Punch":{
             "hitbox":  CollisionBox(Point3(0,-0.3,2),1,0.3,1),
@@ -87,6 +87,10 @@ class Boss(Base_Enemy):
       self.cans = []
 
       self.death_animation_duration = 0.7
+
+      self.is_boss = True
+
+      self.ouch_audio = [base.loader.loadSfx(join("assets", "sfx", "boss_ouch.wav"))]
 
    def update(self, dt, player_pos):
       
