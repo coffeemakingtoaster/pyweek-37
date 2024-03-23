@@ -88,7 +88,7 @@ class Boss(Base_Enemy):
 
       self.death_animation_duration = 0.7
 
-   def update(self, dt, player_pos):
+   def update(self, dt, player_pos,_):
       
       if self._is_dead:
          return

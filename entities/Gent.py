@@ -64,7 +64,7 @@ class Gent(Base_Enemy):
 
       self.model.loop("Idle")
 
-   def update(self, dt, player_pos):
+   def update(self, dt, player_pos,frontMan):
       if self._is_dead:
          return
       
@@ -110,7 +110,10 @@ class Gent(Base_Enemy):
       
       new_x = max(min(self.parentNode.getX() + x_movement, WORLD_CONSTANTS.MAP_X_LIMIT), -WORLD_CONSTANTS.MAP_X_LIMIT)
       
-      self.parentNode.setFluidPos(new_x, 0, new_z)
+      if frontMan == None or frontMan.parentNode.is_empty():
+         self.parentNode.setFluidPos(new_x, 0, new_z)
+      elif abs(frontMan.parentNode.getX()-self.parentNode.getX())>1:
+         self.parentNode.setFluidPos(new_x, 0, new_z)
 
    def _attack(self):
       # Enemy cannot attack midair and when last attack was recently

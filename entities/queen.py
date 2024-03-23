@@ -106,7 +106,7 @@ class Queen(Base_Enemy):
       self.fireAttackParallel = Parallel(self.FireAnimInterval,self.FireAttackSequence)
       
 
-    def update(self, dt, player_pos):
+    def update(self, dt, player_pos,_):
       
       if self._is_dead:
          return

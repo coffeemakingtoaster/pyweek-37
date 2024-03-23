@@ -154,9 +154,13 @@ class main_game(ShowBase):
                     
         if len(self.enemies) <= 0 and self.state == "Drive" and self.backup == 0:
             self.set_Station()
-
-        for enemy in self.enemies:
-            enemy.update(dt, self.player.getPos())
+            
+        self.enemies.sort(key=lambda x: x.parentNode.getX())
+        
+        for id, enemy in enumerate(self.enemies):
+            frontMan = self.getFrontMan(id,enemy)
+            enemy.update(dt, self.player.getPos(),frontMan)
+            
             if enemy.is_dead():
                 enemy.destroy()
                 continue
@@ -165,6 +169,15 @@ class main_game(ShowBase):
         self.enemies = remaining_enemies
 
         return Task.cont
+    
+    def getFrontMan(self,id,enemy):
+        if enemy.parentNode.getX() < self.player.main_model.getX() and id != len(self.enemies)-1:
+            return self.enemies[id+1]
+        elif enemy.parentNode.getX() > self.player.main_model.getX() and id != 0:
+            return self.enemies[id-1]
+        else:
+            return None
+        
 
     def load_game(self):
         print("Loading game")
