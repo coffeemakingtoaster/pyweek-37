@@ -188,7 +188,7 @@ class main_game(ShowBase):
 
         self.backup = 8 #TODO 20
         
-        self.enemies = []
+        self.enemies = [Queen(0,0)]
         
         self.gameState = GameFSM(self.player,self.map,self.carriage)
         

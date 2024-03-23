@@ -59,8 +59,8 @@ class Queen(Base_Enemy):
       self.hp = ENTITY_CONSTANTS.QUEEN_HP
       self.max_hp = ENTITY_CONSTANTS.QUEEN_HP 
 
-      self.attach_hp_bar_to_model(x_offset=-0.5, z_offset=1.7)
-      self.add_enemy_name("THE QUEEN")
+      self.attach_hp_bar_to_model(x_offset=-0.5, z_offset=2)
+      self.add_enemy_name("THE QUEEN", x_offset=-0.5, z_offset=2.2)
       self.add_collision_node()
 
       self.collision.node().addSolid(CollisionBox(Point3(0,-0.6,0),(1,0.6,2)))
