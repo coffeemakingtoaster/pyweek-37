@@ -35,7 +35,6 @@ class main_game(ShowBase):
     def __init__(self):
 
         ShowBase.__init__(self)
-
         
         # Print all occuring events
         #messenger.toggleVerbose()
@@ -105,6 +104,8 @@ class main_game(ShowBase):
 
         self.current_run_duration = 0
 
+        self.announcement_sound = base.loader.loadSfx(join("assets", "sfx", "next_station_bell.wav"))
+
     def setupLights(self):  
         ambientLight = AmbientLight("ambientLight")
         ambientLight.setColor((.4, .4, .4, 4))
@@ -162,6 +163,7 @@ class main_game(ShowBase):
             enemy.update(dt, self.player.getPos(),frontMan)
             
             if enemy.is_dead():
+                self.player._change_hp(1)
                 enemy.destroy()
                 continue
             # Is this inefficient? Probably yes...
@@ -246,6 +248,7 @@ class main_game(ShowBase):
         
     def set_Station(self):
         self.state = "Station"
+        self.announcement_sound.play()
         self.gameState.request('Station')
             
     def set_game_status(self, status):

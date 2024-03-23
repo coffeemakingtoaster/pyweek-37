@@ -7,6 +7,10 @@ from config import ENTITY_CONSTANTS, TEAM_BITMASKS, WORLD_CONSTANTS
 from entities.base import Base_Entity
 from helpers.constants import EVENT_NAMES, PLAYER_ATTACK_NAMES
 
+from os.path import join
+
+import random
+
 class Base_Enemy(Base_Entity):
    def __init__(self) -> None:
       super().__init__()
@@ -45,6 +49,14 @@ class Base_Enemy(Base_Entity):
 
       self.time_since_last_hit = 0
 
+      self.is_boss = False
+
+      self.ouch_audio = [
+         base.loader.loadSfx(join("assets", "sfx", "ouch1.wav")),
+         base.loader.loadSfx(join("assets", "sfx", "ouch2.wav")),
+         base.loader.loadSfx(join("assets", "sfx", "ouch3.wav")),
+      ]
+
    def is_dead(self):
       if time() - self.time_of_death > self.death_animation_duration:
          return self._is_dead
@@ -80,7 +92,6 @@ class Base_Enemy(Base_Entity):
       self.name_display = self.parentNode.attachNewNode(self.name_node)
       self.name_display.setPos(x_offset, 0, z_offset)
       self.name_display.setScale(0.2)
-
 
    def attach_hp_bar_to_model(self, x_offset=-0.5, z_offset=3.0):
       cmfg = CardMaker('fg')
@@ -139,6 +150,10 @@ class Base_Enemy(Base_Entity):
       messenger.send(EVENT_NAMES.DISPLAY_HIT, [self.parentNode.getPos()])
 
       self.model.play("Flinch")
+
+      random.choice(self.ouch_audio).play()
+
+      self.is_in_attack = False
 
       # Allow light attack to stop enemy from being knocked back
       self.knockback_velocity = 0

@@ -67,7 +67,7 @@ class Gent(Base_Enemy):
    def update(self, dt, player_pos,frontMan):
       if self._is_dead:
          return
-      
+
       x_movement = 0
       if not self.is_in_attack:
          x_diff_to_player = self.parentNode.getX() - player_pos.getX()
@@ -100,6 +100,7 @@ class Gent(Base_Enemy):
          self.z_velocity = max(self.z_velocity - (WORLD_CONSTANTS.GRAVITY_VELOCITY * WORLD_CONSTANTS.ENEMY_GRAVITY_MODIFIER), -ENTITY_CONSTANTS.ENEMY_MAX_FALL_SPEED) 
          new_z = min(self.parentNode.getZ() + (self.z_velocity * dt), WORLD_CONSTANTS.MAP_HEIGHT)
          x_movement = self.knockback_velocity * dt
+         self.is_in_attack = False
 
      # Animation handling
       current_animation = self.model.getCurrentAnim() 

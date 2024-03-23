@@ -1,16 +1,20 @@
 from direct.showbase.ShowBase import messenger
-from config import ENTITY_CONSTANTS, GAME_CONFIG, TEAM_BITMASKS, KEYBIND_IDENTIFIERS, WORLD_CONSTANTS
+from config import ENTITY_CONSTANTS, TEAM_BITMASKS, KEYBIND_IDENTIFIERS, WORLD_CONSTANTS
 from entities.base import Base_Entity
 from direct.actor.Actor import Actor
 
-from panda3d.core import CollisionNode, Point3, CollisionBox, CollisionHandlerEvent, Vec3, CollisionEntry
+from panda3d.core import CollisionNode, Point3, CollisionBox, CollisionHandlerEvent, CollisionEntry, AudioSound
 
-from helpers.constants import ENEMY_ATTACK_NAMES, EVENT_NAMES, PLAYER_ATTACK_NAMES
+from helpers.constants import EVENT_NAMES, PLAYER_ATTACK_NAMES
 from helpers.logging import debug_log
 from collections import defaultdict
 from time import time
 
 import random
+
+from os.path import join
+
+from helpers.sfx import play_jump
 
 class Player(Base_Entity):
    def __init__(self, player_x, player_z) -> None:
@@ -80,6 +84,15 @@ class Player(Base_Entity):
       
       self.currentQueenX = 0
 
+      self.jump_audio = base.loader.loadSfx(join("assets", "sfx", "jump.mp3"))
+
+      self.punch_audio = [   
+         base.loader.loadSfx(join("assets", "sfx", "punch1.wav")),
+         base.loader.loadSfx(join("assets", "sfx", "punch2.wav")),
+         base.loader.loadSfx(join("assets", "sfx", "punch3.wav")),
+         base.loader.loadSfx(join("assets", "sfx", "punch4.wav")),
+      ]
+
    def enter_station(self):
       
       self.currentY = 4
@@ -146,11 +159,12 @@ class Player(Base_Entity):
       self.canBeKicked = False
    
    def _jump(self):
-      messenger.send('user_input')
       # Player cannot jump again if midair
       if self.main_model.getZ() < 0.1:
          self.main_model.play('Jump')
          self.z_vel = ENTITY_CONSTANTS.PLAYER_JUMP_VELOCITY
+
+      play_jump ()
 
    def offboard(self):
       print("offBoarding")
@@ -230,6 +244,7 @@ class Player(Base_Entity):
 
    def _change_hp(self, value):
       self.hp += value
+      self.hp = min(self.hp, ENTITY_CONSTANTS.PLAYER_MAX_HP)
       messenger.send(EVENT_NAMES.DISPLAY_PLAYER_HP_EVENT, [self.hp])
       if self.hp <= 0:
          self.is_dead = True
@@ -252,9 +267,10 @@ class Player(Base_Entity):
       self.is_in_light_attack = True
       self.is_in_animation = True
       self.cooldowns[PLAYER_ATTACK_NAMES.LIGHT_ATTACK] = time()
+      random.choice(self.punch_audio).play()
 
    def _heavy_attack(self):
-      # Prevent animation cancel
+           # Prevent animation cancel
       if self.is_in_animation or time() - self.cooldowns[PLAYER_ATTACK_NAMES.HEAVY_ATTACK] < ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_CD:
          return
       if self.main_model:
@@ -262,6 +278,7 @@ class Player(Base_Entity):
          self._add_attack_hitbox(PLAYER_ATTACK_NAMES.HEAVY_ATTACK,CollisionBox(Point3(0,-0.5,1.7),1,0.5,0.3), ENTITY_CONSTANTS.PLAYER_HEAVY_ATTACK_DURATION)
       self.is_in_animation = True
       self.cooldowns[PLAYER_ATTACK_NAMES.HEAVY_ATTACK] = time()
+      random.choice(self.punch_audio).play()
         
    def _dash_attack(self):
       # Prevent animation cancel
