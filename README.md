@@ -16,9 +16,13 @@ python3 run_game.py
 ## Controls
 
 *WASD* - Move
+
 *N* - Dash
+
 *M* - Block
+
 *,* - Quick attack
+
 *.* - Heavy attack 
 
 ## Sources

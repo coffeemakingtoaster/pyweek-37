@@ -76,9 +76,6 @@ class main_game(ShowBase):
         self.accept(EVENT_NAMES.GOTO_MAIN_MENU_EVENT, self.goto_to_main_menu)
         self.accept(EVENT_NAMES.TOGGLE_SETTINGS_EVENT, self.toggle_settings)
         
-        self.accept(KEYBIND_IDENTIFIERS.J_KEY_DOWN,self.set_Station)
-        self.accept(KEYBIND_IDENTIFIERS.K_KEY_DOWN,self.set_Drive)
-
         self.accept(EVENT_NAMES.SPAWN_BOSS_EVENT, self.spawn_boss)
         self.accept(EVENT_NAMES.DEFEAT_BOSS_EVENT, self.bossDied)
         
